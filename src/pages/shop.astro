@@ -1,82 +1,249 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import ProductCard from '../components/cards/ProductCard.astro';
-import SectionHeading from '../components/ui/SectionHeading.astro';
 import { products, categories } from '../data';
+import { LayoutGrid, List, ChevronRight, ChevronLeft, PawPrint } from '@lucide/astro';
+
+const categoryCounts: Record<string, number> = {
+  'dog-food': 4,
+  'cat-food': 3,
+  'bird-supplies': 2,
+  'fish-supplies': 2,
+  'pet-toys': 5,
+  'pet-care': 4,
+};
+
+const brands = [
+  { name: 'NaturePet', count: 3 },
+  { name: 'HappyPaws', count: 2 },
+  { name: 'PetPro', count: 2 },
+  { name: 'FurryFriends', count: 1 },
+  { name: 'AnimalCare', count: 1 },
+];
+
+const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'Organic'];
+
+const bestSellers = products.slice(0, 4);
 ---
 
 <MainLayout title="Shop - Petmania" description="Browse our wide range of premium pet products.">
-  <div class="bg-light py-8 border-b border-border">
+  <!-- Promo Banners -->
+  <section class="py-6">
     <div class="container-main">
-      <h1 class="text-3xl md:text-4xl font-bold text-heading mb-2">Shop</h1>
-      <nav class="text-sm text-muted">
-        <a href="/" class="hover:text-primary">Home</a>
-        <span class="mx-2">/</span>
-        <span class="text-heading">Shop</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Orange Banner -->
+        <a href="/shop" class="group relative overflow-hidden rounded-2xl h-64 md:h-72 bg-gradient-to-br from-primary via-primary/90 to-primary/70">
+          <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+          <div class="relative z-10 h-full flex flex-col justify-center p-8">
+            <span class="text-white/90 text-sm font-semibold uppercase tracking-wider mb-1">Dog Supplies</span>
+            <div class="flex items-baseline gap-1 mb-4">
+              <span class="text-6xl md:text-7xl font-extrabold text-white">25</span>
+              <span class="text-2xl md:text-3xl font-bold text-white">%</span>
+              <span class="text-xl md:text-2xl font-bold text-white">Off</span>
+            </div>
+            <div class="bg-accent/90 inline-flex items-center gap-2 px-4 py-2 rounded-full w-fit">
+              <span class="text-white font-semibold text-sm">Hotline Order</span>
+            </div>
+            <p class="text-white/80 text-2xl font-bold mt-3">(877) 123-4567</p>
+          </div>
+          <div class="absolute right-0 bottom-0 w-1/2 h-full">
+            <img src="/images/products/product-1.jpg" alt="Dog Supplies" class="w-full h-full object-cover rounded-tl-full opacity-80" />
+          </div>
+        </a>
+
+        <!-- Purple Banner -->
+        <a href="/shop" class="group relative overflow-hidden rounded-2xl h-64 md:h-72 bg-gradient-to-br from-accent via-accent/90 to-accent/70">
+          <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+          <div class="relative z-10 h-full flex flex-col justify-center p-8">
+            <span class="text-white/90 text-sm font-semibold uppercase tracking-wider mb-1">Gift For Pet</span>
+            <h3 class="text-3xl md:text-4xl font-extrabold text-white leading-tight mb-4">Premium<br/>Cat Food</h3>
+            <p class="text-2xl font-bold">
+              <span class="text-white">Save </span>
+              <span class="text-primary text-3xl font-extrabold">30%</span>
+            </p>
+          </div>
+          <div class="absolute right-0 bottom-0 w-1/2 h-full">
+            <img src="/images/products/product-2.jpg" alt="Premium Cat Food" class="w-full h-full object-cover rounded-tl-full opacity-80" />
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Breadcrumb -->
+  <section class="py-4">
+    <div class="container-main">
+      <nav class="text-sm text-muted flex items-center gap-2">
+        <a href="/" class="hover:text-primary transition-colors">Home Page</a>
+        <ChevronRight size={14} />
+        <span class="text-heading font-medium">Shop</span>
       </nav>
     </div>
-  </div>
+  </section>
 
-  <section class="py-12 md:py-16">
+  <!-- Shop Content -->
+  <section class="pb-16">
     <div class="container-main">
+      <!-- Title Row -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-heading">Product Categories</h1>
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <button type="button" class="w-9 h-9 flex items-center justify-center rounded bg-primary text-white" aria-label="Grid view">
+              <LayoutGrid size={18} />
+            </button>
+            <button type="button" class="w-9 h-9 flex items-center justify-center rounded text-muted hover:text-heading hover:bg-light transition-colors" aria-label="List view">
+              <List size={18} />
+            </button>
+          </div>
+          <select class="px-4 py-2.5 text-sm border border-border rounded-lg outline-none focus:border-primary bg-white cursor-pointer">
+            <option>Default sorting</option>
+            <option>Sort by popularity</option>
+            <option>Sort by average rating</option>
+            <option>Sort by latest</option>
+            <option>Price: low to high</option>
+            <option>Price: high to low</option>
+          </select>
+          <p class="text-sm text-muted hidden md:block">Showing 1–{products.length} of {products.length} results</p>
+        </div>
+      </div>
+
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Sidebar -->
-        <aside class="w-full lg:w-64 shrink-0">
-          <div class="bg-white rounded-xl p-5 shadow-card">
-            <h3 class="text-lg font-semibold text-heading mb-4">Categories</h3>
-            <ul class="space-y-2">
-              <li>
-                <a href="/shop" class="block text-sm text-body hover:text-primary transition-colors py-1">
-                  All Products
-                </a>
-              </li>
+        <aside class="w-full lg:w-72 shrink-0 space-y-8">
+          <!-- Product Categories -->
+          <div>
+            <h3 class="text-lg font-bold text-heading mb-4">Product Categories</h3>
+            <ul class="space-y-1">
               {categories.map((category) => (
                 <li>
                   <a
                     href={`/shop?category=${category.slug}`}
-                    class="block text-sm text-body hover:text-primary transition-colors py-1"
+                    class="flex items-center justify-between py-2.5 px-3 text-sm text-body hover:text-primary hover:bg-light rounded-lg transition-all group"
                   >
-                    {category.name}
+                    <span class="flex items-center gap-3">
+                      <PawPrint size={16} class="text-muted group-hover:text-primary transition-colors" />
+                      {category.name}
+                    </span>
+                    <span class="text-xs text-muted bg-light group-hover:bg-primary/10 group-hover:text-primary px-2 py-0.5 rounded-full transition-colors">
+                      ({categoryCounts[category.slug] || 0})
+                    </span>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div class="bg-white rounded-xl p-5 shadow-card mt-6">
-            <h3 class="text-lg font-semibold text-heading mb-4">Price Range</h3>
-            <div class="space-y-3">
-              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
-                <input type="checkbox" class="accent-primary" />
-                Under $25
-              </label>
-              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
-                <input type="checkbox" class="accent-primary" />
-                $25 - $50
-              </label>
-              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
-                <input type="checkbox" class="accent-primary" />
-                $50+
-              </label>
+          <!-- Filter By Price -->
+          <div>
+            <h3 class="text-lg font-bold text-heading mb-4">Filter By Price</h3>
+            <div class="px-1">
+              <div class="relative h-1 bg-border rounded-full mb-4">
+                <div class="absolute left-0 top-0 h-full w-3/4 bg-accent rounded-full"></div>
+                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-accent border-2 border-white rounded-full shadow cursor-pointer"></div>
+                <div class="absolute left-3/4 top-1/2 -translate-y-1/2 w-4 h-4 bg-accent border-2 border-white rounded-full shadow cursor-pointer"></div>
+              </div>
+              <div class="flex items-center justify-between text-sm text-body mb-4">
+                <span>Price: $10 — $990</span>
+              </div>
+              <button type="button" class="inline-flex items-center gap-2 px-6 py-2.5 bg-accent text-white text-sm font-semibold rounded-pill hover:bg-primary transition-colors">
+                Filter
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter By Brands -->
+          <div>
+            <h3 class="text-lg font-bold text-heading mb-4">Filter By Brands</h3>
+            <ul class="space-y-1">
+              {brands.map((brand) => (
+                <li>
+                  <label class="flex items-center justify-between py-2.5 px-3 text-sm text-body hover:bg-light rounded-lg transition-all cursor-pointer group">
+                    <span class="flex items-center gap-3">
+                      <PawPrint size={16} class="text-muted group-hover:text-primary transition-colors" />
+                      {brand.name}
+                    </span>
+                    <span class="text-xs text-muted">({brand.count})</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Best Seller Products -->
+          <div>
+            <h3 class="text-lg font-bold text-heading mb-4">Best Seller Products</h3>
+            <div class="space-y-4">
+              {bestSellers.map((product) => (
+                <a href={`/product/${product.slug}`} class="flex items-center gap-3 group">
+                  <div class="w-16 h-16 rounded-lg overflow-hidden bg-light shrink-0">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      class="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-semibold text-heading group-hover:text-primary transition-colors truncate">
+                      {product.name}
+                    </h4>
+                    <div class="flex items-center gap-1 my-1">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <svg width={12} height={12} viewBox="0 0 24 24" fill={i < Math.round(product.rating) ? '#ffcb45' : 'none'} stroke="#ffcb45" stroke-width="2">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                      ))}
+                      <span class="text-xs text-muted">({product.reviewCount})</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm font-bold text-primary">${product.price.toFixed(2)}</span>
+                      {product.oldPrice && (
+                        <span class="text-xs text-muted line-through">${product.oldPrice.toFixed(2)}</span>
+                      )}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <!-- Filter By Tags -->
+          <div>
+            <h3 class="text-lg font-bold text-heading mb-4">Filter By Tags</h3>
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <a
+                  href={`/shop?tag=${tag.toLowerCase()}`}
+                  class="px-4 py-2 text-sm text-body border border-border rounded-full hover:border-primary hover:text-primary transition-colors"
+                >
+                  {tag}
+                </a>
+              ))}
             </div>
           </div>
         </aside>
 
-        <!-- Products -->
+        <!-- Products Grid -->
         <div class="flex-1">
-          <div class="flex items-center justify-between mb-6">
-            <p class="text-sm text-muted">Showing {products.length} products</p>
-            <select class="px-4 py-2 text-sm border border-border rounded-pill outline-none focus:border-primary">
-              <option>Default sorting</option>
-              <option>Price: low to high</option>
-              <option>Price: high to low</option>
-              <option>Newest</option>
-            </select>
-          </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {products.map((product) => (
               <ProductCard product={product} />
             ))}
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex items-center justify-center gap-2 mt-10">
+            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-semibold text-sm">
+              1
+            </button>
+            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-heading hover:border-primary hover:text-primary font-semibold text-sm transition-colors">
+              2
+            </button>
+            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-heading hover:border-primary hover:text-primary transition-colors" aria-label="Next page">
+              <ChevronRight size={18} />
+            </button>
           </div>
         </div>
       </div>

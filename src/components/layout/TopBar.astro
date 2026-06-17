@@ -1,35 +1,35 @@
 ---
-import { MapPin, Truck, Percent, Phone } from '@lucide/astro';
+import { MapPin, Truck } from '@lucide/astro';
 ---
 
-<div class="bg-dark text-white text-xs py-2.5">
-  <div class="container-main flex flex-wrap items-center justify-between gap-2">
+<div class="bg-accent text-white text-xs py-2">
+  <div class="container-main flex items-center justify-between gap-4">
     <div class="hidden md:flex items-center gap-6">
-      <a href="/contact" class="flex items-center gap-1.5 hover:text-primary transition-colors">
+      <a href="/contact" class="flex items-center gap-1.5 hover:text-white/80 transition-colors">
         <MapPin size={14} />
         <span>Find a Store</span>
       </a>
-      <a href="#" class="flex items-center gap-1.5 hover:text-primary transition-colors">
+      <a href="#" class="flex items-center gap-1.5 hover:text-white/80 transition-colors">
         <Truck size={14} />
         <span>Order Tracking</span>
       </a>
-      <span class="flex items-center gap-1.5 text-primary">
-        <Percent size={14} />
-        <span>15% Off $50+</span>
+    </div>
+
+    <div class="flex items-center gap-2 text-center mx-auto md:mx-0">
+      <span class="inline-block bg-primary text-white text-[11px] font-bold px-3 py-1 rounded-full">
+        15% Off
+      </span>
+      <span class="text-white text-xs">
+        $50+ when you buy online & pick up in-store
       </span>
     </div>
 
-    <div class="flex items-center gap-4 ml-auto">
-      <a href="tel:+18001234567" class="hidden sm:flex items-center gap-1.5 hover:text-primary transition-colors">
-        <Phone size={14} />
-        <span>+1 800 123 4567</span>
-      </a>
-      <div class="h-4 w-px bg-white/20 hidden sm:block"></div>
-      <select class="bg-transparent text-white text-xs outline-none cursor-pointer">
-        <option value="usd" class="text-heading">USD $</option>
-        <option value="eur" class="text-heading">EUR €</option>
+    <div class="hidden md:flex items-center gap-3">
+      <select class="bg-transparent text-white text-xs outline-none cursor-pointer hover:text-white/80 transition-colors">
+        <option value="usd" class="text-heading">USD</option>
+        <option value="eur" class="text-heading">EUR</option>
       </select>
-      <select class="bg-transparent text-white text-xs outline-none cursor-pointer">
+      <select class="bg-transparent text-white text-xs outline-none cursor-pointer hover:text-white/80 transition-colors">
         <option value="en" class="text-heading">English</option>
         <option value="es" class="text-heading">Español</option>
       </select>
