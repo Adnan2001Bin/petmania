@@ -1,25 +1,37 @@
 ---
-import { posts } from '../../data';
-import SectionHeading from '../ui/SectionHeading.astro';
-import BlogCard from '../cards/BlogCard.astro';
-import { ChevronRight } from '@lucide/astro';
+import { posts } from "../../data";
+import SectionHeading from "../ui/SectionHeading.astro";
+import BlogCard from "../cards/BlogCard.astro";
+import { ChevronRight } from "@lucide/astro";
+import BrushDivider from "../ui/BrushDivider.astro";
 ---
 
-<section class="py-16 md:py-20 bg-[#fdf0f0]">
-  <div class="container-main">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
-      <SectionHeading title="Latest From Blog" align="left" class="mb-0" />
-      <a href="/blog" class="inline-flex items-center gap-2 text-sm font-semibold text-heading hover:text-primary transition-colors self-start sm:self-auto">
-        View All Posts
-        <span class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center hover:bg-primary transition-colors">
-          <ChevronRight size={16} />
-        </span>
-      </a>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {posts.map((post) => (
-        <BlogCard post={post} />
-      ))}
-    </div>
+<div>
+  <div class="relative z-10 -mt-12 md:-mt-16 rotate-180">
+    <BrushDivider />
   </div>
-</section>
+  <section class="py-16 md:py-20 bg-[#fdf0f0]">
+    <div class="container-main">
+      <div
+        class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10"
+      >
+        <SectionHeading title="Latest From Blog" align="left" class="mb-0" />
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 text-sm font-semibold text-heading hover:text-primary transition-colors self-start sm:self-auto"
+        >
+          View All Posts
+          <span
+            class="w-8 h-8 bg-accent text-white rounded-full flex items-center justify-center hover:bg-primary transition-colors"
+          >
+            <ChevronRight size={16} />
+          </span>
+        </a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => <BlogCard post={post} />)}
+      </div>
+    </div>
+  </section>
+  <BrushDivider />
+</div>
