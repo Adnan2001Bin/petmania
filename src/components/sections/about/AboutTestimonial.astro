@@ -1,0 +1,89 @@
+---
+import aboutData from '../../../data/about.json';
+import StarRating from '../../ui/StarRating.astro';
+
+const { testimonials, gallery } = aboutData;
+---
+
+<section class="bg-white py-16 md:py-20">
+  <div class="container-main">
+    <!-- Testimonial Carousel -->
+    <div class="relative border border-dashed border-[#d3c4b1] rounded-lg px-6 py-10 md:px-12 md:py-14 mb-10 md:mb-14">
+      <button
+        type="button"
+        class="about-testimonial-prev absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-border bg-white flex items-center justify-center text-muted hover:text-heading hover:border-heading transition-colors z-10"
+        aria-label="Previous testimonial"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        class="about-testimonial-next absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-border bg-white flex items-center justify-center text-muted hover:text-heading hover:border-heading transition-colors z-10"
+        aria-label="Next testimonial"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+
+      <div class="swiper about-testimonial-slider overflow-hidden mx-8 md:mx-12">
+        <div class="swiper-wrapper">
+          {testimonials.map((item) => (
+            <div class="swiper-slide">
+              <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16">
+                <div class="text-center shrink-0">
+                  <div class="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden mx-auto mb-4">
+                    <img src={item.avatar} alt={item.name} class="w-full h-full !h-full object-cover" />
+                  </div>
+                  <h4 class="text-lg font-bold text-heading">{item.name}</h4>
+                  <p class="text-sm text-muted">{item.role}</p>
+                </div>
+                <div class="flex-1 text-center md:text-left">
+                  <div class="flex justify-center md:justify-start mb-4">
+                    <StarRating rating={item.rating} />
+                  </div>
+                  <p class="text-heading text-sm md:text-base leading-relaxed max-w-2xl">
+                    {item.content}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Gallery -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 md:gap-4">
+      {gallery.map((image) => (
+        <div class="aspect-square rounded-lg overflow-hidden">
+          <img
+            src={image.src}
+            alt={image.alt}
+            class="w-full h-full !h-full object-cover hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation } from 'swiper/modules';
+  import 'swiper/css';
+
+  new Swiper('.about-testimonial-slider', {
+    modules: [Navigation],
+    slidesPerView: 1,
+    loop: true,
+    navigation: {
+      prevEl: '.about-testimonial-prev',
+      nextEl: '.about-testimonial-next',
+    },
+  });
+</script>

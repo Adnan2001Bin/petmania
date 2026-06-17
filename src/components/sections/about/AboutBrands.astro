@@ -1,0 +1,63 @@
+---
+import BrushDivider from '../../ui/BrushDivider.astro';
+
+const brands = [
+  {
+    name: 'PetCare',
+    tagline: 'Your brand slogan goes here',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><circle cx="32" cy="32" r="30" fill="#5fbd74"/><ellipse cx="24" cy="30" rx="8" ry="10" fill="#ff782c"/><ellipse cx="40" cy="30" rx="8" ry="10" fill="#ff782c"/><circle cx="22" cy="26" r="2" fill="#333"/><circle cx="26" cy="26" r="2" fill="#333"/><circle cx="38" cy="26" r="2" fill="#333"/><circle cx="42" cy="26" r="2" fill="#333"/></svg>`,
+    color: 'text-primary',
+  },
+  {
+    name: 'LOVE DOG',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><path d="M32 58s-20-12-20-28c0-8 6-14 14-14 5 0 10 3 12 7 2-4 7-7 12-7 8 0 14 6 14 14 0 16-20 28-20 28z" fill="#ff782c"/><circle cx="26" cy="28" r="3" fill="#333"/><circle cx="38" cy="28" r="3" fill="#333"/><ellipse cx="32" cy="36" rx="6" ry="4" fill="#fff"/></svg>`,
+    color: 'text-heading',
+  },
+  {
+    name: 'DogCaty',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><ellipse cx="22" cy="32" rx="12" ry="14" fill="#c67b5c"/><ellipse cx="42" cy="32" rx="12" ry="14" fill="#ff782c"/><circle cx="18" cy="28" r="2" fill="#333"/><circle cx="26" cy="28" r="2" fill="#333"/><circle cx="38" cy="28" r="2" fill="#333"/><circle cx="46" cy="28" r="2" fill="#333"/></svg>`,
+    color: 'text-primary',
+  },
+  {
+    name: 'Parrot',
+    tagline: 'linear geometric style',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><path d="M20 40c-4-8-2-20 8-24 6-3 14-1 18 4-2 8-8 16-18 20-4 2-6 2-8 0z" fill="none" stroke="#5fbd74" stroke-width="2.5"/><circle cx="38" cy="22" r="3" fill="#5fbd74"/><path d="M44 18l8-6" stroke="#5fbd74" stroke-width="2" stroke-linecap="round"/></svg>`,
+    color: 'text-heading',
+  },
+  {
+    name: 'PET CARE',
+    tagline: 'YOUR COMPANY SLOGAN',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><path d="M20 36c0-10 6-18 14-18s14 8 14 18" fill="none" stroke="#4a90d9" stroke-width="2.5"/><ellipse cx="32" cy="28" rx="10" ry="12" fill="none" stroke="#5fbd74" stroke-width="2.5"/><circle cx="28" cy="26" r="2" fill="#4a90d9"/><circle cx="36" cy="26" r="2" fill="#4a90d9"/></svg>`,
+    color: 'text-heading',
+  },
+  {
+    name: 'CAT & DOG CUTE',
+    tagline: 'YOUR COMPANY SLOGAN',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><circle cx="24" cy="30" r="12" fill="#fcd935"/><circle cx="40" cy="30" r="12" fill="#c4b5fd"/><circle cx="20" cy="27" r="2" fill="#333"/><circle cx="28" cy="27" r="2" fill="#333"/><circle cx="36" cy="27" r="2" fill="#333"/><circle cx="44" cy="27" r="2" fill="#333"/></svg>`,
+    color: 'text-heading',
+  },
+  {
+    name: 'Pet Shop',
+    icon: `<svg viewBox="0 0 64 64" class="w-14 h-14"><path d="M32 56s-18-10-18-24c0-7 5-12 12-12 4 0 8 2 10 5 2-3 6-5 10-5 7 0 12 5 12 12 0 14-18 24-18 24z" fill="#ff004c"/><ellipse cx="32" cy="30" rx="8" ry="10" fill="#fff"/></svg>`,
+    color: 'text-[#ff004c]',
+  },
+];
+---
+
+<section class="bg-white pt-0 pb-12 md:pb-16">
+  <BrushDivider class="text-white" flip />
+
+  <div class="container-main pt-12 md:pt-16">
+    <div class="flex flex-wrap items-center justify-center gap-8 md:gap-10 lg:gap-12">
+      {brands.map((brand) => (
+        <div class="flex flex-col items-center text-center w-[100px] sm:w-[110px] opacity-70 hover:opacity-100 transition-opacity duration-300">
+          <div class="mb-2" set:html={brand.icon} />
+          <span class={`text-xs font-bold uppercase leading-tight ${brand.color}`}>{brand.name}</span>
+          {brand.tagline && (
+            <span class="text-[9px] text-muted mt-0.5 leading-tight">{brand.tagline}</span>
+          )}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

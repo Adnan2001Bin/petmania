@@ -1,0 +1,107 @@
+---
+import aboutData from '../../../data/about.json';
+
+const { hero } = aboutData;
+---
+
+<section class="about-hero pt-12 pb-0 md:pt-16 lg:pt-20 bg-white">
+  <div class="container-main">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Text -->
+      <div class="order-2 lg:order-1 pb-10 lg:pb-20">
+        <span class="inline-block text-primary font-bold text-xs md:text-sm uppercase tracking-[0.15em] mb-4">
+          {hero.subtitle}
+        </span>
+        <h1 class="text-3xl sm:text-4xl md:text-[42px] lg:text-[48px] font-bold text-heading leading-[1.15] mb-6">
+          {hero.title}
+        </h1>
+        <p class="text-body text-sm md:text-base leading-[1.8] mb-8 max-w-lg">
+          {hero.text}
+        </p>
+        <div class="flex flex-wrap items-center gap-6">
+          <button type="button" class="inline-flex items-center gap-3 text-heading font-semibold text-sm hover:text-primary transition-colors group">
+            <span class="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
+              <svg class="w-4 h-4 text-primary ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+              </svg>
+            </span>
+            Watch Our Video
+          </button>
+          <a
+            href="#services"
+            class="inline-flex items-center gap-3 bg-accent text-white font-semibold text-sm pl-7 pr-2 py-2.5 rounded-full hover:bg-primary transition-colors"
+          >
+            Learn more
+            <span class="w-9 h-9 bg-white rounded-full flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Image Collage -->
+      <div class="order-1 lg:order-2 relative flex justify-center lg:justify-end min-h-[340px] sm:min-h-[400px] lg:min-h-[520px]">
+        <!-- Paw prints -->
+        <svg class="absolute top-8 left-4 w-8 h-8 text-primary/20 rotate-[-20deg]" viewBox="0 0 24 24" fill="currentColor">
+          <ellipse cx="6" cy="8" rx="2.5" ry="3"/><ellipse cx="12" cy="6" rx="2.5" ry="3"/><ellipse cx="18" cy="8" rx="2.5" ry="3"/><ellipse cx="9" cy="13" rx="2" ry="2.5"/><ellipse cx="15" cy="13" rx="2" ry="2.5"/><path d="M8 16c2 3 6 3 8 0" stroke="currentColor" stroke-width="1.5" fill="none"/>
+        </svg>
+        <svg class="absolute top-24 right-8 w-6 h-6 text-primary/15 rotate-[15deg]" viewBox="0 0 24 24" fill="currentColor">
+          <ellipse cx="6" cy="8" rx="2.5" ry="3"/><ellipse cx="12" cy="6" rx="2.5" ry="3"/><ellipse cx="18" cy="8" rx="2.5" ry="3"/><ellipse cx="9" cy="13" rx="2" ry="2.5"/><ellipse cx="15" cy="13" rx="2" ry="2.5"/>
+        </svg>
+        <svg class="absolute bottom-32 left-8 w-7 h-7 text-primary/20 rotate-[30deg] hidden sm:block" viewBox="0 0 24 24" fill="currentColor">
+          <ellipse cx="6" cy="8" rx="2.5" ry="3"/><ellipse cx="12" cy="6" rx="2.5" ry="3"/><ellipse cx="18" cy="8" rx="2.5" ry="3"/><ellipse cx="9" cy="13" rx="2" ry="2.5"/><ellipse cx="15" cy="13" rx="2" ry="2.5"/>
+        </svg>
+
+        <!-- Main circle -->
+        <div class="relative w-[280px] h-[280px] sm:w-[340px] sm:h-[340px] lg:w-[420px] lg:h-[420px]">
+          <div class="w-full h-full rounded-full bg-[#fcd935] overflow-hidden">
+            <img
+              src="/images/hero/hero-1.jpg"
+              alt="Woman holding a cat"
+              class="w-full h-full !h-full object-cover"
+            />
+          </div>
+
+          <!-- French bulldog inset -->
+          <div class="absolute -left-6 sm:-left-10 top-1/2 -translate-y-1/2 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-[5px] border-white overflow-hidden shadow-md z-10">
+            <img
+              src="/images/categories/category-1.jpg"
+              alt="French bulldog"
+              class="w-full h-full !h-full object-cover"
+            />
+          </div>
+
+          <!-- Dog rectangle inset -->
+          <div class="absolute -right-4 sm:-right-8 bottom-8 w-24 h-32 sm:w-28 sm:h-36 rounded-2xl border-[5px] border-white overflow-hidden shadow-lg rotate-6 z-10">
+            <img
+              src="/images/hero/hero-2.jpg"
+              alt="Dog looking up"
+              class="w-full h-full object-cover bg-accent"
+            />
+          </div>
+
+          <!-- Bottom left pug -->
+          <div class="absolute left-4 sm:left-8 -bottom-4 w-16 h-16 sm:w-20 sm:h-20 rounded-full border-[5px] border-white overflow-hidden shadow-md z-10">
+            <img
+              src="/images/categories/category-2.jpg"
+              alt="Dog with hat"
+              class="w-full h-full !h-full object-cover"
+            />
+          </div>
+
+          <!-- Bottom cat with sunglasses -->
+          <div class="absolute right-16 sm:right-24 -bottom-2 w-16 h-16 sm:w-[72px] sm:h-[72px] rounded-full border-[5px] border-white overflow-hidden shadow-md z-10">
+            <img
+              src="/images/gallery/gallery-5.jpg"
+              alt="Cat with sunglasses"
+              class="w-full h-full !h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,82 @@
+{
+  "hero": {
+    "subtitle": "NEW LOOK, NEW FOCUS.",
+    "title": "Pet care, up close and personal.",
+    "text": "But this isn't just about our fresh new look. As you'll see below, we've hired more qualified advisors, expanded our range, built a pet-first navigation, and launched new services like on-demand healthcare and insurance. There's much more to come, but we hope you think we're headed in the right direction."
+  },
+  "services": {
+    "subtitle": "WE'RE HERE FOR YOU",
+    "title": "All you need, all in one place.",
+    "items": [
+      {
+        "title": "Tailor-made insurance",
+        "desc": "Lorem ipsum dolor sit amet, consectetur eiusmod tempor incididunt",
+        "color": "#5fbd74",
+        "icon": "shield"
+      },
+      {
+        "title": "On-demand healthcare",
+        "desc": "Lorem ipsum dolor sit amet, consectetur eiusmod tempor incididunt",
+        "color": "#f06292",
+        "icon": "healthcare"
+      },
+      {
+        "title": "Tailor-made insurance",
+        "desc": "Lorem ipsum dolor sit amet, consectetur eiusmod tempor incididunt",
+        "color": "#ffb74d",
+        "icon": "tag"
+      }
+    ]
+  },
+  "testimonials": [
+    {
+      "name": "Waylan S",
+      "role": "Cat Owner",
+      "avatar": "/images/testimonials/avatar-2.jpg",
+      "content": "This is simply unbelievable! Pet shop did exactly what you said it does. I'm good to go. Pet shop is great. One cats horrid breath...gone! One cat from a bit 'toround' to almost perfect weight.",
+      "rating": 5
+    },
+    {
+      "name": "Sarah Jenkins",
+      "role": "Cat Lover",
+      "avatar": "/images/testimonials/avatar-1.jpg",
+      "content": "Finally a pet shop that understands what cats need. The organic cat food selection is amazing and my kitty has never been healthier.",
+      "rating": 5
+    },
+    {
+      "name": "Michael Brown",
+      "role": "Dog Trainer",
+      "avatar": "/images/testimonials/avatar-3.jpg",
+      "content": "I recommend Petmania to all my clients. Their training treats and toys are top-notch, and the prices are very competitive.",
+      "rating": 5
+    }
+  ],
+  "gallery": [
+    { "src": "/images/gallery/gallery-1.jpg", "alt": "Dog on rug" },
+    { "src": "/images/gallery/gallery-2.jpg", "alt": "Chameleon" },
+    { "src": "/images/gallery/gallery-3.jpg", "alt": "Guinea pigs" },
+    { "src": "/images/gallery/gallery-4.jpg", "alt": "Pet carrier" },
+    { "src": "/images/gallery/gallery-5.jpg", "alt": "Cat with sunglasses" }
+  ],
+  "team": {
+    "subtitle": "NUTRITION TEAM",
+    "title": "Our Team The Best",
+    "members": [
+      {
+        "name": "Albert McKinney",
+        "avatar": "/images/testimonials/avatar-1.jpg",
+        "bg": "#c4b5fd"
+      },
+      {
+        "name": "Vera Duncan",
+        "avatar": "/images/testimonials/avatar-3.jpg",
+        "bg": "#c67b5c"
+      },
+      {
+        "name": "Michella Ore",
+        "avatar": "/images/testimonials/avatar-2.jpg",
+        "bg": "#fcd935"
+      }
+    ]
+  }
+}
