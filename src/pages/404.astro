@@ -1,0 +1,19 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Button from '../components/ui/Button.astro';
+---
+
+<MainLayout title="Page Not Found - Petmania" description="The page you are looking for does not exist.">
+  <section class="py-20 md:py-32">
+    <div class="container-main text-center">
+      <div class="w-32 h-32 mx-auto mb-6 bg-primary/10 rounded-full flex items-center justify-center text-primary text-6xl font-bold">
+        404
+      </div>
+      <h1 class="text-3xl md:text-5xl font-bold text-heading mb-4">Oops! Page Not Found</h1>
+      <p class="text-body max-w-md mx-auto mb-8">
+        The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+      </p>
+      <Button href="/" variant="primary" size="lg">Back to Home</Button>
+    </div>
+  </section>
+</MainLayout>

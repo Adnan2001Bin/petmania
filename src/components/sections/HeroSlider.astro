@@ -1,0 +1,84 @@
+---
+import { getHeroBanners } from '../../data';
+import Button from '../ui/Button.astro';
+
+const heroBanners = getHeroBanners();
+---
+
+<section class="relative">
+  <div class="swiper hero-slider h-[500px] md:h-[600px] lg:h-[700px]">
+    <div class="swiper-wrapper">
+      {heroBanners.map((banner) => (
+        <div class="swiper-slide relative">
+          <img
+            src={banner.image}
+            alt={banner.title}
+            class="absolute inset-0 w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent"></div>
+          <div class="container-main relative h-full flex items-center">
+            <div class="max-w-xl text-white reveal">
+              {banner.subtitle && (
+                <span class="inline-block text-primary text-sm md:text-base font-semibold uppercase tracking-wider mb-3">
+                  {banner.subtitle}
+                </span>
+              )}
+              {banner.discount && (
+                <div class="inline-flex items-center justify-center w-20 h-20 md:w-24 md:h-24 bg-primary rounded-full text-white font-bold text-lg md:text-xl mb-5 shadow-card">
+                  {banner.discount}<br />OFF
+                </div>
+              )}
+              <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+                {banner.title}
+              </h2>
+              {banner.description && (
+                <p class="text-base md:text-lg text-white/80 mb-6">
+                  {banner.description}
+                </p>
+              )}
+              <div class="flex flex-wrap gap-3">
+                <Button href={banner.link} variant="primary" size="lg">
+                  Shop Now
+                </Button>
+                <Button href="/shop" variant="outline" size="lg" class="!border-white !text-white hover:!bg-white hover:!text-heading">
+                  View All
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/navigation';
+  import 'swiper/css/pagination';
+  import 'swiper/css/effect-fade';
+
+  new Swiper('.hero-slider', {
+    modules: [Navigation, Pagination, Autoplay, EffectFade],
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>

@@ -1,0 +1,42 @@
+---
+import { brands } from '../../data';
+---
+
+<section class="py-12 border-t border-border">
+  <div class="container-main">
+    <div class="swiper brand-slider">
+      <div class="swiper-wrapper items-center">
+        {brands.map((brand) => (
+          <div class="swiper-slide">
+            <div class="flex items-center justify-center h-16 px-6 grayscale hover:grayscale-0 transition-all duration-300 opacity-60 hover:opacity-100">
+              <span class="text-xl font-bold text-heading">{brand.name}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay } from 'swiper/modules';
+  import 'swiper/css';
+
+  new Swiper('.brand-slider', {
+    modules: [Autoplay],
+    slidesPerView: 2,
+    spaceBetween: 24,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false,
+    },
+    breakpoints: {
+      480: { slidesPerView: 3 },
+      768: { slidesPerView: 4 },
+      1024: { slidesPerView: 5 },
+      1280: { slidesPerView: 6 },
+    },
+  });
+</script>

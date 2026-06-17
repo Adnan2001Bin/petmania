@@ -1,0 +1,85 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import ProductCard from '../components/cards/ProductCard.astro';
+import SectionHeading from '../components/ui/SectionHeading.astro';
+import { products, categories } from '../data';
+---
+
+<MainLayout title="Shop - Petmania" description="Browse our wide range of premium pet products.">
+  <div class="bg-light py-8 border-b border-border">
+    <div class="container-main">
+      <h1 class="text-3xl md:text-4xl font-bold text-heading mb-2">Shop</h1>
+      <nav class="text-sm text-muted">
+        <a href="/" class="hover:text-primary">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-heading">Shop</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="py-12 md:py-16">
+    <div class="container-main">
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-64 shrink-0">
+          <div class="bg-white rounded-xl p-5 shadow-card">
+            <h3 class="text-lg font-semibold text-heading mb-4">Categories</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="/shop" class="block text-sm text-body hover:text-primary transition-colors py-1">
+                  All Products
+                </a>
+              </li>
+              {categories.map((category) => (
+                <li>
+                  <a
+                    href={`/shop?category=${category.slug}`}
+                    class="block text-sm text-body hover:text-primary transition-colors py-1"
+                  >
+                    {category.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="bg-white rounded-xl p-5 shadow-card mt-6">
+            <h3 class="text-lg font-semibold text-heading mb-4">Price Range</h3>
+            <div class="space-y-3">
+              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
+                <input type="checkbox" class="accent-primary" />
+                Under $25
+              </label>
+              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
+                <input type="checkbox" class="accent-primary" />
+                $25 - $50
+              </label>
+              <label class="flex items-center gap-2 text-sm text-body cursor-pointer">
+                <input type="checkbox" class="accent-primary" />
+                $50+
+              </label>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Products -->
+        <div class="flex-1">
+          <div class="flex items-center justify-between mb-6">
+            <p class="text-sm text-muted">Showing {products.length} products</p>
+            <select class="px-4 py-2 text-sm border border-border rounded-pill outline-none focus:border-primary">
+              <option>Default sorting</option>
+              <option>Price: low to high</option>
+              <option>Price: high to low</option>
+              <option>Newest</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {products.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -1,0 +1,39 @@
+---
+import { Star } from '@lucide/astro';
+
+export interface Props {
+  rating: number;
+  count?: number;
+  showCount?: boolean;
+  size?: number;
+}
+
+const { rating, count = 0, showCount = false, size = 14 } = Astro.props;
+const fullStars = Math.floor(rating);
+const hasHalf = rating % 1 >= 0.5;
+---
+
+<div class="flex items-center gap-1">
+  <div class="flex items-center text-star">
+    {Array.from({ length: 5 }).map((_, i) => {
+      const fill = i < fullStars ? 'currentColor' : i === fullStars && hasHalf ? 'url(#half)' : 'none';
+      const stroke = i < fullStars || (i === fullStars && hasHalf) ? 'currentColor' : 'currentColor';
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={stroke} stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          {i === fullStars && hasHalf && (
+            <defs>
+              <linearGradient id="half">
+                <stop offset="50%" stop-color="currentColor" />
+                <stop offset="50%" stop-color="transparent" />
+              </linearGradient>
+            </defs>
+          )}
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </svg>
+      );
+    })}
+  </div>
+  {showCount && count > 0 && (
+    <span class="text-xs text-muted">({count})</span>
+  )}
+</div>

@@ -1,0 +1,28 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import BlogCard from '../components/cards/BlogCard.astro';
+import { posts } from '../data';
+---
+
+<MainLayout title="Blog - Petmania" description="Read the latest pet care tips and news.">
+  <div class="bg-light py-8 border-b border-border">
+    <div class="container-main">
+      <h1 class="text-3xl md:text-4xl font-bold text-heading mb-2">Blog</h1>
+      <nav class="text-sm text-muted">
+        <a href="/" class="hover:text-primary">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-heading">Blog</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="py-16 md:py-20">
+    <div class="container-main">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => (
+          <BlogCard post={post} />
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

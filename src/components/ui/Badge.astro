@@ -1,0 +1,21 @@
+---
+export interface Props {
+  text: string;
+  type?: 'sale' | 'new' | 'hot' | 'sold-out' | 'default';
+  class?: string;
+}
+
+const { text, type = 'default', class: className = '' } = Astro.props;
+
+const styles: Record<string, string> = {
+  sale: 'bg-sale text-white',
+  new: 'bg-success text-white',
+  hot: 'bg-primary text-white',
+  'sold-out': 'bg-muted text-white',
+  default: 'bg-accent text-white',
+};
+---
+
+<span class={`inline-block px-3 py-1 text-xs font-semibold rounded ${styles[type]} ${className}`}>
+  {text}
+</span>

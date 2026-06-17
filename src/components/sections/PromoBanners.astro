@@ -1,0 +1,22 @@
+---
+import { getSmallPromoBanners, getMediumPromoBanners } from '../../data';
+import BannerCard from '../cards/BannerCard.astro';
+
+const smallBanners = getSmallPromoBanners();
+const mediumBanners = getMediumPromoBanners();
+---
+
+<section class="pb-16 md:pb-20">
+  <div class="container-main">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      {smallBanners.slice(0, 3).map((banner) => (
+        <BannerCard banner={banner} class="h-64" />
+      ))}
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {mediumBanners.slice(0, 2).map((banner) => (
+        <BannerCard banner={banner} class="h-72 md:h-80" />
+      ))}
+    </div>
+  </div>
+</section>

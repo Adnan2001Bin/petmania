@@ -1,0 +1,85 @@
+[
+  {
+    "id": "hero-1",
+    "title": "Foods They Love",
+    "subtitle": "Discount 25% Off",
+    "description": "Gift for pet. Bowl for Pet Flat 25% Off on selected items.",
+    "discount": "25%",
+    "image": "/images/hero/hero-1.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "large"
+  },
+  {
+    "id": "hero-2",
+    "title": "Healthy & Happy Pets",
+    "subtitle": "Summer Sale",
+    "description": "Premium quality products for your best friends.",
+    "discount": "30%",
+    "image": "/images/hero/hero-2.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "large"
+  },
+  {
+    "id": "hero-3",
+    "title": "For Your Feline Friend",
+    "subtitle": "New Arrivals",
+    "description": "Discover the latest cat food, toys, and accessories.",
+    "discount": "20%",
+    "image": "/images/hero/hero-3.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "large"
+  },
+  {
+    "id": "promo-1",
+    "title": "50% Off",
+    "subtitle": "Pet Food & Accessories",
+    "description": "Limited time offer",
+    "image": "/images/banners/banner-1.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "small"
+  },
+  {
+    "id": "promo-2",
+    "title": "30% Sale Off",
+    "subtitle": "Parrot Food",
+    "description": "For all bird lovers",
+    "image": "/images/banners/banner-2.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "small"
+  },
+  {
+    "id": "promo-3",
+    "title": "Healthy Formula",
+    "subtitle": "Natural Ingredients",
+    "description": "Shop organic food",
+    "image": "/images/banners/banner-3.jpg",
+    "link": "/shop",
+    "align": "left",
+    "size": "small"
+  },
+  {
+    "id": "promo-4",
+    "title": "25% Off",
+    "subtitle": "Dog Supplies",
+    "description": "Hotline order available",
+    "image": "/images/banners/banner-4.jpg",
+    "link": "/shop",
+    "align": "right",
+    "size": "medium"
+  },
+  {
+    "id": "promo-5",
+    "title": "Save 30%",
+    "subtitle": "Premium Cat Food",
+    "description": "Best nutrition for cats",
+    "image": "/images/banners/banner-1.jpg",
+    "link": "/shop",
+    "align": "right",
+    "size": "medium"
+  }
+]

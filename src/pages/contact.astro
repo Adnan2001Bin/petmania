@@ -1,0 +1,73 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Input from '../components/ui/Input.astro';
+import Button from '../components/ui/Button.astro';
+import { MapPin, Phone, Mail, Clock } from '@lucide/astro';
+
+const contactInfo = [
+  { icon: MapPin, title: 'Address', text: '123 Pet Street, Animal City, AC 12345' },
+  { icon: Phone, title: 'Phone', text: '+1 800 123 4567' },
+  { icon: Mail, title: 'Email', text: 'hello@petmania.com' },
+  { icon: Clock, title: 'Working Hours', text: 'Mon - Sat: 9:00 AM - 8:00 PM' },
+];
+---
+
+<MainLayout title="Contact Us - Petmania" description="Get in touch with Petmania.">
+  <div class="bg-light py-8 border-b border-border">
+    <div class="container-main">
+      <h1 class="text-3xl md:text-4xl font-bold text-heading mb-2">Contact Us</h1>
+      <nav class="text-sm text-muted">
+        <a href="/" class="hover:text-primary">Home</a>
+        <span class="mx-2">/</span>
+        <span class="text-heading">Contact</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="py-16 md:py-20">
+    <div class="container-main">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
+        {contactInfo.map((info) => (
+          <div class="bg-white rounded-xl p-6 shadow-card text-center">
+            <div class="w-14 h-14 mx-auto mb-4 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+              <info.icon size={24} />
+            </div>
+            <h3 class="text-lg font-semibold text-heading mb-1">{info.title}</h3>
+            <p class="text-sm text-body">{info.text}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div class="bg-white rounded-xl p-8 shadow-card">
+          <h2 class="text-2xl font-bold text-heading mb-6">Send us a Message</h2>
+          <form class="space-y-4" onsubmit="event.preventDefault();">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input name="name" placeholder="Your Name" required />
+              <Input type="email" name="email" placeholder="Your Email" required />
+            </div>
+            <Input name="subject" placeholder="Subject" required />
+            <div>
+              <textarea
+                name="message"
+                rows={5}
+                placeholder="Your Message"
+                required
+                class="w-full px-5 py-3 text-sm text-heading bg-white border border-border rounded-2xl outline-none transition-all duration-300 placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
+              ></textarea>
+            </div>
+            <Button type="submit" variant="primary" size="lg">Send Message</Button>
+          </form>
+        </div>
+
+        <div class="rounded-xl overflow-hidden h-full min-h-[400px]">
+          <img
+            src="/images/hero/hero-2.jpg"
+            alt="Our store"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>

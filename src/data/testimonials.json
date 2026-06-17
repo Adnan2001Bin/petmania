@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "John Alvy",
+    "role": "Pet Owner",
+    "avatar": "/images/testimonials/avatar-1.jpg",
+    "content": "Petmania has completely transformed how I shop for my pets. The quality is outstanding and delivery is always on time. My dogs absolutely love the treats!",
+    "rating": 5
+  },
+  {
+    "id": "2",
+    "name": "Sarah Jenkins",
+    "role": "Cat Lover",
+    "avatar": "/images/testimonials/avatar-2.jpg",
+    "content": "Finally a pet shop that understands what cats need. The organic cat food selection is amazing and my kitty has never been healthier.",
+    "rating": 5
+  },
+  {
+    "id": "3",
+    "name": "Michael Brown",
+    "role": "Dog Trainer",
+    "avatar": "/images/testimonials/avatar-3.jpg",
+    "content": "I recommend Petmania to all my clients. Their training treats and toys are top-notch, and the prices are very competitive.",
+    "rating": 4
+  }
+]

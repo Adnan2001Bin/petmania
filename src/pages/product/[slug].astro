@@ -1,0 +1,130 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import ProductCard from '../../components/cards/ProductCard.astro';
+import StarRating from '../../components/ui/StarRating.astro';
+import Button from '../../components/ui/Button.astro';
+import { products, getProductBySlug, getRelatedProducts } from '../../data';
+
+export function getStaticPaths() {
+  return products.map((product) => ({
+    params: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const product = getProductBySlug(slug);
+
+if (!product) {
+  return Astro.redirect('/404');
+}
+
+const relatedProducts = getRelatedProducts(product.id, 4);
+---
+
+<MainLayout title={`${product.name} - Petmania`} description={product.description}>
+  <div class="bg-light py-8 border-b border-border">
+    <div class="container-main">
+      <nav class="text-sm text-muted">
+        <a href="/" class="hover:text-primary">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/shop" class="hover:text-primary">Shop</a>
+        <span class="mx-2">/</span>
+        <span class="text-heading">{product.name}</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="py-12 md:py-16">
+    <div class="container-main">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-16">
+        <!-- Image -->
+        <div class="bg-light rounded-2xl overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.name}
+            class="w-full h-full object-cover aspect-square"
+          />
+        </div>
+
+        <!-- Info -->
+        <div>
+          <p class="text-sm text-muted mb-2">{product.category}</p>
+          <h1 class="text-3xl md:text-4xl font-bold text-heading mb-4">{product.name}</h1>
+          <div class="flex items-center gap-3 mb-4">
+            <StarRating rating={product.rating} showCount count={product.reviewCount} />
+          </div>
+          <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl font-bold text-primary">${product.price.toFixed(2)}</span>
+            {product.oldPrice && (
+              <span class="text-xl text-muted line-through">${product.oldPrice.toFixed(2)}</span>
+            )}
+          </div>
+          <p class="text-body leading-relaxed mb-6">{product.description}</p>
+
+          <div class="flex items-center gap-4 mb-8">
+            <div class="flex items-center border border-border rounded-pill overflow-hidden">
+              <button type="button" id="qty-minus" class="w-10 h-12 text-heading hover:bg-light transition-colors">-</button>
+              <input
+                type="number"
+                id="qty-input"
+                value="1"
+                min="1"
+                class="w-12 h-12 text-center text-heading outline-none border-x border-border"
+                readonly
+              />
+              <button type="button" id="qty-plus" class="w-10 h-12 text-heading hover:bg-light transition-colors">+</button>
+            </div>
+            <Button variant="primary" size="lg" class="add-to-cart-btn" data-product-id={product.id}>
+              Add to Cart
+            </Button>
+          </div>
+
+          <div class="text-sm text-muted space-y-2">
+            <p><span class="text-heading font-medium">SKU:</span> {product.sku}</p>
+            <p><span class="text-heading font-medium">Category:</span> {product.category}</p>
+            <p><span class="text-heading font-medium">Tags:</span> {product.tags.join(', ')}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Related Products -->
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-heading mb-8 text-center">Related Products</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {relatedProducts.map((p) => (
+            <ProductCard product={p} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  import { addToCart } from '../../stores/cartStore';
+  import { products } from '../../data';
+
+  const qtyInput = document.getElementById('qty-input') as HTMLInputElement;
+  const minusBtn = document.getElementById('qty-minus');
+  const plusBtn = document.getElementById('qty-plus');
+  const addBtn = document.querySelector('.add-to-cart-btn');
+
+  minusBtn?.addEventListener('click', () => {
+    const val = parseInt(qtyInput.value) || 1;
+    if (val > 1) qtyInput.value = String(val - 1);
+  });
+
+  plusBtn?.addEventListener('click', () => {
+    const val = parseInt(qtyInput.value) || 1;
+    qtyInput.value = String(val + 1);
+  });
+
+  addBtn?.addEventListener('click', () => {
+    const productId = addBtn.getAttribute('data-product-id');
+    const product = products.find((p) => p.id === productId);
+    const qty = parseInt(qtyInput.value) || 1;
+    if (product) {
+      addToCart(product, qty);
+    }
+  });
+</script>

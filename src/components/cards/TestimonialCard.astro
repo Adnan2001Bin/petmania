@@ -1,0 +1,29 @@
+---
+import type { Testimonial } from '../../types';
+import StarRating from '../ui/StarRating.astro';
+
+export interface Props {
+  testimonial: Testimonial;
+}
+
+const { testimonial } = Astro.props;
+---
+
+<div class="bg-white rounded-2xl p-8 shadow-card text-center">
+  <div class="w-20 h-20 mx-auto mb-5 rounded-full overflow-hidden border-4 border-primary/10">
+    <img
+      src={testimonial.avatar}
+      alt={testimonial.name}
+      class="w-full h-full object-cover"
+      loading="lazy"
+    />
+  </div>
+  <div class="flex justify-center mb-4">
+    <StarRating rating={testimonial.rating} />
+  </div>
+  <p class="text-body italic mb-6 leading-relaxed">
+    "{testimonial.content}"
+  </p>
+  <h4 class="text-base font-bold text-heading">{testimonial.name}</h4>
+  <p class="text-xs text-muted">{testimonial.role}</p>
+</div>

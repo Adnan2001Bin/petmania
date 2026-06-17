@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "slug": "how-to-choose-the-best-dog-food",
+    "title": "How to Choose the Best Dog Food",
+    "excerpt": "Discover the key factors to consider when selecting nutritious food for your canine companion.",
+    "image": "/images/blog/blog-1.jpg",
+    "date": "2026-06-10",
+    "author": "Dr. Emily Carter",
+    "category": "Pet Care"
+  },
+  {
+    "id": "2",
+    "slug": "top-10-toys-to-keep-your-pet-active",
+    "title": "Top 10 Toys to Keep Your Pet Active",
+    "excerpt": "Keep your furry friend entertained and healthy with these fun and engaging pet toys.",
+    "image": "/images/blog/blog-2.jpg",
+    "date": "2026-06-05",
+    "author": "Mark Wilson",
+    "category": "Pet Toys"
+  },
+  {
+    "id": "3",
+    "slug": "grooming-tips-for-a-healthier-pet",
+    "title": "Grooming Tips for a Healthier Pet",
+    "excerpt": "Learn essential grooming routines that will keep your pet looking and feeling great.",
+    "image": "/images/blog/blog-3.jpg",
+    "date": "2026-05-28",
+    "author": "Lisa Thompson",
+    "category": "Pet Care"
+  }
+]

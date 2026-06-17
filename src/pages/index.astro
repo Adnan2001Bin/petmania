@@ -1,0 +1,38 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import HeroSlider from '../components/sections/HeroSlider.astro';
+import ProductGrid from '../components/sections/ProductGrid.astro';
+import PromoBanners from '../components/sections/PromoBanners.astro';
+import Categories from '../components/sections/Categories.astro';
+import BestSellers from '../components/sections/BestSellers.astro';
+import BlogPosts from '../components/sections/BlogPosts.astro';
+import Testimonials from '../components/sections/Testimonials.astro';
+import BrandLogos from '../components/sections/BrandLogos.astro';
+import InstagramGallery from '../components/sections/InstagramGallery.astro';
+import Newsletter from '../components/sections/Newsletter.astro';
+import { products } from '../data';
+
+const bestSellingProducts = products.slice(0, 8);
+---
+
+<MainLayout>
+  <HeroSlider />
+  <ProductGrid
+    title="Best Selling Products"
+    subtitle="Popular Now"
+    products={bestSellingProducts.slice(0, 4)}
+  />
+  <PromoBanners />
+  <ProductGrid
+    title="Spring Pet Collection"
+    subtitle="Seasonal Picks"
+    products={bestSellingProducts.slice(4, 8)}
+  />
+  <Categories />
+  <BestSellers />
+  <BlogPosts />
+  <Testimonials />
+  <BrandLogos />
+  <InstagramGallery />
+  <Newsletter />
+</MainLayout>

@@ -1,0 +1,7 @@
+[
+  { "id": "1", "src": "/images/gallery/gallery-1.jpg", "alt": "Happy pets", "link": "https://instagram.com" },
+  { "id": "2", "src": "/images/gallery/gallery-2.jpg", "alt": "Dogs playing", "link": "https://instagram.com" },
+  { "id": "3", "src": "/images/gallery/gallery-3.jpg", "alt": "Cute cat", "link": "https://instagram.com" },
+  { "id": "4", "src": "/images/gallery/gallery-4.jpg", "alt": "Pet toys", "link": "https://instagram.com" },
+  { "id": "5", "src": "/images/gallery/gallery-5.jpg", "alt": "Dog treats", "link": "https://instagram.com" }
+]

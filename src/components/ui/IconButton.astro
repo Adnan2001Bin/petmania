@@ -1,0 +1,40 @@
+---
+export interface Props {
+  href?: string;
+  type?: 'button' | 'submit';
+  variant?: 'primary' | 'accent' | 'outline' | 'white' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  class?: string;
+  ariaLabel: string;
+}
+
+const { href, type = 'button', variant = 'white', size = 'md', class: className = '', ariaLabel } = Astro.props;
+
+const baseStyles = 'inline-flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2';
+
+const variants: Record<string, string> = {
+  primary: 'bg-primary text-white hover:bg-heading focus:ring-primary',
+  accent: 'bg-accent text-white hover:bg-primary focus:ring-accent',
+  outline: 'border border-border text-heading hover:border-primary hover:text-primary focus:ring-primary',
+  white: 'bg-white text-heading shadow-card hover:bg-primary hover:text-white focus:ring-primary',
+  ghost: 'text-heading hover:text-primary focus:ring-primary',
+};
+
+const sizes: Record<string, string> = {
+  sm: 'w-8 h-8',
+  md: 'w-10 h-10',
+  lg: 'w-12 h-12',
+};
+
+const classes = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
+---
+
+{href ? (
+  <a href={href} class={classes} aria-label={ariaLabel}>
+    <slot />
+  </a>
+) : (
+  <button type={type} class={classes} aria-label={ariaLabel}>
+    <slot />
+  </button>
+)}

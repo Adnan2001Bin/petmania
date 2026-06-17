@@ -1,0 +1,110 @@
+---
+import { Heart, Eye, ArrowRightLeft, ShoppingCart } from '@lucide/astro';
+import type { Product } from '../../types';
+import Badge from '../ui/Badge.astro';
+import StarRating from '../ui/StarRating.astro';
+
+export interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+const badgeText: Record<string, string> = {
+  sale: 'Sale',
+  new: 'New',
+  hot: 'Hot',
+  'sold-out': 'Sold Out',
+};
+---
+
+<div class="group relative bg-white rounded-lg overflow-hidden transition-all duration-300 hover:shadow-hover">
+  <!-- Image -->
+  <a href={`/product/${product.slug}`} class="relative block aspect-square overflow-hidden bg-light">
+    <img
+      src={product.image}
+      alt={product.name}
+      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+      loading="lazy"
+    />
+    {product.hoverImage && (
+      <img
+        src={product.hoverImage}
+        alt={product.name}
+        class="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        loading="lazy"
+      />
+    )}
+    {product.badge && (
+      <div class="absolute top-3 left-3">
+        <Badge text={badgeText[product.badge]} type={product.badge} />
+      </div>
+    )}
+
+    <!-- Actions -->
+    <div class="product-actions">
+      <button
+        type="button"
+        class="w-9 h-9 bg-white text-heading rounded-full shadow-card flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+        aria-label="Add to wishlist"
+      >
+        <Heart size={16} />
+      </button>
+      <button
+        type="button"
+        class="w-9 h-9 bg-white text-heading rounded-full shadow-card flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+        aria-label="Quick view"
+      >
+        <Eye size={16} />
+      </button>
+      <button
+        type="button"
+        class="w-9 h-9 bg-white text-heading rounded-full shadow-card flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+        aria-label="Compare"
+      >
+        <ArrowRightLeft size={16} />
+      </button>
+    </div>
+  </a>
+
+  <!-- Content -->
+  <div class="p-4 text-center">
+    <p class="text-xs text-muted mb-1">{product.category}</p>
+    <a href={`/product/${product.slug}`} class="block text-base font-semibold text-heading hover:text-primary transition-colors mb-2">
+      {product.name}
+    </a>
+    <div class="flex items-center justify-center gap-2 mb-3">
+      <StarRating rating={product.rating} />
+    </div>
+    <div class="flex items-center justify-center gap-2 mb-4">
+      <span class="text-lg font-bold text-primary">${product.price.toFixed(2)}</span>
+      {product.oldPrice && (
+        <span class="text-sm text-muted line-through">${product.oldPrice.toFixed(2)}</span>
+      )}
+    </div>
+    <button
+      type="button"
+      data-add-to-cart
+      data-product-id={product.id}
+      class="inline-flex items-center justify-center gap-2 w-full px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-pill hover:bg-primary transition-colors"
+    >
+      <ShoppingCart size={16} />
+      <span>Add to Cart</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { addToCart } from '../../stores/cartStore';
+  import { products } from '../../data';
+
+  document.querySelectorAll('[data-add-to-cart]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.getAttribute('data-product-id');
+      const product = products.find((p) => p.id === productId);
+      if (product) {
+        addToCart(product);
+      }
+    });
+  });
+</script>
