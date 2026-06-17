@@ -64,17 +64,17 @@
     "members": [
       {
         "name": "Albert McKinney",
-        "avatar": "/images/testimonials/avatar-1.jpg",
+        "avatar": "https://images.pexels.com/photos/4148949/pexels-photo-4148949.jpeg",
         "bg": "#c4b5fd"
       },
       {
         "name": "Vera Duncan",
-        "avatar": "/images/testimonials/avatar-3.jpg",
+        "avatar": "https://images.pexels.com/photos/12173276/pexels-photo-12173276.jpeg",
         "bg": "#c67b5c"
       },
       {
         "name": "Michella Ore",
-        "avatar": "/images/testimonials/avatar-2.jpg",
+        "avatar": "https://images.pexels.com/photos/1677533/pexels-photo-1677533.jpeg",
         "bg": "#fcd935"
       }
     ]
