@@ -4,6 +4,7 @@ export interface Product {
   name: string;
   price: number;
   oldPrice?: number;
+  priceRange?: string;
   rating: number;
   reviewCount: number;
   image: string;
@@ -54,6 +55,7 @@ export interface BlogPost {
   date: string;
   author: string;
   category: string;
+  tags?: string[];
 }
 
 export interface Brand {

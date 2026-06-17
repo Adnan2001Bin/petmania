@@ -12,7 +12,7 @@ const { category } = Astro.props;
   href={`/shop?category=${category.slug}`}
   class="group block text-center"
 >
-  <div class="relative aspect-square rounded-full overflow-hidden mb-4 bg-light border border-border">
+  <div class="relative aspect-square rounded-full overflow-hidden mb-4 bg-white border-2 border-transparent group-hover:border-primary transition-colors duration-300 shadow-sm">
     <img
       src={category.image}
       alt={category.name}
@@ -20,8 +20,7 @@ const { category } = Astro.props;
       loading="lazy"
     />
   </div>
-  <h3 class="text-base font-semibold text-heading group-hover:text-primary transition-colors">
+  <h3 class="text-base font-bold text-heading group-hover:text-primary transition-colors">
     {category.name}
   </h3>
-  <p class="text-xs text-muted mt-1">{category.productCount} Products</p>
 </a>

@@ -1,0 +1,101 @@
+---
+import type { Product } from '../../types';
+
+export interface Props {
+  title: string;
+  products: Product[];
+}
+
+const { title, products } = Astro.props;
+---
+
+<section class="py-12 md:py-16">
+  <div class="container-main">
+    <!-- Ribbon Heading -->
+    <div class="relative inline-block mb-4">
+      <!-- Paw icon above ribbon -->
+      <svg class="absolute -top-5 right-6 w-7 h-7 text-[#ff004c] z-20" viewBox="0 0 512 512" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <path d="M226.5 92.9c14.3 42.9-.3 86.2-32.6 96.8s-70.1-15.6-84.4-58.5c-14.3-42.9.3-86.2 32.6-96.8s70.1 15.6 84.4 58.5zM100.4 198.6c18.9 32.4 14.3 70.1-10.2 84.1s-59.7-.9-78.5-33.3S-2.7 179.3 21.8 165.3s59.7.9 78.5 33.3zM69.2 401.2C121.6 259.9 214.7 224 256 224s134.4 35.9 186.8 177.2c3.6 9.7 5.2 20.1 5.2 30.5v1.6c0 25.8-20.9 46.7-46.7 46.7c-11.5 0-22.9-1.4-34-4.2l-88-22c-15.3-3.8-31.3-3.8-46.6 0l-88 22c-11.1 2.8-22.5 4.2-34 4.2C84.9 480 64 459.1 64 433.3v-1.6c0-10.4 1.6-20.8 5.2-30.5zM421.8 282.7c-24.5-14-29-51.7-10.2-84.1s54-47.3 78.5-33.3s29 51.7 10.2 84.1s-54 47.3-78.5 33.3zM310.1 189.7c-32.3-10.6-46.9-53.9-32.6-96.8s52.1-69.1 84.4-58.5c32.3 10.6 46.9 53.9 32.6 96.8s-52.1 69.1-84.4 58.5z"/>
+      </svg>
+      <!-- Ribbon main body -->
+      <div class="relative z-10">
+        <div class="ribbon-flag relative bg-[#ff004c] text-white text-lg md:text-xl font-bold py-2.5 pl-10 pr-12">
+          {title}
+        </div>
+        <!-- Ribbon fold -->
+        <div class="absolute top-full right-3 w-0 h-0 z-20" style="border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 8px solid #cc003d;"></div>
+      </div>
+    </div>
+
+    <!-- Compact Product List -->
+    <div class="border border-dashed border-[#ddd] rounded-lg overflow-hidden mt-4">
+      <div class="best-selling-row grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {products.map((product) => (
+          <a
+            href={`/product/${product.slug}`}
+            class="best-selling-item flex items-center gap-4 p-5 group hover:bg-[#fafafa] transition-colors"
+          >
+            <!-- Thumbnail -->
+            <div class="w-[72px] h-[72px] shrink-0 rounded-lg overflow-hidden bg-white border border-[#eee]">
+              <img
+                src={product.image}
+                alt={product.name}
+                class="w-full h-full object-cover p-1.5 group-hover:scale-110 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+            <!-- Info -->
+            <div class="flex-1 min-w-0">
+              <h4 class="text-[13px] font-bold text-[#222] group-hover:text-primary transition-colors truncate mb-0.5 leading-snug">
+                {product.name}
+              </h4>
+              <div class="text-[13px] font-bold text-accent mb-0.5">
+                {product.priceRange ? (
+                  <span>{product.priceRange}</span>
+                ) : product.oldPrice ? (
+                  <span>${product.price.toFixed(2)}<span class="text-[#999] line-through font-normal text-[11px] ml-1">${product.oldPrice.toFixed(2)}</span></span>
+                ) : (
+                  <span>${product.price.toFixed(2)}</span>
+                )}
+              </div>
+              <div class="flex items-center gap-1">
+                <div class="flex items-center">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <svg width={11} height={11} viewBox="0 0 24 24" fill={i < Math.round(product.rating) ? '#ffcb45' : 'none'} stroke="#ffcb45" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  ))}
+                </div>
+                <span class="text-[11px] text-[#999]">({product.reviewCount})</span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ribbon-flag {
+    clip-path: polygon(12px 0, 100% 0, 100% 100%, 12px 100%, 0 50%);
+  }
+  .best-selling-row .best-selling-item:not(:last-child) {
+    border-right: 1px dashed #ddd;
+  }
+  @media (max-width: 639px) {
+    .best-selling-row .best-selling-item:not(:last-child) {
+      border-right: none;
+      border-bottom: 1px dashed #ddd;
+    }
+  }
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .best-selling-row .best-selling-item:nth-child(2n) {
+      border-right: none;
+    }
+    .best-selling-row .best-selling-item:nth-child(1),
+    .best-selling-row .best-selling-item:nth-child(2) {
+      border-bottom: 1px dashed #ddd;
+    }
+  }
+</style>

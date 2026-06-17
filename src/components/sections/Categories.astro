@@ -4,9 +4,19 @@ import SectionHeading from '../ui/SectionHeading.astro';
 import CategoryCard from '../cards/CategoryCard.astro';
 ---
 
-<section class="py-16 md:py-20 bg-light">
+<section class="py-16 md:py-20 bg-[#fdf0f0]">
   <div class="container-main">
-    <SectionHeading title="Browse By Categories" subtitle="Our Collection" />
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+      <SectionHeading title="Browse By Categories" align="left" class="mb-0" />
+      <div class="flex gap-2 self-start sm:self-auto">
+        <button type="button" class="category-prev w-10 h-10 border border-border rounded-full flex items-center justify-center text-heading hover:bg-primary hover:text-white hover:border-primary transition-colors" aria-label="Previous">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="category-next w-10 h-10 border border-border rounded-full flex items-center justify-center text-heading hover:bg-primary hover:text-white hover:border-primary transition-colors" aria-label="Next">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+    </div>
     <div class="swiper category-slider">
       <div class="swiper-wrapper pb-10">
         {categories.map((category) => (
@@ -15,24 +25,22 @@ import CategoryCard from '../cards/CategoryCard.astro';
           </div>
         ))}
       </div>
-      <div class="swiper-pagination"></div>
     </div>
   </div>
 </section>
 
 <script>
   import Swiper from 'swiper';
-  import { Pagination } from 'swiper/modules';
+  import { Navigation } from 'swiper/modules';
   import 'swiper/css';
-  import 'swiper/css/pagination';
 
   new Swiper('.category-slider', {
-    modules: [Pagination],
+    modules: [Navigation],
     slidesPerView: 2,
     spaceBetween: 20,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
+    navigation: {
+      nextEl: '.category-next',
+      prevEl: '.category-prev',
     },
     breakpoints: {
       640: { slidesPerView: 3 },

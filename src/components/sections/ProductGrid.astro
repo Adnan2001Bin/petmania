@@ -2,7 +2,6 @@
 import type { Product } from "../../types";
 import SectionHeading from "../ui/SectionHeading.astro";
 import ProductCard from "../cards/ProductCard.astro";
-import Button from "../ui/Button.astro";
 import BrushDivider from "../ui/BrushDivider.astro";
 
 export interface Props {
@@ -30,18 +29,6 @@ const { title, subtitle, products, showViewAll = false } = Astro.props;
           align="left"
           class="mb-0"
         />
-        {
-          showViewAll && (
-            <Button
-              href="/shop"
-              variant="outline"
-              size="sm"
-              class="self-start sm:self-auto"
-            >
-              View All Products
-            </Button>
-          )
-        }
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => <ProductCard product={product} />)}

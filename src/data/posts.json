@@ -2,31 +2,34 @@
   {
     "id": "1",
     "slug": "how-to-choose-the-best-dog-food",
-    "title": "How to Choose the Best Dog Food",
-    "excerpt": "Discover the key factors to consider when selecting nutritious food for your canine companion.",
+    "title": "How to Choose the Right Bully Stick for Your Dog",
+    "excerpt": "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
     "image": "/images/blog/blog-1.jpg",
-    "date": "2026-06-10",
-    "author": "Dr. Emily Carter",
-    "category": "Pet Care"
+    "date": "2022-06-03",
+    "author": "Admin",
+    "category": "Pet Care",
+    "tags": ["Lifestyles"]
   },
   {
     "id": "2",
-    "slug": "top-10-toys-to-keep-your-pet-active",
-    "title": "Top 10 Toys to Keep Your Pet Active",
-    "excerpt": "Keep your furry friend entertained and healthy with these fun and engaging pet toys.",
+    "slug": "saving-lives-animal-house-shelter",
+    "title": "Saving Lives: Animal House Shelter And Downtown Pet Supply",
+    "excerpt": "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
     "image": "/images/blog/blog-2.jpg",
-    "date": "2026-06-05",
-    "author": "Mark Wilson",
-    "category": "Pet Toys"
+    "date": "2022-06-03",
+    "author": "Admin",
+    "category": "Pet Toys",
+    "tags": ["Educational", "Lifestyles"]
   },
   {
     "id": "3",
-    "slug": "grooming-tips-for-a-healthier-pet",
-    "title": "Grooming Tips for a Healthier Pet",
-    "excerpt": "Learn essential grooming routines that will keep your pet looking and feeling great.",
+    "slug": "himalayan-yak-chews-benefits",
+    "title": "Himalayan Yak Chews: 11 Benefits You Need To Know",
+    "excerpt": "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
     "image": "/images/blog/blog-3.jpg",
-    "date": "2026-05-28",
-    "author": "Lisa Thompson",
-    "category": "Pet Care"
+    "date": "2022-06-03",
+    "author": "Admin",
+    "category": "Pet Care",
+    "tags": ["Educational", "New"]
   }
 ]

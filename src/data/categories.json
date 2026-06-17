@@ -1,8 +1,8 @@
 [
-  { "id": "1", "slug": "dog-food", "name": "Dog Food", "image": "/images/categories/category-1.jpg", "productCount": 48 },
-  { "id": "2", "slug": "cat-food", "name": "Cat Food", "image": "/images/categories/category-2.jpg", "productCount": 36 },
-  { "id": "3", "slug": "bird-supplies", "name": "Bird Supplies", "image": "/images/categories/category-3.jpg", "productCount": 22 },
-  { "id": "4", "slug": "fish-supplies", "name": "Fish Supplies", "image": "/images/categories/category-4.jpg", "productCount": 18 },
-  { "id": "5", "slug": "pet-toys", "name": "Pet Toys", "image": "/images/categories/category-5.jpg", "productCount": 54 },
-  { "id": "6", "slug": "pet-care", "name": "Pet Care", "image": "/images/categories/category-6.jpg", "productCount": 41 }
+  { "id": "1", "slug": "furniture", "name": "Furniture", "image": "/images/categories/category-1.jpg", "productCount": 24 },
+  { "id": "2", "slug": "toys", "name": "Toys", "image": "/images/categories/category-2.jpg", "productCount": 54 },
+  { "id": "3", "slug": "beds", "name": "Beds", "image": "/images/categories/category-3.jpg", "productCount": 36 },
+  { "id": "4", "slug": "bowls", "name": "Bowls", "image": "/images/categories/category-4.jpg", "productCount": 18 },
+  { "id": "5", "slug": "treats", "name": "Treats", "image": "/images/categories/category-5.jpg", "productCount": 42 },
+  { "id": "6", "slug": "crates", "name": "Crates", "image": "/images/categories/category-6.jpg", "productCount": 12 }
 ]

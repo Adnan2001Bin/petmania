@@ -1,10 +1,10 @@
 [
   {
     "id": "hero-1",
-    "title": "Foods They Love",
-    "subtitle": "Discount 25% Off",
-    "description": "Gift for pet. Bowl for Pet Flat 25% Off on selected items.",
-    "discount": "25%",
+    "title": "Felt Cat Beds For Indoor Cats",
+    "subtitle": "Felt products that cats love",
+    "description": "Limited time offer",
+    "discount": "15%",
     "image": "/images/hero/hero-1.jpg",
     "link": "/shop",
     "align": "left",
@@ -12,7 +12,7 @@
   },
   {
     "id": "hero-2",
-    "title": "Healthy & Happy Pets",
+    "title": "Premium Pet Food Collection",
     "subtitle": "Summer Sale",
     "description": "Premium quality products for your best friends.",
     "discount": "30%",
@@ -36,7 +36,7 @@
     "id": "promo-1",
     "title": "50% Off",
     "subtitle": "Pet Food & Accessories",
-    "description": "Limited time offer",
+    "description": "Everything for your pet.",
     "image": "/images/banners/banner-1.jpg",
     "link": "/shop",
     "align": "left",
@@ -45,8 +45,8 @@
   {
     "id": "promo-2",
     "title": "30% Sale Off",
-    "subtitle": "Parrot Food",
-    "description": "For all bird lovers",
+    "subtitle": "FREE SHIPPING",
+    "description": "Shop Now",
     "image": "/images/banners/banner-2.jpg",
     "link": "/shop",
     "align": "left",
@@ -54,9 +54,9 @@
   },
   {
     "id": "promo-3",
-    "title": "Healthy Formula",
-    "subtitle": "Natural Ingredients",
-    "description": "Shop organic food",
+    "title": "Healthy formula",
+    "subtitle": "Parrot Food",
+    "description": "Premium bird nutrition",
     "image": "/images/banners/banner-3.jpg",
     "link": "/shop",
     "align": "left",
@@ -66,20 +66,20 @@
     "id": "promo-4",
     "title": "25% Off",
     "subtitle": "Dog Supplies",
-    "description": "Hotline order available",
+    "description": "Hotline Order (877) 123-4567",
     "image": "/images/banners/banner-4.jpg",
     "link": "/shop",
-    "align": "right",
+    "align": "left",
     "size": "medium"
   },
   {
     "id": "promo-5",
     "title": "Save 30%",
     "subtitle": "Premium Cat Food",
-    "description": "Best nutrition for cats",
+    "description": "GIFT FOR PET",
     "image": "/images/banners/banner-1.jpg",
     "link": "/shop",
-    "align": "right",
+    "align": "left",
     "size": "medium"
   }
 ]

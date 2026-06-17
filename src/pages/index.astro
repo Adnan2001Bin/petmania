@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import HeroSlider from '../components/sections/HeroSlider.astro';
+import BestSellingCompact from '../components/sections/BestSellingCompact.astro';
 import ProductGrid from '../components/sections/ProductGrid.astro';
 import PromoBanners from '../components/sections/PromoBanners.astro';
 import Categories from '../components/sections/Categories.astro';
@@ -17,18 +18,42 @@ const bestSellingProducts = products.slice(0, 8);
 
 <MainLayout>
   <HeroSlider />
-  <ProductGrid
+  <BestSellingCompact
     title="Best Selling Products"
-    subtitle="Popular Now"
     products={bestSellingProducts.slice(0, 4)}
   />
   <PromoBanners />
   <ProductGrid
     title="Spring Pet Collection"
-    subtitle="Seasonal Picks"
     products={bestSellingProducts.slice(4, 8)}
   />
   <Categories />
+
+  <!-- Buy 1 Get 1 Promo Banner -->
+  <section class="py-8">
+    <div class="container-main">
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#f5a623] to-[#f7c948] p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="relative z-10">
+          <span class="text-white/90 text-sm font-semibold uppercase tracking-wider">Buy 1 Get 1</span>
+          <h2 class="text-4xl md:text-5xl font-extrabold text-white mt-2 mb-3">Save 50% Off</h2>
+          <p class="text-white/90 text-base">Safe and effective products.</p>
+        </div>
+        <div class="relative z-10 text-right">
+          <p class="text-white/90 text-sm font-semibold mb-3">Shop for your Pet</p>
+          <a href="/shop" class="inline-flex items-center gap-2 px-7 py-3 bg-accent text-white text-sm font-semibold rounded-full hover:bg-primary transition-colors">
+            Shop Now
+            <span class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </a>
+        </div>
+        <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-20">
+          <img src="/images/products/product-7.jpg" alt="Pet products" class="w-full h-full object-cover" />
+        </div>
+      </div>
+    </div>
+  </section>
+
   <BestSellers />
   <BlogPosts />
   <Testimonials />
