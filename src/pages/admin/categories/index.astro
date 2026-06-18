@@ -1,0 +1,64 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AdminSidebar from '../../../components/admin/AdminSidebar.astro';
+import AdminTopbar from '../../../components/admin/AdminTopbar.astro';
+import categoriesData from '../../../data/categories.json';
+import type { Category } from '../../../types';
+import { Plus, Package } from '@lucide/astro';
+
+const categories: Category[] = categoriesData;
+
+---
+
+<AdminLayout title="Categories - Petmania Admin" activeNav="categories">
+  <AdminSidebar slot="sidebar" activeNav="categories" />
+  <AdminTopbar
+    slot="topbar"
+    title="Categories"
+    subtitle={`${categories.length} categories in your store`}
+  />
+
+  <div class="mb-6 flex justify-end">
+    <button
+      type="button"
+      class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+    >
+      <Plus size={18} />
+      Add Category
+    </button>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      categories.map((category) => (
+        <article class="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-all hover:shadow-card">
+          <div class="relative aspect-[4/3] overflow-hidden bg-light">
+            <img
+              src={category.image}
+              alt={category.name}
+              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent" />
+            <div class="absolute bottom-4 left-4 right-4">
+              <h3 class="text-lg font-semibold text-white">{category.name}</h3>
+              <p class="text-xs text-white/70">/{category.slug}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-4">
+            <div class="flex items-center gap-2 text-sm text-muted">
+              <Package size={16} />
+              <span>{category.productCount} products</span>
+            </div>
+            <button
+              type="button"
+              class="text-sm font-medium text-primary transition-colors hover:text-accent"
+            >
+              Edit
+            </button>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</AdminLayout>

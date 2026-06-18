@@ -1,0 +1,86 @@
+---
+import {
+  LayoutDashboard,
+  Package,
+  FolderTree,
+  ShoppingCart,
+  Settings,
+  PawPrint,
+  ExternalLink,
+  X,
+} from '@lucide/astro';
+
+export interface Props {
+  activeNav?: string;
+}
+
+const { activeNav = 'dashboard' } = Astro.props;
+
+const navItems = [
+  { id: 'dashboard', label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+  { id: 'products', label: 'Products', href: '/admin/products', icon: Package },
+  { id: 'categories', label: 'Categories', href: '/admin/categories', icon: FolderTree },
+  { id: 'orders', label: 'Orders', href: '/admin/orders', icon: ShoppingCart },
+  { id: 'settings', label: 'Settings', href: '/admin/settings', icon: Settings },
+];
+---
+
+<div class="flex h-full flex-col">
+  <!-- Brand — height matches topbar -->
+  <div class="flex h-16 shrink-0 items-center justify-between border-b border-white/10 px-5">
+    <a href="/admin" class="flex min-w-0 items-center gap-3">
+      <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white">
+        <PawPrint size={20} />
+      </span>
+      <div class="min-w-0">
+        <p class="truncate text-sm font-semibold leading-tight text-white">Petmania</p>
+        <p class="truncate text-xs text-white/50">Admin Panel</p>
+      </div>
+    </a>
+    <button
+      id="sidebar-close"
+      type="button"
+      class="shrink-0 rounded-lg p-2 text-white/60 transition-colors hover:bg-white/10 hover:text-white lg:hidden"
+      aria-label="Close sidebar"
+    >
+      <X size={20} />
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-5">
+    <p class="mb-3 px-3 text-xs font-semibold uppercase tracking-wider text-white/40">Menu</p>
+    {
+      navItems.map((item) => {
+        const isActive = activeNav === item.id;
+        const Icon = item.icon;
+        return (
+          <a
+            href={item.href}
+            class:list={[
+              'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+              isActive
+                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                : 'text-white/70 hover:bg-white/10 hover:text-white',
+            ]}
+          >
+            <Icon size={18} class="shrink-0" />
+            <span class="truncate">{item.label}</span>
+          </a>
+        );
+      })
+    }
+  </nav>
+
+  <!-- Footer -->
+  <div class="shrink-0 border-t border-white/10 p-3">
+    <a
+      href="/"
+      target="_blank"
+      class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+    >
+      <ExternalLink size={18} class="shrink-0" />
+      View Store
+    </a>
+  </div>
+</div>

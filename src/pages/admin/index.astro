@@ -1,0 +1,200 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import AdminSidebar from '../../components/admin/AdminSidebar.astro';
+import AdminTopbar from '../../components/admin/AdminTopbar.astro';
+import StatCard from '../../components/admin/StatCard.astro';
+import ProductTable from '../../components/admin/ProductTable.astro';
+import adminProductsData from '../../data/admin-products.json';
+import type { Product } from '../../types';
+import {
+  Package,
+  DollarSign,
+  Star,
+  TrendingUp,
+  ArrowUpRight,
+  Plus,
+} from '@lucide/astro';
+
+const products: Product[] = adminProductsData;
+
+const totalProducts = products.length;
+const inStockCount = products.filter((p) => p.inStock).length;
+const avgRating = (products.reduce((sum, p) => sum + p.rating, 0) / totalProducts).toFixed(1);
+const totalValue = products.reduce((sum, p) => sum + p.price, 0);
+const categories = [...new Set(products.map((p) => p.category))];
+const recentProducts = products.slice(0, 5);
+
+function formatPrice(price: number) {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+}
+---
+
+<AdminLayout title="Dashboard - Petmania Admin" activeNav="dashboard">
+  <AdminSidebar slot="sidebar" activeNav="dashboard" />
+  <AdminTopbar
+    slot="topbar"
+    title="Dashboard"
+    subtitle="Welcome back! Here's what's happening with your pet shop."
+  />
+
+  <!-- Stats -->
+  <div class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <StatCard
+      label="Total Products"
+      value={String(totalProducts)}
+      change="+2 this month"
+      changeType="up"
+      icon={Package}
+      iconBg="bg-primary/10 text-primary"
+    />
+    <StatCard
+      label="In Stock"
+      value={String(inStockCount)}
+      change={`${totalProducts - inStockCount} out of stock`}
+      changeType={inStockCount === totalProducts ? 'up' : 'neutral'}
+      icon={TrendingUp}
+      iconBg="bg-success/10 text-success"
+    />
+    <StatCard
+      label="Avg. Rating"
+      value={avgRating}
+      change="Across all products"
+      changeType="neutral"
+      icon={Star}
+      iconBg="bg-star/20 text-star"
+    />
+    <StatCard
+      label="Inventory Value"
+      value={formatPrice(totalValue)}
+      change={`${categories.length} categories`}
+      changeType="neutral"
+      icon={DollarSign}
+      iconBg="bg-accent/10 text-accent"
+    />
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-3">
+    <!-- Recent Products -->
+    <div class="xl:col-span-2">
+      <div class="rounded-2xl border border-border bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-border px-5 py-4">
+          <div>
+            <h2 class="text-base font-semibold text-heading">Recent Products</h2>
+            <p class="text-xs text-muted">Latest items in your catalog</p>
+          </div>
+          <a
+            href="/admin/products"
+            class="flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-accent"
+          >
+            View all
+            <ArrowUpRight size={16} />
+          </a>
+        </div>
+        <div class="divide-y divide-border">
+          {
+            recentProducts.map((product) => (
+              <div class="flex items-center gap-4 px-5 py-4 transition-colors hover:bg-light/50">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  class="h-14 w-14 rounded-xl object-cover"
+                  loading="lazy"
+                />
+                <div class="min-w-0 flex-1">
+                  <p class="truncate font-medium text-heading">{product.name}</p>
+                  <p class="text-xs text-muted">{product.category} · {product.sku}</p>
+                </div>
+                <div class="text-right">
+                  <p class="font-semibold text-heading">{formatPrice(product.price)}</p>
+                  <p class="flex items-center justify-end gap-1 text-xs text-muted">
+                    <Star size={12} class="fill-star text-star" />
+                    {product.rating}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar widgets -->
+    <div class="space-y-6">
+      <!-- Quick actions -->
+      <div class="rounded-2xl border border-border bg-white p-5 shadow-sm">
+        <h2 class="text-base font-semibold text-heading">Quick Actions</h2>
+        <p class="mt-1 text-xs text-muted">Manage your store efficiently</p>
+        <div class="mt-4 space-y-2">
+          <a
+            href="/admin/products"
+            class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent"
+          >
+            <Plus size={18} />
+            Add New Product
+          </a>
+          <a
+            href="/admin/products"
+            class="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
+          >
+            <Package size={18} />
+            Manage Products
+          </a>
+        </div>
+      </div>
+
+      <!-- Categories breakdown -->
+      <div class="rounded-2xl border border-border bg-white p-5 shadow-sm">
+        <h2 class="text-base font-semibold text-heading">Categories</h2>
+        <p class="mt-1 text-xs text-muted">Products by category</p>
+        <ul class="mt-4 space-y-3">
+          {
+            categories.map((category) => {
+              const count = products.filter((p) => p.category === category).length;
+              const percentage = Math.round((count / totalProducts) * 100);
+              return (
+                <li>
+                  <div class="mb-1 flex items-center justify-between text-sm">
+                    <span class="font-medium text-heading">{category}</span>
+                    <span class="text-muted">{count}</span>
+                  </div>
+                  <div class="h-2 overflow-hidden rounded-full bg-light">
+                    <div
+                      class="h-full rounded-full bg-primary transition-all"
+                      style={`width: ${percentage}%`}
+                    />
+                  </div>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+
+      <!-- Top rated -->
+      <div class="rounded-2xl border border-border bg-white p-5 shadow-sm">
+        <h2 class="text-base font-semibold text-heading">Top Rated</h2>
+        <ul class="mt-4 space-y-3">
+          {
+            [...products]
+              .sort((a, b) => b.rating - a.rating)
+              .slice(0, 3)
+              .map((product, i) => (
+                <li class="flex items-center gap-3">
+                  <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-light text-xs font-bold text-muted">
+                    {i + 1}
+                  </span>
+                  <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-medium text-heading">{product.name}</p>
+                    <p class="flex items-center gap-1 text-xs text-muted">
+                      <Star size={12} class="fill-star text-star" />
+                      {product.rating} · {product.reviewCount} reviews
+                    </p>
+                  </div>
+                </li>
+              ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</AdminLayout>

@@ -1,0 +1,286 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum ProductBadge {
+  SALE
+  NEW
+  HOT
+  SOLD_OUT
+}
+
+enum BannerType {
+  HERO
+  PROMO
+}
+
+enum BannerSize {
+  SMALL
+  MEDIUM
+  LARGE
+}
+
+enum BannerAlign {
+  LEFT
+  RIGHT
+  CENTER
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// ─── Category ────────────────────────────────────────────────────────────────
+
+model Category {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("categories")
+}
+
+// ─── Brand ───────────────────────────────────────────────────────────────────
+
+model Brand {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  logo      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  products Product[]
+
+  @@map("brands")
+}
+
+// ─── Tag ─────────────────────────────────────────────────────────────────────
+
+model Tag {
+  id   String @id @default(cuid())
+  name String @unique
+
+  products ProductTag[]
+
+  @@map("tags")
+}
+
+// ─── Product ─────────────────────────────────────────────────────────────────
+
+model Product {
+  id          String       @id @default(cuid())
+  slug        String       @unique
+  name        String
+  description String       @db.Text
+  price       Decimal      @db.Decimal(10, 2)
+  oldPrice    Decimal?     @db.Decimal(10, 2)
+  priceRange  String?
+  sku         String       @unique
+  image       String
+  hoverImage  String?
+  badge       ProductBadge?
+  rating      Decimal      @default(0) @db.Decimal(3, 2)
+  reviewCount Int          @default(0)
+  inStock     Boolean      @default(true)
+  isActive    Boolean      @default(true)
+  sortOrder   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  category   Category   @relation(fields: [categoryId], references: [id])
+  categoryId String
+  brand      Brand?     @relation(fields: [brandId], references: [id])
+  brandId    String?
+  tags       ProductTag[]
+  reviews    Review[]
+  orderItems OrderItem[]
+
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([slug])
+  @@map("products")
+}
+
+// ─── ProductTag (Many-to-Many) ───────────────────────────────────────────────
+
+model ProductTag {
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId     String
+
+  @@id([productId, tagId])
+  @@map("product_tags")
+}
+
+// ─── Banner ──────────────────────────────────────────────────────────────────
+
+model Banner {
+  id          String      @id @default(cuid())
+  title       String
+  subtitle    String?
+  description String?
+  discount    String?
+  image       String
+  link        String
+  type        BannerType  @default(PROMO)
+  size        BannerSize? @default(MEDIUM)
+  align       BannerAlign @default(LEFT)
+  isActive    Boolean     @default(true)
+  sortOrder   Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([type])
+  @@map("banners")
+}
+
+// ─── BlogPost ────────────────────────────────────────────────────────────────
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String   @db.Text
+  content     String?  @db.Text
+  image       String
+  date        DateTime @default(now())
+  author      String
+  category    String
+  tags        String?  // JSON array stored as string, or use separate table
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@map("blog_posts")
+}
+
+// ─── Testimonial ─────────────────────────────────────────────────────────────
+
+model Testimonial {
+  id        String  @id @default(cuid())
+  name      String
+  role      String
+  avatar    String?
+  content   String  @db.Text
+  rating    Int     @default(5)
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@map("testimonials")
+}
+
+// ─── GalleryImage ────────────────────────────────────────────────────────────
+
+model GalleryImage {
+  id        String  @id @default(cuid())
+  src       String
+  alt       String
+  link      String?
+  isActive  Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@map("gallery_images")
+}
+
+// ─── User ────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      UserRole @default(USER)
+  avatar    String?
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders   Order[]
+  reviews  Review[]
+
+  @@map("users")
+}
+
+// ─── Order ───────────────────────────────────────────────────────────────────
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNumber   String      @unique
+  status        OrderStatus @default(PENDING)
+  total         Decimal     @db.Decimal(10, 2)
+  shippingAddress String?   @db.Text
+  phone         String?
+  notes         String?     @db.Text
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  user   User        @relation(fields: [userId], references: [id])
+  userId String
+  items  OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("orders")
+}
+
+// ─── OrderItem ───────────────────────────────────────────────────────────────
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int     @default(1)
+  price     Decimal @db.Decimal(10, 2)
+
+  // Relations
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("order_items")
+}
+
+// ─── Review ──────────────────────────────────────────────────────────────────
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  @@unique([userId, productId])
+  @@index([productId])
+  @@map("reviews")
+}

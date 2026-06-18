@@ -1,0 +1,93 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  activeNav?: string;
+}
+
+const {
+  title = 'Admin Dashboard - Petmania',
+  description = 'Manage your pet shop products, orders, and store settings.',
+  activeNav = 'dashboard',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title}</title>
+</head>
+<body class="min-h-screen bg-light text-body antialiased">
+  <div class="admin-shell">
+    <!-- Mobile overlay -->
+    <div
+      id="admin-overlay"
+      class="admin-overlay fixed inset-0 z-40 bg-dark/60 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Sidebar -->
+    <aside
+      id="admin-sidebar"
+      class="admin-sidebar fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col bg-dark text-white shadow-xl transition-transform duration-300"
+    >
+      <slot name="sidebar" />
+    </aside>
+
+    <!-- Main column -->
+    <div class="flex min-h-screen min-w-0 flex-col">
+      <slot name="topbar" />
+      <main class="flex-1 p-4 sm:p-6 lg:p-8">
+        <slot />
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('admin-sidebar');
+    const overlay = document.getElementById('admin-overlay');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    const closeBtn = document.getElementById('sidebar-close');
+
+    function isDesktop() {
+      return window.matchMedia('(min-width: 1024px)').matches;
+    }
+
+    function openSidebar() {
+      if (isDesktop()) return;
+      sidebar?.classList.remove('-translate-x-full');
+      overlay?.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeSidebar() {
+      if (isDesktop()) return;
+      sidebar?.classList.add('-translate-x-full');
+      overlay?.classList.add('opacity-0', 'pointer-events-none');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    toggleBtn?.addEventListener('click', openSidebar);
+    closeBtn?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+
+    window.addEventListener('resize', () => {
+      if (isDesktop()) {
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        document.body.classList.remove('overflow-hidden');
+      } else {
+        sidebar?.classList.add('-translate-x-full');
+        overlay?.classList.add('opacity-0', 'pointer-events-none');
+        document.body.classList.remove('overflow-hidden');
+      }
+    });
+  </script>
+</body>
+</html>

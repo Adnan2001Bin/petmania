@@ -1,0 +1,50 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AdminSidebar from '../../../components/admin/AdminSidebar.astro';
+import AdminTopbar from '../../../components/admin/AdminTopbar.astro';
+import { Store, Mail, Globe, Bell } from '@lucide/astro';
+
+const settings = [
+  { icon: Store, label: 'Store Name', value: 'Petmania', description: 'Your pet shop display name' },
+  { icon: Mail, label: 'Contact Email', value: 'admin@petmania.com', description: 'Admin notification email' },
+  { icon: Globe, label: 'Store URL', value: 'https://petmania.com', description: 'Public storefront URL' },
+  { icon: Bell, label: 'Notifications', value: 'Enabled', description: 'Email alerts for new orders' },
+];
+---
+
+<AdminLayout title="Settings - Petmania Admin" activeNav="settings">
+  <AdminSidebar slot="sidebar" activeNav="settings" />
+  <AdminTopbar slot="topbar" title="Settings" subtitle="Configure your store preferences" />
+
+  <div class="mx-auto max-w-2xl space-y-4">
+    {
+      settings.map((setting) => {
+        const Icon = setting.icon;
+        return (
+          <div class="flex items-start gap-4 rounded-2xl border border-border bg-white p-5 shadow-sm">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-light text-primary">
+              <Icon size={20} />
+            </span>
+            <div class="min-w-0 flex-1">
+              <label class="text-sm font-semibold text-heading">{setting.label}</label>
+              <p class="mt-0.5 text-xs text-muted">{setting.description}</p>
+              <input
+                type="text"
+                value={setting.value}
+                readonly
+                class="mt-3 w-full rounded-xl border border-border bg-light px-4 py-2.5 text-sm text-heading outline-none focus:border-primary"
+              />
+            </div>
+          </div>
+        );
+      })
+    }
+
+    <button
+      type="button"
+      class="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white transition-colors hover:bg-accent"
+    >
+      Save Changes
+    </button>
+  </div>
+</AdminLayout>
