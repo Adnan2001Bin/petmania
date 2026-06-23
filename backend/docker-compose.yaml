@@ -1,0 +1,76 @@
+services:
+  app:
+    build: .
+    container_name: petmania-backend
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_NAME: fastify_db
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/petmania_db?schema=public"
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+    restart: always
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: petmania-postgres
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: petmania_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d petmania_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: petmania-redis
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    restart: always
+
+volumes:
+  postgres_data:
+  redis_data:

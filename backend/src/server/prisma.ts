@@ -22,9 +22,7 @@ async function prismaPlugin(fastify: FastifyInstance) {
     fastify.log.warn(
       "Database connection failed. Server will start without DB."
     );
-    fastify.log.warn(
-      "Start PostgreSQL and restart the server to enable database features."
-    );
+    fastify.log.warn({ err }, "Connection error details");
   }
 
   fastify.decorate("prisma", prisma);
