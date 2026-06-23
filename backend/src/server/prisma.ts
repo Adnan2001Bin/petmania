@@ -1,13 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import fp from "fastify-plugin";
 import type { FastifyInstance } from "fastify";
-
-declare module "fastify" {
-  interface FastifyInstance {
-    prisma: PrismaClient;
-    dbConnected: boolean;
-  }
-}
+import "../types/fastify.d";
 
 async function prismaPlugin(fastify: FastifyInstance) {
   const prisma = new PrismaClient();

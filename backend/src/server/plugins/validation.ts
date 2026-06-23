@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import fp from "fastify-plugin";
 import { ZodSchema, ZodError } from "zod";
+import "../../types/fastify.d";
 
 declare module "fastify" {
   interface FastifyInstance {

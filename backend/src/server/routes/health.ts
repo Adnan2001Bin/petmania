@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import "../../types/fastify.d";
 
 export default async function healthRoutes(fastify: FastifyInstance) {
   fastify.get("/health", async (_, reply) => {
