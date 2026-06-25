@@ -32,7 +32,7 @@ jobs:
             cd "$DEPLOY_DIR"
             git fetch origin
             git reset --hard origin/main
-            export REGISTRY_REPO=${{ github.repository }}
+            export REGISTRY_REPO=${GITHUB_REPOSITORY,,}
             docker compose -f docker-compose.prod.yaml pull
             docker compose -f docker-compose.prod.yaml up -d --remove-orphans
             docker image prune -f
