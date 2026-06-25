@@ -10,7 +10,7 @@ const { requireAuth = true, requireAdmin = false } = Astro.props;
 <div id="auth-guard" data-require-auth={requireAuth} data-require-admin={requireAdmin}></div>
 
 <script>
-  import { isLoggedIn, currentUser } from '../stores/authStore';
+  import { isLoggedIn, currentUser } from '../../stores/authStore';
 
   const guard = document.getElementById('auth-guard');
   if (guard) {
