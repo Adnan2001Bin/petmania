@@ -24,8 +24,14 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            cd ${{ vars.DEPLOY_PATH || '~/petmania' }}
-            git pull origin main
+            DEPLOY_DIR=${{ vars.DEPLOY_PATH || '~/petmania' }}
+            if [ ! -d "$DEPLOY_DIR/.git" ]; then
+              rm -rf "$DEPLOY_DIR"
+              git clone https://github.com/${{ github.repository }}.git "$DEPLOY_DIR"
+            fi
+            cd "$DEPLOY_DIR"
+            git fetch origin
+            git reset --hard origin/main
             export REGISTRY_REPO=${{ github.repository }}
             docker compose -f docker-compose.prod.yaml pull
             docker compose -f docker-compose.prod.yaml up -d --remove-orphans
