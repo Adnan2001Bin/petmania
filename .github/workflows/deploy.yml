@@ -1,0 +1,32 @@
+name: Deploy to production
+
+on:
+  workflow_run:
+    workflows: ["Main branch workflow"]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            cd ${{ vars.DEPLOY_PATH || '~/petmania' }}
+            git pull origin main
+            export REGISTRY_REPO=${{ github.repository }}
+            docker compose -f docker-compose.prod.yaml pull
+            docker compose -f docker-compose.prod.yaml up -d --remove-orphans
+            docker image prune -f
