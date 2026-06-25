@@ -1,6 +1,6 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
-import AuthGuard from '../components/ui/AuthGuard.astro';
+import MainLayout from '../../layouts/MainLayout.astro';
+import AuthGuard from '../../components/ui/AuthGuard.astro';
 import { User, Package, LogOut, Settings } from '@lucide/astro';
 ---
 
@@ -96,7 +96,7 @@ import { User, Package, LogOut, Settings } from '@lucide/astro';
 </MainLayout>
 
 <script>
-  import { authState, logout, fetchProfile, getAuthHeaders } from '../stores/authStore';
+  import { authState, logout, fetchProfile, getAuthHeaders } from '../../stores/authStore';
 
   const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
 
