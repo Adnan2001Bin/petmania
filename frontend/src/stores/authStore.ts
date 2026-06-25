@@ -1,14 +1,6 @@
 import { atom } from "nanostores";
-import { persistent } from "@nanostores/persistent";
-
-type User = {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-  avatar?: string;
-  phone?: string;
-};
+import { persistentAtom } from "@nanostores/persistent";
+import type { User } from "../types";
 
 type AuthState = {
   user: User | null;
@@ -18,30 +10,28 @@ type AuthState = {
 
 const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:5000";
 
-export const authState = persistent<AuthState>("petmania-auth", {
+export const authState = persistentAtom<AuthState>("petmania-auth", {
   user: null,
   token: null,
   isLoading: false,
+}, {
+  encode: JSON.stringify,
+  decode: JSON.parse,
 });
 
 export const isLoggedIn = atom(false);
 export const currentUser = atom<User | null>(null);
 export const isAdmin = atom(false);
 
-// Sync atoms with persistent store
-authState.subscribe((state) => {
+function syncAuth() {
+  const state = authState.get();
   isLoggedIn.set(!!state.token);
   currentUser.set(state.user);
   isAdmin.set(state.user?.role === "ADMIN");
-});
-
-// Initialize from persisted state
-const initial = authState.get();
-if (initial.token) {
-  isLoggedIn.set(true);
-  currentUser.set(initial.user);
-  isAdmin.set(initial.user?.role === "ADMIN");
 }
+
+authState.subscribe(syncAuth);
+syncAuth();
 
 async function apiRequest(path: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${path}`, {
@@ -118,4 +108,9 @@ export async function fetchProfile() {
     logout();
     return null;
   }
+}
+
+export function getAuthHeaders(): Record<string, string> {
+  const token = authState.get().token;
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }

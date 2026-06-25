@@ -1,0 +1,173 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import AuthGuard from '../components/ui/AuthGuard.astro';
+import { User, Package, LogOut, Settings } from '@lucide/astro';
+---
+
+<MainLayout title="My Account - Petmania">
+  <AuthGuard requireAuth={true} />
+
+  <section class="py-16 bg-light">
+    <div class="container-main">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold text-heading mb-8">My Account</h1>
+
+        <div class="grid gap-6 md:grid-cols-3">
+          <!-- Sidebar -->
+          <div class="space-y-4">
+            <div class="bg-white rounded-2xl shadow-sm border border-border p-6 text-center">
+              <div id="user-avatar" class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                <User size={32} class="text-primary" />
+              </div>
+              <h2 id="user-name" class="font-semibold text-heading text-lg">Loading...</h2>
+              <p id="user-email" class="text-sm text-muted"></p>
+            </div>
+
+            <nav class="bg-white rounded-2xl shadow-sm border border-border divide-y divide-border">
+              <a href="/account" class="flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-primary bg-primary/5">
+                <User size={18} />
+                Profile
+              </a>
+              <a href="/account/orders" class="flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-heading hover:bg-light transition-colors">
+                <Package size={18} />
+                Orders
+              </a>
+              <button id="logout-btn" class="flex items-center gap-3 px-5 py-3.5 text-sm font-medium text-heading hover:bg-light transition-colors w-full text-left">
+                <LogOut size={18} />
+                Logout
+              </button>
+            </nav>
+          </div>
+
+          <!-- Profile Form -->
+          <div class="md:col-span-2">
+            <div class="bg-white rounded-2xl shadow-sm border border-border p-6">
+              <h3 class="text-lg font-semibold text-heading mb-6">Profile Information</h3>
+              <form id="profile-form" class="space-y-5">
+                <div id="profile-message" class="hidden p-3 rounded-lg text-sm"></div>
+
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label for="name" class="block text-sm font-medium text-heading mb-1.5">Full Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label for="email" class="block text-sm font-medium text-heading mb-1.5">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      disabled
+                      class="w-full px-4 py-3 rounded-xl border border-border bg-light text-muted cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-heading mb-1.5">Phone</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                    placeholder="Your phone number"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  id="save-btn"
+                  class="px-6 py-3 rounded-xl bg-primary text-white font-semibold hover:bg-accent transition-colors"
+                >
+                  Save Changes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  import { authState, logout, fetchProfile, getAuthHeaders } from '../stores/authStore';
+
+  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+
+  const form = document.getElementById('profile-form') as HTMLFormElement;
+  const nameInput = document.getElementById('name') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
+  const phoneInput = document.getElementById('phone') as HTMLInputElement;
+  const userName = document.getElementById('user-name')!;
+  const userEmail = document.getElementById('user-email')!;
+  const messageEl = document.getElementById('profile-message')!;
+  const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
+  const logoutBtn = document.getElementById('logout-btn')!;
+
+  // Load profile
+  async function loadProfile() {
+    try {
+      const profile = await fetchProfile();
+      if (profile) {
+        nameInput.value = profile.name || '';
+        emailInput.value = profile.email || '';
+        phoneInput.value = profile.phone || '';
+        userName.textContent = profile.name;
+        userEmail.textContent = profile.email;
+      }
+    } catch {
+      // redirect handled by fetchProfile
+    }
+  }
+
+  // Save profile
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    messageEl.classList.add('hidden');
+    saveBtn.textContent = 'Saving...';
+    saveBtn.disabled = true;
+
+    try {
+      const res = await fetch(`${API_URL}/api/auth/profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({
+          name: nameInput.value,
+          phone: phoneInput.value,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+
+      messageEl.textContent = 'Profile updated successfully!';
+      messageEl.className = 'p-3 rounded-lg bg-green-50 text-green-600 text-sm';
+      userName.textContent = nameInput.value;
+
+      // Update stored user
+      const state = authState.get();
+      authState.set({ ...state, user: { ...state.user!, name: nameInput.value, phone: phoneInput.value } });
+    } catch (err: any) {
+      messageEl.textContent = err.message || 'Failed to update profile';
+      messageEl.className = 'p-3 rounded-lg bg-red-50 text-red-600 text-sm';
+    } finally {
+      saveBtn.textContent = 'Save Changes';
+      saveBtn.disabled = false;
+    }
+  });
+
+  logoutBtn?.addEventListener('click', () => {
+    logout();
+    window.location.href = '/';
+  });
+
+  loadProfile();
+</script>
