@@ -1,6 +1,8 @@
+import "dotenv/config";
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import prismaPlugin from "./prisma";
+import authPlugin from "./plugins/auth";
 import validationPlugin from "./plugins/validation";
 import apiRoutes from "./routes";
 
@@ -19,6 +21,7 @@ async function bootstrap() {
   });
 
   await fastify.register(prismaPlugin);
+  await fastify.register(authPlugin);
   await fastify.register(validationPlugin);
   await fastify.register(apiRoutes);
 

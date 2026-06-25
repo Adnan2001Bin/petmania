@@ -596,6 +596,37 @@ async function main() {
 
   console.log(`Created ${galleryImages.length} gallery images`);
 
+  // ─── Admin User ─────────────────────────────────────────────────────────
+  const bcrypt = await import("bcryptjs");
+  const adminPassword = await bcrypt.hash("admin123", 12);
+
+  await prisma.user.upsert({
+    where: { email: "admin@petmania.com" },
+    update: {},
+    create: {
+      email: "admin@petmania.com",
+      password: adminPassword,
+      name: "Admin",
+      role: "ADMIN",
+    },
+  });
+
+  // ─── Test User ───────────────────────────────────────────────────────────
+  const userPassword = await bcrypt.hash("user123", 12);
+
+  await prisma.user.upsert({
+    where: { email: "user@petmania.com" },
+    update: {},
+    create: {
+      email: "user@petmania.com",
+      password: userPassword,
+      name: "Test User",
+      role: "USER",
+    },
+  });
+
+  console.log("Created admin and test users");
+
   console.log("Seeding completed!");
 }
 

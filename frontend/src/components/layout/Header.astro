@@ -60,9 +60,19 @@ import { menu } from '../../data';
       <!-- Actions -->
       <div class="flex items-center gap-3 sm:gap-4">
         <a
-          href="#"
+          href="/login"
+          id="auth-link"
           class="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-heading hover:text-primary transition-colors"
           aria-label="Account"
+        >
+          <User size={20} />
+        </a>
+        <a
+          href="#"
+          id="logout-btn"
+          class="hidden md:inline-flex items-center justify-center w-10 h-10 rounded-full text-heading hover:text-primary transition-colors"
+          aria-label="Logout"
+          style="display: none;"
         >
           <User size={20} />
         </a>
@@ -167,10 +177,13 @@ import { menu } from '../../data';
 
 <script>
   import { cartCount, cartTotal } from '../../stores/cartStore';
+  import { isLoggedIn, currentUser, logout } from '../../stores/authStore';
 
   const countEl = document.getElementById('cart-count');
   const mobileCountEl = document.getElementById('mobile-cart-count');
   const priceEl = document.getElementById('cart-total-price');
+  const authLink = document.getElementById('auth-link') as HTMLAnchorElement;
+  const logoutBtn = document.getElementById('logout-btn') as HTMLAnchorElement;
 
   function updateCart() {
     const count = cartCount.get();
@@ -180,9 +193,40 @@ import { menu } from '../../data';
     if (priceEl) priceEl.textContent = `$${total.toFixed(2)}`;
   }
 
+  function updateAuth() {
+    const loggedIn = isLoggedIn.get();
+    const user = currentUser.get();
+    if (loggedIn && user) {
+      if (authLink) {
+        authLink.href = user.role === 'ADMIN' ? '/admin' : '/account';
+        authLink.style.display = '';
+      }
+      if (logoutBtn) {
+        logoutBtn.style.display = '';
+      }
+    } else {
+      if (authLink) {
+        authLink.href = '/login';
+        authLink.style.display = '';
+      }
+      if (logoutBtn) {
+        logoutBtn.style.display = 'none';
+      }
+    }
+  }
+
+  logoutBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    logout();
+    window.location.href = '/';
+  });
+
   cartCount.subscribe(updateCart);
   cartTotal.subscribe(updateCart);
+  isLoggedIn.subscribe(updateAuth);
+  currentUser.subscribe(updateAuth);
   updateCart();
+  updateAuth();
 
   // Mobile menu toggle
   const toggleBtn = document.getElementById('mobile-menu-toggle');

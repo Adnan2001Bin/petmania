@@ -51,6 +51,15 @@ const {
   </div>
 
   <script>
+    import { isLoggedIn, currentUser } from '../stores/authStore';
+
+    // Check admin auth
+    const loggedIn = isLoggedIn.get();
+    const user = currentUser.get();
+    if (!loggedIn || !user || user.role !== 'ADMIN') {
+      window.location.href = '/login';
+    }
+
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('admin-overlay');
     const toggleBtn = document.getElementById('sidebar-toggle');

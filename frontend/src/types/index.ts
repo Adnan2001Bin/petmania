@@ -81,3 +81,18 @@ export interface GalleryImage {
   alt: string;
   link?: string;
 }
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'USER';
+  avatar?: string;
+  phone?: string;
+}
+
+export interface AuthState {
+  user: User | null;
+  token: string | null;
+  isLoading: boolean;
+}
