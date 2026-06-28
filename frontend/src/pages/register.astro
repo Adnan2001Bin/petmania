@@ -1,106 +1,98 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
+import AuthLayout from '../layouts/AuthLayout.astro';
+import AuthShell from '../components/auth/AuthShell.astro';
+import AuthField from '../components/auth/AuthField.astro';
+import AuthSubmit from '../components/auth/AuthSubmit.astro';
 ---
 
-<MainLayout title="Register - Petmania">
-  <section class="py-16 bg-light">
-    <div class="container-main">
-      <div class="max-w-md mx-auto">
-        <div class="text-center mb-8">
-          <h1 class="text-3xl font-bold text-heading">Create Account</h1>
-          <p class="text-muted mt-2">Join Petmania today</p>
-        </div>
+<AuthLayout title="Register - Petmania" description="Create your Petmania account.">
+  <AuthShell
+    formTitle="Registration"
+    formSubtitle="Please fill up the form to get started."
+    panelTitle="Create an Account for Your Pet's Best Life"
+    panelDescription="Join Petmania and give your furry companion the love, care, and happiness they deserve."
+  >
+    <form id="register-form" class="auth-form-grid auth-form-grid--register">
+      <div id="register-error" class="auth-error hidden auth-field--full"></div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-border p-8">
-          <form id="register-form" class="space-y-5">
-            <div id="register-error" class="hidden p-3 rounded-lg bg-red-50 text-red-600 text-sm"></div>
+      <AuthField
+        id="name"
+        label="Full Name"
+        type="text"
+        icon="user"
+        placeholder="Full Name"
+        required
+        autocomplete="name"
+      />
 
-            <div>
-              <label for="name" class="block text-sm font-medium text-heading mb-1.5">Full Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="John Doe"
-              />
-            </div>
+      <AuthField
+        id="email"
+        label="Email Address"
+        type="email"
+        icon="mail"
+        placeholder="Email Address"
+        required
+        autocomplete="email"
+      />
 
-            <div>
-              <label for="email" class="block text-sm font-medium text-heading mb-1.5">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="you@example.com"
-              />
-            </div>
+      <AuthField
+        id="password"
+        label="Password"
+        type="password"
+        icon="lock"
+        placeholder="Password"
+        required
+        minlength={8}
+        autocomplete="new-password"
+        class="auth-field--full"
+      />
 
-            <div>
-              <label for="password" class="block text-sm font-medium text-heading mb-1.5">Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                minlength="8"
-                class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="Min. 8 characters"
-              />
-            </div>
+      <AuthField
+        id="confirm-password"
+        label="Confirm Password"
+        type="password"
+        icon="lock"
+        placeholder="Confirm Password"
+        required
+        minlength={8}
+        autocomplete="new-password"
+        class="auth-field--full"
+      />
 
-            <div>
-              <label for="confirm-password" class="block text-sm font-medium text-heading mb-1.5">Confirm Password</label>
-              <input
-                type="password"
-                id="confirm-password"
-                name="confirm-password"
-                required
-                minlength="8"
-                class="w-full px-4 py-3 rounded-xl border border-border bg-light text-heading placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                placeholder="Repeat your password"
-              />
-            </div>
+      <p class="auth-link auth-field--full">
+        Already have an account? <a href="/login">Login</a>
+      </p>
 
-            <button
-              type="submit"
-              id="register-btn"
-              class="w-full py-3 rounded-xl bg-primary text-white font-semibold hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Create Account
-            </button>
-          </form>
-
-          <div class="mt-6 text-center">
-            <p class="text-sm text-muted">
-              Already have an account?
-              <a href="/login" class="text-primary font-semibold hover:text-accent transition-colors">Sign in</a>
-            </p>
-          </div>
-        </div>
+      <div class="auth-field--full">
+        <AuthSubmit id="register-btn" label="Register" />
       </div>
-    </div>
-  </section>
-</MainLayout>
+    </form>
+  </AuthShell>
+</AuthLayout>
 
 <script>
-  import { register, getPostLoginRedirect } from '../stores/authStore';
+  import { register, getPostLoginRedirect, currentUser, waitForAuth } from '../stores/authStore';
 
   const form = document.getElementById('register-form') as HTMLFormElement;
   const errorEl = document.getElementById('register-error')!;
   const btn = document.getElementById('register-btn') as HTMLButtonElement;
+  const btnLabel = btn.querySelector('span')!;
+
+  waitForAuth().then(() => {
+    const user = currentUser.get();
+    if (user) {
+      window.location.replace(getPostLoginRedirect(user));
+    }
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorEl.classList.add('hidden');
     btn.disabled = true;
-    btn.textContent = 'Creating account...';
+    btnLabel.textContent = 'Creating account...';
 
-    const name = (document.getElementById('name') as HTMLInputElement).value;
-    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const name = (document.getElementById('name') as HTMLInputElement).value.trim();
+    const email = (document.getElementById('email') as HTMLInputElement).value.trim();
     const password = (document.getElementById('password') as HTMLInputElement).value;
     const confirmPassword = (document.getElementById('confirm-password') as HTMLInputElement).value;
 
@@ -108,18 +100,19 @@ import MainLayout from '../layouts/MainLayout.astro';
       errorEl.textContent = 'Passwords do not match';
       errorEl.classList.remove('hidden');
       btn.disabled = false;
-      btn.textContent = 'Create Account';
+      btnLabel.textContent = 'Register';
       return;
     }
 
     try {
       const data = await register({ name, email, password });
       window.location.href = getPostLoginRedirect(data.user);
-    } catch (err: any) {
-      errorEl.textContent = err.message || 'Registration failed';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Registration failed';
+      errorEl.textContent = message;
       errorEl.classList.remove('hidden');
       btn.disabled = false;
-      btn.textContent = 'Create Account';
+      btnLabel.textContent = 'Register';
     }
   });
 </script>

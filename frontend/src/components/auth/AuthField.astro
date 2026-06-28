@@ -1,0 +1,67 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+export interface Props extends HTMLAttributes<'input'> {
+  id: string;
+  label: string;
+  type?: string;
+  placeholder?: string;
+  icon: 'user' | 'mail' | 'lock' | 'phone';
+  required?: boolean;
+  minlength?: number;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  type = 'text',
+  placeholder,
+  icon,
+  required = false,
+  minlength,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<div class:list={['auth-field', className]}>
+  <label for={id} class="sr-only">{label}</label>
+  <div class="relative">
+    <span class="auth-field-icon pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-muted">
+      {icon === 'user' && (
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <circle cx="12" cy="8" r="4"></circle>
+          <path d="M5 20c0-4 3.5-7 7-7s7 3 7 7"></path>
+        </svg>
+      )}
+      {icon === 'mail' && (
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <path d="M3 7l9 6 9-6"></path>
+        </svg>
+      )}
+      {icon === 'lock' && (
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <rect x="5" y="11" width="14" height="10" rx="2"></rect>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3"></path>
+        </svg>
+      )}
+      {icon === 'phone' && (
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M6.5 4h3l1.5 5-2 1.5a11 11 0 0 0 5 5L15.5 14l5 1.5v3A2.5 2.5 0 0 1 18 21C10.8 21 3 13.2 3 6a2.5 2.5 0 0 1 2.5-2z"></path>
+        </svg>
+      )}
+    </span>
+    <input
+      id={id}
+      name={id}
+      type={type}
+      placeholder={placeholder ?? label}
+      required={required}
+      minlength={minlength}
+      class="auth-field-input"
+      {...rest}
+    />
+  </div>
+</div>
