@@ -62,11 +62,18 @@ import MainLayout from '../layouts/MainLayout.astro';
 </MainLayout>
 
 <script>
-  import { login } from '../stores/authStore';
+  import { login, getPostLoginRedirect, currentUser, waitForAuth } from '../stores/authStore';
 
   const form = document.getElementById('login-form') as HTMLFormElement;
   const errorEl = document.getElementById('login-error')!;
   const btn = document.getElementById('login-btn') as HTMLButtonElement;
+
+  waitForAuth().then(() => {
+    const user = currentUser.get();
+    if (user) {
+      window.location.replace(getPostLoginRedirect(user));
+    }
+  });
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -78,8 +85,8 @@ import MainLayout from '../layouts/MainLayout.astro';
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
     try {
-      await login(email, password);
-      window.location.href = '/';
+      const data = await login(email, password);
+      window.location.href = getPostLoginRedirect(data.user);
     } catch (err: any) {
       errorEl.textContent = err.message || 'Login failed';
       errorEl.classList.remove('hidden');

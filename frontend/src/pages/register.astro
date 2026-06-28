@@ -87,7 +87,7 @@ import MainLayout from '../layouts/MainLayout.astro';
 </MainLayout>
 
 <script>
-  import { register } from '../stores/authStore';
+  import { register, getPostLoginRedirect } from '../stores/authStore';
 
   const form = document.getElementById('register-form') as HTMLFormElement;
   const errorEl = document.getElementById('register-error')!;
@@ -113,8 +113,8 @@ import MainLayout from '../layouts/MainLayout.astro';
     }
 
     try {
-      await register({ name, email, password });
-      window.location.href = '/';
+      const data = await register({ name, email, password });
+      window.location.href = getPostLoginRedirect(data.user);
     } catch (err: any) {
       errorEl.textContent = err.message || 'Registration failed';
       errorEl.classList.remove('hidden');

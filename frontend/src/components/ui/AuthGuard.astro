@@ -10,20 +10,17 @@ const { requireAuth = true, requireAdmin = false } = Astro.props;
 <div id="auth-guard" data-require-auth={requireAuth} data-require-admin={requireAdmin}></div>
 
 <script>
-  import { isLoggedIn, currentUser } from '../../stores/authStore';
+  import { checkAuthAccess } from '../../stores/authStore';
 
   const guard = document.getElementById('auth-guard');
   if (guard) {
     const requireAuth = guard.dataset.requireAuth === 'true';
     const requireAdmin = guard.dataset.requireAdmin === 'true';
 
-    const loggedIn = isLoggedIn.get();
-    const user = currentUser.get();
-
-    if (requireAuth && !loggedIn) {
-      window.location.href = '/login';
-    } else if (requireAdmin && (!user || user.role !== 'ADMIN')) {
-      window.location.href = '/login';
-    }
+    checkAuthAccess({ requireAuth, requireAdmin }).then(({ allowed, redirectTo }) => {
+      if (!allowed && redirectTo) {
+        window.location.replace(redirectTo);
+      }
+    });
   }
 </script>

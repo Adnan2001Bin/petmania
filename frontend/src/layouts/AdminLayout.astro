@@ -51,15 +51,18 @@ const {
   </div>
 
   <script>
-    import { isLoggedIn, currentUser } from '../stores/authStore';
+    import { checkAuthAccess } from '../stores/authStore';
 
-    // Check admin auth
-    const loggedIn = isLoggedIn.get();
-    const user = currentUser.get();
-    if (!loggedIn || !user || user.role !== 'ADMIN') {
-      window.location.href = '/login';
-    }
+    checkAuthAccess({ requireAuth: true, requireAdmin: true }).then(({ allowed, redirectTo }) => {
+      if (!allowed && redirectTo) {
+        window.location.replace(redirectTo);
+        return;
+      }
 
+      initAdminShell();
+    });
+
+    function initAdminShell() {
     const sidebar = document.getElementById('admin-sidebar');
     const overlay = document.getElementById('admin-overlay');
     const toggleBtn = document.getElementById('sidebar-toggle');
@@ -97,6 +100,7 @@ const {
         document.body.classList.remove('overflow-hidden');
       }
     });
+    }
   </script>
 </body>
 </html>

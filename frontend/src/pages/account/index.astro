@@ -96,7 +96,7 @@ import { User, Package, LogOut, Settings } from '@lucide/astro';
 </MainLayout>
 
 <script>
-  import { authState, logout, fetchProfile, getAuthHeaders, API_URL } from '../../stores/authStore';
+  import { logout, fetchProfile, updateProfile } from '../../stores/authStore';
 
   const form = document.getElementById('profile-form') as HTMLFormElement;
   const nameInput = document.getElementById('name') as HTMLInputElement;
@@ -132,27 +132,14 @@ import { User, Package, LogOut, Settings } from '@lucide/astro';
     saveBtn.disabled = true;
 
     try {
-      const res = await fetch(`${API_URL}/api/auth/profile`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          ...getAuthHeaders(),
-        },
-        body: JSON.stringify({
-          name: nameInput.value,
-          phone: phoneInput.value,
-        }),
+      await updateProfile({
+        name: nameInput.value,
+        phone: phoneInput.value,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
 
       messageEl.textContent = 'Profile updated successfully!';
       messageEl.className = 'p-3 rounded-lg bg-green-50 text-green-600 text-sm';
       userName.textContent = nameInput.value;
-
-      // Update stored user
-      const state = authState.get();
-      authState.set({ ...state, user: { ...state.user!, name: nameInput.value, phone: phoneInput.value } });
     } catch (err: any) {
       messageEl.textContent = err.message || 'Failed to update profile';
       messageEl.className = 'p-3 rounded-lg bg-red-50 text-red-600 text-sm';
