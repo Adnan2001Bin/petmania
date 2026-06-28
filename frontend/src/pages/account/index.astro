@@ -96,9 +96,7 @@ import { User, Package, LogOut, Settings } from '@lucide/astro';
 </MainLayout>
 
 <script>
-  import { authState, logout, fetchProfile, getAuthHeaders } from '../../stores/authStore';
-
-  const API_URL = import.meta.env.PUBLIC_API_URL || 'http://localhost:5000';
+  import { authState, logout, fetchProfile, getAuthHeaders, API_URL } from '../../stores/authStore';
 
   const form = document.getElementById('profile-form') as HTMLFormElement;
   const nameInput = document.getElementById('name') as HTMLInputElement;

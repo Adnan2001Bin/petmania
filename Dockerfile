@@ -7,6 +7,7 @@ RUN npm install
 
 COPY backend/ .
 RUN npx prisma generate
+RUN npm run build
 
 FROM node:22-alpine AS frontend-builder
 
@@ -16,6 +17,8 @@ COPY frontend/package*.json ./
 RUN npm install
 
 COPY frontend/ .
+ENV PUBLIC_API_URL=
+RUN npm run build
 
 FROM node:22-alpine
 
@@ -28,4 +31,4 @@ RUN npm install -g concurrently
 
 EXPOSE 5000 4321
 
-CMD ["concurrently", "npm --prefix backend run dev", "npm --prefix frontend run dev"]
+CMD ["concurrently", "npm --prefix backend run dev", "npm --prefix frontend run preview -- --host 0.0.0.0 --port 4321"]

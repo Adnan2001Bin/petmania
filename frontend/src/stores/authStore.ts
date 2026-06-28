@@ -8,7 +8,8 @@ type AuthState = {
   isLoading: boolean;
 };
 
-const API_URL = import.meta.env.PUBLIC_API_URL || "http://localhost:5000";
+/** Same-origin by default so Caddy can route /api/* in production. Override via PUBLIC_API_URL for local dev without proxy. */
+export const API_URL = import.meta.env.PUBLIC_API_URL ?? "";
 
 export const authState = persistentAtom<AuthState>("petmania-auth", {
   user: null,
