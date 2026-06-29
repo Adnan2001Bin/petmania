@@ -14,33 +14,35 @@ export default async function productRoutes(fastify: FastifyInstance) {
     const query = productQuerySchema.parse(request.query);
     const skip = (query.page - 1) * query.limit;
 
-    const where: any = { isActive: true };
+    const where: Record<string, unknown> = {};
+
+    if (!query.all) {
+      where.isActive = true;
+    }
 
     if (query.category) {
-      where.category = { slug: query.category };
+      (where as { category?: { slug: string } }).category = { slug: query.category };
     }
     if (query.brand) {
-      where.brand = { name: query.brand };
+      (where as { brand?: { name: string } }).brand = { name: query.brand };
     }
     if (query.search) {
-      where.OR = [
+      (where as { OR?: unknown[] }).OR = [
         { name: { contains: query.search, mode: "insensitive" } },
         { description: { contains: query.search, mode: "insensitive" } },
       ];
     }
     if (query.minPrice || query.maxPrice) {
-      where.price = {};
-      if (query.minPrice) where.price.gte = query.minPrice;
-      if (query.maxPrice) where.price.lte = query.maxPrice;
-    }
-    if (query.badge) {
-      where.badge = query.badge;
+      const price: Record<string, number> = {};
+      if (query.minPrice) price.gte = query.minPrice;
+      if (query.maxPrice) price.lte = query.maxPrice;
+      where.price = price;
     }
     if (query.inStock !== undefined) {
       where.inStock = query.inStock;
     }
 
-    const orderBy: any = { [query.sortBy]: query.sortOrder };
+    const orderBy: Record<string, string> = { [query.sortBy]: query.sortOrder };
 
     const [products, total] = await Promise.all([
       fastify.prisma.product.findMany({
@@ -157,7 +159,10 @@ export default async function productRoutes(fastify: FastifyInstance) {
   });
 
   // POST create product
-  fastify.post("/products", async (request, reply) => {
+  fastify.post(
+    "/products",
+    { preHandler: [fastify.authenticateAdmin] },
+    async (request, reply) => {
     const data = createProductSchema.parse(request.body);
 
     const [existingSlug, existingSku] = await Promise.all([
@@ -204,10 +209,14 @@ export default async function productRoutes(fastify: FastifyInstance) {
     }
 
     return reply.status(201).send({ success: true, data: product });
-  });
+    },
+  );
 
   // PUT update product
-  fastify.put("/products/:id", async (request, reply) => {
+  fastify.put(
+    "/products/:id",
+    { preHandler: [fastify.authenticateAdmin] },
+    async (request, reply) => {
     const { id } = idParamSchema.parse(request.params);
     const data = updateProductSchema.parse(request.body);
 
@@ -276,10 +285,14 @@ export default async function productRoutes(fastify: FastifyInstance) {
     }
 
     return reply.send({ success: true, data: product });
-  });
+    },
+  );
 
   // DELETE product
-  fastify.delete("/products/:id", async (request, reply) => {
+  fastify.delete(
+    "/products/:id",
+    { preHandler: [fastify.authenticateAdmin] },
+    async (request, reply) => {
     const { id } = idParamSchema.parse(request.params);
 
     const existing = await fastify.prisma.product.findUnique({ where: { id } });
@@ -297,5 +310,6 @@ export default async function productRoutes(fastify: FastifyInstance) {
       success: true,
       message: "Product deleted successfully",
     });
-  });
+    },
+  );
 }

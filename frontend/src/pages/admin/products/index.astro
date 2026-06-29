@@ -2,15 +2,10 @@
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import AdminSidebar from '../../../components/admin/AdminSidebar.astro';
 import AdminTopbar from '../../../components/admin/AdminTopbar.astro';
-import ProductTable from '../../../components/admin/ProductTable.astro';
-import adminProductsData from '../../../data/admin-products.json';
-import type { Product } from '../../../types';
-import { Plus, Download, Filter } from '@lucide/astro';
-
-const products: Product[] = adminProductsData;
-
-const inStockCount = products.filter((p) => p.inStock).length;
-const onSaleCount = products.filter((p) => p.badge === 'sale').length;
+import ProductModal from '../../../components/admin/ProductModal.astro';
+import ConfirmDialog from '../../../components/admin/ConfirmDialog.astro';
+import AdminToast from '../../../components/admin/AdminToast.astro';
+import { Plus } from '@lucide/astro';
 ---
 
 <AdminLayout title="Products - Petmania Admin" activeNav="products">
@@ -18,51 +13,107 @@ const onSaleCount = products.filter((p) => p.badge === 'sale').length;
   <AdminTopbar
     slot="topbar"
     title="Products"
-    subtitle={`${products.length} products · ${inStockCount} in stock · ${onSaleCount} on sale`}
+    subtitle="Loading products..."
+    subtitleId="products-subtitle"
   />
 
-  <!-- Toolbar -->
-  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex flex-wrap items-center gap-2">
-      <button
-        type="button"
-        class="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
-      >
-        <Filter size={16} />
-        Filter
-      </button>
-      <button
-        type="button"
-        class="inline-flex items-center gap-2 rounded-xl border border-border bg-white px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
-      >
-        <Download size={16} />
-        Export
-      </button>
+  <div id="products-page">
+    <div
+      id="products-error"
+      class="hidden mb-4 rounded-lg border border-sale/30 bg-sale/5 px-4 py-3 text-sm text-sale"
+      role="alert"
+    ></div>
+
+    <div id="products-loading" class="rounded-xl border border-border bg-white px-6 py-16 text-center">
+      <div class="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary"></div>
+      <p class="text-sm text-muted">Loading products...</p>
     </div>
-    <button
-      type="button"
-      class="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
-    >
-      <Plus size={18} />
-      Add Product
-    </button>
+
+    <div id="products-content" class="hidden">
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+          <div class="min-w-[180px]">
+            <label for="category-filter" class="mb-1.5 block text-xs font-medium text-muted">
+              Filter by category
+            </label>
+            <select
+              id="category-filter"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+            >
+              <option value="">All categories</option>
+            </select>
+          </div>
+          <div class="min-w-[220px] flex-1 sm:max-w-xs">
+            <label for="product-search" class="mb-1.5 block text-xs font-medium text-muted">
+              Search products
+            </label>
+            <input
+              id="product-search"
+              type="search"
+              placeholder="Search by name, slug, or SKU..."
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+        </div>
+        <button
+          id="add-product-btn"
+          type="button"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          <Plus size={18} />
+          Add Product
+        </button>
+      </div>
+
+      <div id="products-table-wrap" class="hidden overflow-hidden rounded-xl border border-border bg-white">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead class="border-b border-border bg-light">
+              <tr>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Image</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Product</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">SKU</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Category</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Price</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Rating</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Stock</th>
+                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        id="products-empty"
+        class="hidden rounded-xl border border-dashed border-border bg-white px-6 py-16 text-center"
+      >
+        <p id="products-empty-title" class="text-base font-medium text-heading">No products yet</p>
+        <p class="mt-1 text-sm text-muted">Add your first product to start selling.</p>
+        <button
+          type="button"
+          id="add-product-empty-btn"
+          class="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          <Plus size={16} />
+          Add Product
+        </button>
+      </div>
+    </div>
   </div>
 
-  <!-- Product fields legend -->
-  <div class="mb-6 rounded-2xl border border-border bg-white p-4 shadow-sm">
-    <p class="text-xs font-semibold uppercase tracking-wider text-muted">Product Fields</p>
-    <div class="mt-3 flex flex-wrap gap-2">
-      {
-        [
-          'id', 'slug', 'name', 'price', 'oldPrice', 'priceRange',
-          'rating', 'reviewCount', 'image', 'hoverImage', 'category',
-          'tags', 'badge', 'description', 'sku', 'inStock',
-        ].map((field) => (
-          <span class="rounded-lg bg-light px-2.5 py-1 font-mono text-xs text-body">{field}</span>
-        ))
-      }
-    </div>
-  </div>
-
-  <ProductTable products={products} />
+  <ProductModal />
+  <ConfirmDialog />
+  <AdminToast />
 </AdminLayout>
+
+<script>
+  import { initProductsPage } from '../../../scripts/admin-products';
+
+  initProductsPage();
+
+  document.getElementById('add-product-empty-btn')?.addEventListener('click', () => {
+    document.getElementById('add-product-btn')?.click();
+  });
+</script>

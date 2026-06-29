@@ -9,13 +9,6 @@ datasource db {
 
 // ─── Enums ───────────────────────────────────────────────────────────────────
 
-enum ProductBadge {
-  SALE
-  NEW
-  HOT
-  SOLD_OUT
-}
-
 enum BannerType {
   HERO
   PROMO
@@ -118,11 +111,8 @@ model Product {
   description String       @db.Text
   price       Decimal      @db.Decimal(10, 2)
   oldPrice    Decimal?     @db.Decimal(10, 2)
-  priceRange  String?
   sku         String       @unique
   image       String
-  hoverImage  String?
-  badge       ProductBadge?
   rating      Decimal      @default(0) @db.Decimal(3, 2)
   reviewCount Int          @default(0)
   inStock     Boolean      @default(true)

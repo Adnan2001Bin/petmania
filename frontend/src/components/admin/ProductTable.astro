@@ -1,6 +1,5 @@
 ---
 import type { Product } from '../../types';
-import Badge from '../ui/Badge.astro';
 import { Star, Pencil, Trash2, Eye } from '@lucide/astro';
 
 export interface Props {
@@ -8,13 +7,6 @@ export interface Props {
 }
 
 const { products } = Astro.props;
-
-const badgeLabels: Record<string, string> = {
-  sale: 'Sale',
-  new: 'New',
-  hot: 'Hot',
-  'sold-out': 'Sold Out',
-};
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
@@ -33,7 +25,6 @@ function formatPrice(price: number) {
           <th class="px-5 py-4 font-semibold text-heading">Price</th>
           <th class="px-5 py-4 font-semibold text-heading">Rating</th>
           <th class="px-5 py-4 font-semibold text-heading">Stock</th>
-          <th class="px-5 py-4 font-semibold text-heading">Badge</th>
           <th class="px-5 py-4 font-semibold text-heading">Actions</th>
         </tr>
       </thead>
@@ -93,13 +84,6 @@ function formatPrice(price: number) {
                 </span>
               </td>
               <td class="px-5 py-4">
-                {product.badge ? (
-                  <Badge text={badgeLabels[product.badge]} type={product.badge} />
-                ) : (
-                  <span class="text-xs text-muted">—</span>
-                )}
-              </td>
-              <td class="px-5 py-4">
                 <div class="flex items-center gap-1">
                   <a
                     href={`/product/${product.slug}`}
@@ -151,7 +135,6 @@ function formatPrice(price: number) {
                 <h3 class="font-semibold text-heading">{product.name}</h3>
                 <p class="text-xs text-muted">{product.sku}</p>
               </div>
-              {product.badge && <Badge text={badgeLabels[product.badge]} type={product.badge} />}
             </div>
             <div class="mt-2 flex flex-wrap items-center gap-2">
               <span class="rounded-lg bg-accent/10 px-2 py-0.5 text-xs font-medium text-accent">

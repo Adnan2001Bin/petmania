@@ -1,0 +1,219 @@
+---
+import { X } from '@lucide/astro';
+---
+
+<div
+  id="product-modal"
+  class="hidden fixed inset-0 z-[60] flex items-end justify-center p-4 sm:items-center sm:p-6"
+  aria-hidden="true"
+>
+  <div
+    id="product-modal-backdrop"
+    class="absolute inset-0 bg-dark/50"
+  ></div>
+
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="product-modal-title"
+    class="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-border bg-white"
+  >
+    <div class="flex items-center justify-between border-b border-border px-5 py-4">
+      <h2 id="product-modal-title" class="text-base font-semibold text-heading">
+        Add Product
+      </h2>
+      <button
+        id="product-modal-close-btn"
+        type="button"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted transition-colors hover:border-primary hover:text-primary"
+        aria-label="Close modal"
+      >
+        <X size={16} />
+      </button>
+    </div>
+
+    <form id="product-form" class="px-5 py-4">
+      <div
+        id="product-modal-error"
+        class="hidden mb-4 rounded-lg border border-sale/30 bg-sale/5 px-3 py-2 text-sm text-sale"
+        role="alert"
+      ></div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="product-name" class="mb-1.5 block text-sm font-medium text-heading">
+            Name <span class="text-sale">*</span>
+          </label>
+          <input
+            id="product-name"
+            name="name"
+            type="text"
+            required
+            maxlength="200"
+            placeholder="Premium Dog Treats"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="product-slug" class="mb-1.5 block text-sm font-medium text-heading">
+              Slug <span class="text-sale">*</span>
+            </label>
+            <input
+              id="product-slug"
+              name="slug"
+              type="text"
+              required
+              maxlength="200"
+              placeholder="premium-dog-treats"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+          <div>
+            <label for="product-sku" class="mb-1.5 block text-sm font-medium text-heading">
+              SKU <span class="text-sale">*</span>
+            </label>
+            <input
+              id="product-sku"
+              name="sku"
+              type="text"
+              required
+              maxlength="50"
+              placeholder="DOG-TRT-001"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="product-animal" class="mb-1.5 block text-sm font-medium text-heading">
+            Animal <span class="text-sale">*</span>
+          </label>
+          <select
+            id="product-animal"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+          >
+            <option value="">Select animal</option>
+          </select>
+        </div>
+
+        <div id="product-category-section">
+          <label for="product-category" class="mb-1.5 block text-sm font-medium text-heading">
+            Category <span class="text-sale">*</span>
+          </label>
+          <select
+            id="product-category"
+            name="categoryId"
+            disabled
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-light"
+          >
+            <option value="">Select category</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="product-price" class="mb-1.5 block text-sm font-medium text-heading">
+              Price <span class="text-sale">*</span>
+            </label>
+            <input
+              id="product-price"
+              name="price"
+              type="number"
+              required
+              min="0.01"
+              step="0.01"
+              placeholder="29.99"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+          <div>
+            <label for="product-old-price" class="mb-1.5 block text-sm font-medium text-heading">
+              Old Price
+            </label>
+            <input
+              id="product-old-price"
+              name="oldPrice"
+              type="number"
+              min="0.01"
+              step="0.01"
+              placeholder="Optional"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="product-description" class="mb-1.5 block text-sm font-medium text-heading">
+            Description <span class="text-sale">*</span>
+          </label>
+          <textarea
+            id="product-description"
+            name="description"
+            required
+            rows="3"
+            maxlength="2000"
+            placeholder="Product description"
+            class="w-full resize-none rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          ></textarea>
+        </div>
+
+        <div>
+          <label for="product-image" class="mb-1.5 block text-sm font-medium text-heading">
+            Image <span class="text-sale">*</span>
+          </label>
+          <input
+            id="product-image"
+            name="image"
+            type="text"
+            required
+            placeholder="/images/products/product-1.jpg"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label for="product-tags" class="mb-1.5 block text-sm font-medium text-heading">
+            Tags
+          </label>
+          <input
+            id="product-tags"
+            name="tags"
+            type="text"
+            placeholder="dog, treats (comma separated)"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+        </div>
+
+        <label class="flex items-center gap-2 text-sm text-body">
+          <input
+            id="product-in-stock"
+            name="inStock"
+            type="checkbox"
+            checked
+            class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+          />
+          In stock
+        </label>
+      </div>
+
+      <div class="mt-6 flex flex-col-reverse gap-2 border-t border-border pt-4 sm:flex-row sm:justify-end">
+        <button
+          id="product-modal-cancel-btn"
+          type="button"
+          class="inline-flex items-center justify-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
+        >
+          Cancel
+        </button>
+        <button
+          id="product-modal-submit-btn"
+          type="submit"
+          class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          Create Product
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

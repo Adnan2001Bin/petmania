@@ -4,14 +4,11 @@
     "slug": "premium-dog-treats",
     "name": "Lightweight Aluminum Clock",
     "price": 60.40,
-    "priceRange": "$60.40–$98.32",
     "rating": 4.8,
     "reviewCount": 128,
     "image": "/images/products/product-1.jpg",
-    "hoverImage": "/images/products/product-3.jpg",
     "category": "Dog Food",
     "tags": ["dog", "treats", "bestseller"],
-    "badge": "sale",
     "description": "Healthy and delicious premium dog treats made with natural ingredients. Perfect for training and rewarding your furry friend.",
     "sku": "DOG-TRT-001",
     "inStock": true
@@ -26,7 +23,6 @@
     "image": "/images/products/product-2.jpg",
     "category": "Cat Food",
     "tags": ["cat", "food", "organic"],
-    "badge": "new",
     "description": "Grain-free organic cat food packed with real meat and essential nutrients for a healthy, active cat.",
     "sku": "CAT-FD-002",
     "inStock": true
@@ -41,7 +37,6 @@
     "image": "/images/products/product-3.jpg",
     "category": "Dog Food",
     "tags": ["dog", "dry food", "premium"],
-    "badge": "hot",
     "description": "High-protein dry dog food formulated for adult dogs of all breeds. Supports muscle health and shiny coat.",
     "sku": "DOG-DF-003",
     "inStock": true
@@ -85,7 +80,6 @@
     "image": "/images/products/product-6.jpg",
     "category": "Pet Toys",
     "tags": ["dog", "toy", "interactive"],
-    "badge": "sale",
     "description": "Keep your dog entertained for hours with this durable interactive toy. Great for mental stimulation.",
     "sku": "DOG-TOY-006",
     "inStock": true
@@ -100,7 +94,6 @@
     "image": "/images/products/product-7.jpg",
     "category": "Pet Care",
     "tags": ["bed", "comfort", "dog", "cat"],
-    "badge": "new",
     "description": "Ultra-soft pet bed with orthopedic support. Machine washable cover and non-slip bottom.",
     "sku": "PET-BED-007",
     "inStock": true
@@ -130,7 +123,6 @@
     "image": "/images/products/product-9.jpg",
     "category": "Cat Food",
     "tags": ["cat", "kitten", "starter"],
-    "badge": "sale",
     "description": "Everything you need for your new kitten: food, treats, toys, and grooming essentials.",
     "sku": "CAT-KIT-009",
     "inStock": true

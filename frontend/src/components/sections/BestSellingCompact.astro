@@ -50,9 +50,7 @@ const { title, products } = Astro.props;
                 {product.name}
               </h4>
               <div class="text-[13px] font-bold text-accent mb-0.5">
-                {product.priceRange ? (
-                  <span>{product.priceRange}</span>
-                ) : product.oldPrice ? (
+                {product.oldPrice ? (
                   <span>${product.price.toFixed(2)}<span class="text-[#999] line-through font-normal text-[11px] ml-1">${product.oldPrice.toFixed(2)}</span></span>
                 ) : (
                   <span>${product.price.toFixed(2)}</span>

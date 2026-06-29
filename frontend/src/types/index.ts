@@ -4,17 +4,32 @@ export interface Product {
   name: string;
   price: number;
   oldPrice?: number;
-  priceRange?: string;
   rating: number;
   reviewCount: number;
   image: string;
-  hoverImage?: string;
   category: string;
   tags: string[];
-  badge?: 'sale' | 'new' | 'hot' | 'sold-out';
   description: string;
   sku: string;
   inStock: boolean;
+}
+
+export interface AdminProduct {
+  id: string;
+  slug: string;
+  name: string;
+  description: string;
+  price: number;
+  oldPrice?: number | null;
+  sku: string;
+  image: string;
+  rating: number;
+  reviewCount: number;
+  inStock: boolean;
+  isActive: boolean;
+  categoryId: number;
+  category?: { id: number; name: string; slug: string };
+  tags?: { tag: { id: string; name: string } }[];
 }
 
 export interface Animal {

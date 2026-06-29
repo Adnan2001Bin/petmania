@@ -75,11 +75,8 @@ export const createProductSchema = z.object({
   description: z.string().min(1),
   price: z.number().positive(),
   oldPrice: z.number().positive().optional(),
-  priceRange: z.string().optional(),
   sku: z.string().min(1).max(50),
-  image: z.string().url(),
-  hoverImage: z.string().url().optional(),
-  badge: z.enum(["SALE", "NEW", "HOT", "SOLD_OUT"]).optional(),
+  image: z.string().min(1),
   inStock: z.boolean().default(true),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().default(0),
@@ -98,8 +95,8 @@ export const productQuerySchema = z.object({
   search: z.string().optional(),
   minPrice: z.coerce.number().positive().optional(),
   maxPrice: z.coerce.number().positive().optional(),
-  badge: z.enum(["SALE", "NEW", "HOT", "SOLD_OUT"]).optional(),
   inStock: z.coerce.boolean().optional(),
+  all: z.coerce.boolean().optional(),
   sortBy: z
     .enum(["price", "rating", "createdAt", "name"])
     .default("createdAt"),
