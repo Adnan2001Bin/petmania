@@ -3,6 +3,7 @@ import {
   deleteProduct,
   fetchProducts,
   slugify,
+  updateProduct,
 } from "../lib/admin/products";
 import { fetchCategories, fetchAnimals } from "../lib/admin/categories";
 import type { AdminCategory, AdminProduct, Animal } from "../types";
@@ -11,9 +12,18 @@ let products: AdminProduct[] = [];
 let categories: AdminCategory[] = [];
 let animals: Animal[] = [];
 let searchQuery = "";
+let animalFilter: number | null = null;
 let categoryFilter = "";
+let stockFilter = "";
+let editingProductId: string | null = null;
 let confirmResolve: ((value: boolean) => void) | null = null;
 let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+const ACTION_ICONS = {
+  view: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>`,
+  edit: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>`,
+  delete: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
+};
 
 export function initProductsPage(): void {
   const page = document.getElementById("products-page");
@@ -24,7 +34,7 @@ export function initProductsPage(): void {
 }
 
 function bindEvents(): void {
-  document.getElementById("add-product-btn")?.addEventListener("click", openModal);
+  document.getElementById("add-product-btn")?.addEventListener("click", () => openModal());
   document
     .getElementById("product-modal-close-btn")
     ?.addEventListener("click", closeModal);
@@ -56,8 +66,24 @@ function bindEvents(): void {
     .getElementById("product-animal")
     ?.addEventListener("change", handleProductAnimalChange);
 
+  document.getElementById("animal-filter")?.addEventListener("change", (event) => {
+    const value = (event.target as HTMLSelectElement).value;
+    animalFilter = value ? Number(value) : null;
+    categoryFilter = "";
+    populateFilterCategorySelect(animalFilter);
+    setFilterCategoryEnabled(Boolean(animalFilter));
+    renderTable();
+    updateSubtitle();
+  });
+
   document.getElementById("category-filter")?.addEventListener("change", (event) => {
     categoryFilter = (event.target as HTMLSelectElement).value;
+    renderTable();
+    updateSubtitle();
+  });
+
+  document.getElementById("stock-filter")?.addEventListener("change", (event) => {
+    stockFilter = (event.target as HTMLSelectElement).value;
     renderTable();
     updateSubtitle();
   });
@@ -96,7 +122,9 @@ async function loadData(): Promise<void> {
     categories = categoriesData;
     animals = animalsData;
 
-    populateCategoryFilter();
+    populateAnimalFilter();
+    populateFilterCategorySelect(animalFilter);
+    setFilterCategoryEnabled(Boolean(animalFilter));
     populateAnimalSelect();
     renderTable();
     updateSubtitle();
@@ -112,10 +140,23 @@ async function loadData(): Promise<void> {
 function getFilteredProducts(): AdminProduct[] {
   let result = products;
 
+  if (animalFilter !== null) {
+    result = result.filter((product) => {
+      const category = categories.find((item) => item.id === product.categoryId);
+      return category?.animalId === animalFilter;
+    });
+  }
+
   if (categoryFilter) {
     result = result.filter(
       (product) => product.category?.slug === categoryFilter,
     );
+  }
+
+  if (stockFilter === "in") {
+    result = result.filter((product) => product.inStock);
+  } else if (stockFilter === "out") {
+    result = result.filter((product) => !product.inStock);
   }
 
   if (searchQuery) {
@@ -128,26 +169,61 @@ function getFilteredProducts(): AdminProduct[] {
   return result;
 }
 
-function populateCategoryFilter(): void {
+function populateAnimalFilter(): void {
   const select = document.getElementById(
-    "category-filter",
+    "animal-filter",
   ) as HTMLSelectElement | null;
   if (!select) return;
 
   const current = select.value;
 
   select.innerHTML = [
-    '<option value="">All categories</option>',
-    ...categories.map(
-      (category) =>
-        `<option value="${escapeHtml(category.slug)}">${escapeHtml(category.name)}</option>`,
+    '<option value="">All animals</option>',
+    ...animals.map(
+      (animal) =>
+        `<option value="${animal.id}">${escapeHtml(animal.name)}</option>`,
     ),
   ].join("");
 
   select.value =
-    current && categories.some((category) => category.slug === current)
+    current && animals.some((animal) => String(animal.id) === current)
       ? current
-      : categoryFilter;
+      : animalFilter !== null
+        ? String(animalFilter)
+        : "";
+}
+
+function populateFilterCategorySelect(animalId: number | null): void {
+  const select = document.getElementById(
+    "category-filter",
+  ) as HTMLSelectElement | null;
+  if (!select) return;
+
+  const filtered = animalId
+    ? categories.filter((category) => category.animalId === animalId)
+    : [];
+
+  select.innerHTML = [
+    '<option value="">All categories</option>',
+    ...filtered.map(
+      (category) =>
+        `<option value="${escapeHtml(category.slug)}">${escapeHtml(getCategoryLabel(category))}</option>`,
+    ),
+  ].join("");
+}
+
+function setFilterCategoryEnabled(enabled: boolean): void {
+  const select = document.getElementById(
+    "category-filter",
+  ) as HTMLSelectElement | null;
+  const section = document.getElementById("filter-category-section");
+
+  if (select) {
+    select.disabled = !enabled;
+    if (!enabled) select.value = "";
+  }
+
+  section?.classList.toggle("opacity-50", !enabled);
 }
 
 function populateAnimalSelect(): void {
@@ -293,21 +369,41 @@ function renderTable(): void {
               <a
                 href="/product/${escapeHtml(product.slug)}"
                 target="_blank"
-                class="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-light hover:text-primary"
+                rel="noopener noreferrer"
+                data-tip="View"
                 aria-label="View ${escapeHtml(product.name)}"
-              >↗</a>
+                class="admin-tip flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-light hover:text-primary"
+              >${ACTION_ICONS.view}</a>
               <button
                 type="button"
-                class="delete-product-btn flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-light hover:text-sale"
+                class="edit-product-btn admin-tip flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-light hover:text-accent"
                 data-id="${product.id}"
+                data-tip="Edit"
+                aria-label="Edit ${escapeHtml(product.name)}"
+              >${ACTION_ICONS.edit}</button>
+              <button
+                type="button"
+                class="delete-product-btn admin-tip flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:bg-light hover:text-sale"
+                data-id="${product.id}"
+                data-tip="Delete"
                 aria-label="Delete ${escapeHtml(product.name)}"
-              >×</button>
+              >${ACTION_ICONS.delete}</button>
             </div>
           </td>
         </tr>
       `;
     })
     .join("");
+
+  tbody.querySelectorAll<HTMLButtonElement>(".edit-product-btn").forEach(
+    (button) => {
+      button.addEventListener("click", () => {
+        const id = button.dataset.id;
+        if (!id) return;
+        openEditModal(id);
+      });
+    },
+  );
 
   tbody.querySelectorAll<HTMLButtonElement>(".delete-product-btn").forEach(
     (button) => {
@@ -331,14 +427,29 @@ function updateSubtitle(): void {
 
   let label = `${total} products · ${inStock} in stock · ${onSale} on sale`;
 
-  if (categoryFilter || searchQuery) {
+  if (animalFilter !== null || categoryFilter || stockFilter || searchQuery) {
     label = `${count} of ${total} products`;
   }
 
   subtitle.textContent = label;
 }
 
+function setModalMode(mode: "create" | "edit"): void {
+  const title = document.getElementById("product-modal-title");
+  const submitBtn = document.getElementById("product-modal-submit-btn");
+
+  if (title) {
+    title.textContent = mode === "edit" ? "Edit Product" : "Add Product";
+  }
+  if (submitBtn) {
+    submitBtn.textContent = mode === "edit" ? "Save Changes" : "Create Product";
+  }
+}
+
 function openModal(): void {
+  editingProductId = null;
+  setModalMode("create");
+
   const modal = document.getElementById("product-modal");
   const form = document.getElementById("product-form") as HTMLFormElement | null;
   const slugInput = document.getElementById(
@@ -358,7 +469,64 @@ function openModal(): void {
   (document.getElementById("product-name") as HTMLInputElement | null)?.focus();
 }
 
+function openEditModal(id: string): void {
+  const product = products.find((item) => item.id === id);
+  if (!product) return;
+
+  const category = categories.find((item) => item.id === product.categoryId);
+  const animalId = category?.animalId ?? null;
+
+  editingProductId = id;
+  setModalMode("edit");
+
+  const modal = document.getElementById("product-modal");
+  const slugInput = document.getElementById(
+    "product-slug",
+  ) as HTMLInputElement | null;
+
+  document.getElementById("product-modal-error")?.classList.add("hidden");
+
+  (document.getElementById("product-name") as HTMLInputElement).value =
+    product.name;
+  if (slugInput) {
+    slugInput.value = product.slug;
+    slugInput.dataset.manual = "true";
+  }
+  (document.getElementById("product-sku") as HTMLInputElement).value =
+    product.sku;
+  (document.getElementById("product-price") as HTMLInputElement).value =
+    String(product.price);
+  (document.getElementById("product-old-price") as HTMLInputElement).value =
+    product.oldPrice != null ? String(product.oldPrice) : "";
+  (document.getElementById("product-description") as HTMLTextAreaElement).value =
+    product.description;
+  (document.getElementById("product-image") as HTMLInputElement).value =
+    product.image;
+  (document.getElementById("product-tags") as HTMLInputElement).value =
+    product.tags?.map((item) => item.tag.name).join(", ") ?? "";
+  (document.getElementById("product-in-stock") as HTMLInputElement).checked =
+    product.inStock;
+
+  populateAnimalSelect();
+  if (animalId) {
+    (document.getElementById("product-animal") as HTMLSelectElement).value =
+      String(animalId);
+    populateProductCategorySelect(animalId);
+    setProductCategorySelectEnabled(true);
+    (document.getElementById("product-category") as HTMLSelectElement).value =
+      String(product.categoryId);
+  } else {
+    populateProductCategorySelect(null);
+    setProductCategorySelectEnabled(false);
+  }
+
+  modal?.classList.remove("hidden");
+  document.body.classList.add("overflow-hidden");
+  (document.getElementById("product-name") as HTMLInputElement).focus();
+}
+
 function closeModal(): void {
+  editingProductId = null;
   document.getElementById("product-modal")?.classList.add("hidden");
   if (document.getElementById("confirm-dialog")?.classList.contains("hidden")) {
     document.body.classList.remove("overflow-hidden");
@@ -401,37 +569,58 @@ async function handleSubmit(event: Event): Promise<void> {
   submitBtn?.setAttribute("disabled", "true");
   document.getElementById("product-modal-error")?.classList.add("hidden");
 
-  try {
-    const created = await createProduct({
-      name,
-      slug,
-      sku,
-      description,
-      image,
-      price,
-      categoryId,
-      inStock,
-      ...(oldPriceValue ? { oldPrice: Number(oldPriceValue) } : {}),
-      ...(tagsValue
-        ? {
-            tags: tagsValue
-              .split(",")
-              .map((tag) => tag.trim())
-              .filter(Boolean),
-          }
-        : {}),
-    });
+  const payload = {
+    name,
+    slug,
+    sku,
+    description,
+    image,
+    price,
+    categoryId,
+    inStock,
+    ...(oldPriceValue ? { oldPrice: Number(oldPriceValue) } : {}),
+    ...(tagsValue
+      ? {
+          tags: tagsValue
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
+        }
+      : { tags: [] }),
+  };
 
-    products = [...products, created].sort((a, b) =>
-      a.name.localeCompare(b.name),
-    );
-    renderTable();
-    updateSubtitle();
-    closeModal();
-    showToast(`"${created.name}" created`);
+  try {
+    if (editingProductId) {
+      const previous = products.find((item) => item.id === editingProductId);
+      const updated = await updateProduct(editingProductId, payload);
+      const merged = {
+        ...updated,
+        tags: updated.tags ?? previous?.tags,
+      };
+      products = products
+        .map((item) => (item.id === merged.id ? merged : item))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      renderTable();
+      updateSubtitle();
+      closeModal();
+      showToast(`"${merged.name}" updated`);
+    } else {
+      const created = await createProduct(payload);
+      products = [...products, created].sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+      renderTable();
+      updateSubtitle();
+      closeModal();
+      showToast(`"${created.name}" created`);
+    }
   } catch (error) {
     showModalError(
-      error instanceof Error ? error.message : "Failed to create product",
+      error instanceof Error
+        ? error.message
+        : editingProductId
+          ? "Failed to update product"
+          : "Failed to create product",
     );
   } finally {
     submitBtn?.removeAttribute("disabled");

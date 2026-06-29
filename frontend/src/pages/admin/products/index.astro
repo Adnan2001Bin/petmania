@@ -32,15 +32,40 @@ import { Plus } from '@lucide/astro';
     <div id="products-content" class="hidden">
       <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
-          <div class="min-w-[180px]">
+          <div class="min-w-[160px]">
+            <label for="animal-filter" class="mb-1.5 block text-xs font-medium text-muted">
+              Animal
+            </label>
+            <select
+              id="animal-filter"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+            >
+              <option value="">All animals</option>
+            </select>
+          </div>
+          <div id="filter-category-section" class="min-w-[160px]">
             <label for="category-filter" class="mb-1.5 block text-xs font-medium text-muted">
-              Filter by category
+              Category
             </label>
             <select
               id="category-filter"
-              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+              disabled
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-light"
             >
               <option value="">All categories</option>
+            </select>
+          </div>
+          <div class="min-w-[140px]">
+            <label for="stock-filter" class="mb-1.5 block text-xs font-medium text-muted">
+              Stock
+            </label>
+            <select
+              id="stock-filter"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+            >
+              <option value="">All stock</option>
+              <option value="in">In stock</option>
+              <option value="out">Out of stock</option>
             </select>
           </div>
           <div class="min-w-[220px] flex-1 sm:max-w-xs">
@@ -107,6 +132,37 @@ import { Plus } from '@lucide/astro';
   <ConfirmDialog />
   <AdminToast />
 </AdminLayout>
+
+<style>
+  .admin-tip {
+    position: relative;
+  }
+
+  .admin-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 20;
+  }
+
+  .admin-tip:hover::after,
+  .admin-tip:focus-visible::after {
+    opacity: 1;
+  }
+</style>
 
 <script>
   import { initProductsPage } from '../../../scripts/admin-products';

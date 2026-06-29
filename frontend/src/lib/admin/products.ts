@@ -25,6 +25,8 @@ export interface CreateProductPayload {
   tags?: string[];
 }
 
+export type UpdateProductPayload = Partial<CreateProductPayload>;
+
 function normalizeProduct(product: AdminProduct): AdminProduct {
   return {
     ...product,
@@ -58,6 +60,17 @@ export async function createProduct(
 ): Promise<AdminProduct> {
   const { data } = await api.post<ApiResponse<AdminProduct>>(
     "/api/products",
+    payload,
+  );
+  return normalizeProduct(data.data);
+}
+
+export async function updateProduct(
+  id: string,
+  payload: UpdateProductPayload,
+): Promise<AdminProduct> {
+  const { data } = await api.put<ApiResponse<AdminProduct>>(
+    `/api/products/${id}`,
     payload,
   );
   return normalizeProduct(data.data);
