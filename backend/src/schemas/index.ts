@@ -11,11 +11,34 @@ export const idParamSchema = z.object({
   id: z.string().cuid(),
 });
 
+export const intIdParamSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
 export const slugParamSchema = z.object({
   slug: z.string().min(1),
 });
 
+// ─── Animal Schemas ──────────────────────────────────────────────────────────
+
+export const createAnimalSchema = z.object({
+  name: z.string().min(1).max(100),
+  slug: z
+    .string()
+    .min(1)
+    .max(100)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug format"),
+  description: z.string().max(500).optional(),
+  image: z.string().optional(),
+});
+
+export const updateAnimalSchema = createAnimalSchema.partial();
+
 // ─── Category Schemas ────────────────────────────────────────────────────────
+
+export const categoryQuerySchema = paginationSchema.extend({
+  animalId: z.coerce.number().int().positive().optional(),
+});
 
 export const createCategorySchema = z.object({
   name: z.string().min(1).max(100),
@@ -24,7 +47,9 @@ export const createCategorySchema = z.object({
     .min(1)
     .max(100)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Invalid slug format"),
-  image: z.string().url().optional(),
+  description: z.string().max(500).optional(),
+  image: z.string().optional(),
+  animalId: z.number().int().positive(),
 });
 
 export const updateCategorySchema = createCategorySchema.partial();
@@ -58,7 +83,7 @@ export const createProductSchema = z.object({
   inStock: z.boolean().default(true),
   isActive: z.boolean().default(true),
   sortOrder: z.number().int().default(0),
-  categoryId: z.string().cuid(),
+  categoryId: z.number().int().positive(),
   brandId: z.string().cuid().optional(),
   tags: z.array(z.string()).optional(),
 });
@@ -216,6 +241,8 @@ export const updateReviewSchema = z.object({
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
+export type CreateAnimalInput = z.infer<typeof createAnimalSchema>;
+export type UpdateAnimalInput = z.infer<typeof updateAnimalSchema>;
 export type CreateCategoryInput = z.infer<typeof createCategorySchema>;
 export type UpdateCategoryInput = z.infer<typeof updateCategorySchema>;
 export type CreateBrandInput = z.infer<typeof createBrandSchema>;

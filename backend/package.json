@@ -11,8 +11,12 @@
     "build": "tsc -p tsconfig.server.json",
     "start": "tsx src/server/index.ts",
     "db:generate": "prisma generate",
+    "db:generate:stop-server": "powershell -NoProfile -Command \"Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }; Start-Sleep -Seconds 2; npx prisma generate\"",
     "db:push": "prisma db push",
+    "db:reset": "prisma db push --force-reset && prisma db seed",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy && prisma generate",
+    "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio"
   },

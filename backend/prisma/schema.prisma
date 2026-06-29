@@ -46,18 +46,41 @@ enum UserRole {
   USER
 }
 
-// ─── Category ────────────────────────────────────────────────────────────────
+// ─── Animal ──────────────────────────────────────────────────────────────────
 
-model Category {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  name      String
-  image     String?
+model Animal {
+  id          Int        @id @default(autoincrement())
+  name        String
+  slug        String     @unique
+  description String?
+  image       String?
+
+  categories Category[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@map("animals")
+}
+
+// ─── Category ────────────────────────────────────────────────────────────────
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String
+  slug        String  @unique
+  description String?
+  image       String?
+
+  animal   Animal @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  animalId Int
+
   products Product[]
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([animalId])
   @@map("categories")
 }
 
@@ -109,8 +132,8 @@ model Product {
   updatedAt   DateTime     @updatedAt
 
   // Relations
-  category   Category   @relation(fields: [categoryId], references: [id])
-  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
   brand      Brand?     @relation(fields: [brandId], references: [id])
   brandId    String?
   tags       ProductTag[]

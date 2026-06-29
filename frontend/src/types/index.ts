@@ -17,6 +17,26 @@ export interface Product {
   inStock: boolean;
 }
 
+export interface Animal {
+  id: number;
+  name: string;
+  slug: string;
+  description?: string | null;
+  image?: string | null;
+  _count?: { categories: number };
+}
+
+export interface AdminCategory {
+  id: number;
+  slug: string;
+  name: string;
+  description?: string | null;
+  image?: string | null;
+  animalId: number;
+  animal?: Pick<Animal, 'id' | 'name' | 'slug'>;
+  _count?: { products: number };
+}
+
 export interface Category {
   id: string;
   slug: string;

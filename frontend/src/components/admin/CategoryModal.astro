@@ -1,0 +1,165 @@
+---
+import { X } from '@lucide/astro';
+---
+
+<div
+  id="category-modal"
+  class="hidden fixed inset-0 z-[60] flex items-end justify-center p-4 sm:items-center sm:p-6"
+  aria-hidden="true"
+>
+  <div
+    id="category-modal-backdrop"
+    class="absolute inset-0 bg-dark/50"
+  ></div>
+
+  <div
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="category-modal-title"
+    class="relative w-full max-w-lg rounded-xl border border-border bg-white"
+  >
+    <div class="flex items-start justify-between border-b border-border px-5 py-4">
+      <div>
+        <h2 id="category-modal-title" class="text-base font-semibold text-heading">
+          Add Category
+        </h2>
+        <p class="mt-0.5 text-xs text-muted">
+          Create a new category under an animal type
+        </p>
+      </div>
+      <button
+        id="modal-close-btn"
+        type="button"
+        class="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted transition-colors hover:border-primary hover:text-primary"
+        aria-label="Close modal"
+      >
+        <X size={16} />
+      </button>
+    </div>
+
+    <form id="category-form" class="px-5 py-4">
+      <div
+        id="modal-error"
+        class="hidden mb-4 rounded-lg border border-sale/30 bg-sale/5 px-3 py-2 text-sm text-sale"
+        role="alert"
+      ></div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="category-animal" class="mb-1.5 block text-sm font-medium text-heading">
+            Animal Type <span class="text-sale">*</span>
+          </label>
+          <select
+            id="category-animal"
+            name="animalId"
+            required
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+          >
+            <option value="">Select animal type</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="category-name" class="mb-1.5 block text-sm font-medium text-heading">
+            Category Name <span class="text-sale">*</span>
+          </label>
+          <input
+            id="category-name"
+            name="name"
+            type="text"
+            required
+            maxlength="100"
+            placeholder="e.g. Cat Food"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label for="category-slug" class="mb-1.5 block text-sm font-medium text-heading">
+            Slug <span class="text-sale">*</span>
+          </label>
+          <input
+            id="category-slug"
+            name="slug"
+            type="text"
+            required
+            maxlength="100"
+            placeholder="e.g. cat-food"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+          <p class="mt-1 text-xs text-muted">Lowercase letters, numbers, and hyphens only</p>
+        </div>
+
+        <div>
+          <label for="category-description" class="mb-1.5 block text-sm font-medium text-heading">
+            Description
+          </label>
+          <textarea
+            id="category-description"
+            name="description"
+            rows="3"
+            maxlength="500"
+            placeholder="Brief description of this category"
+            class="w-full resize-none rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          ></textarea>
+        </div>
+
+        <div>
+          <label for="category-image" class="mb-1.5 block text-sm font-medium text-heading">
+            Image URL
+          </label>
+          <input
+            id="category-image"
+            name="image"
+            type="text"
+            placeholder="/images/categories/category-1.jpg"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col-reverse gap-2 border-t border-border pt-4 sm:flex-row sm:justify-end">
+        <button
+          id="modal-cancel-btn"
+          type="button"
+          class="inline-flex items-center justify-center rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
+        >
+          Cancel
+        </button>
+        <button
+          id="modal-submit-btn"
+          type="submit"
+          class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          Create Category
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    background: var(--color-white);
+    padding: 0.375rem 0.875rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-body);
+    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .filter-pill.is-active {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, white);
+    color: var(--color-primary);
+  }
+</style>

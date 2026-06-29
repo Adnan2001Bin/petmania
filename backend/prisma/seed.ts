@@ -5,63 +5,146 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database...");
 
-  // ─── Categories ───────────────────────────────────────────────────────────
-  const categories = await Promise.all([
-    prisma.category.upsert({
-      where: { slug: "furniture" },
+  // ─── Animals ────────────────────────────────────────────────────────────────
+  const animals = await Promise.all([
+    prisma.animal.upsert({
+      where: { slug: "cat" },
       update: {},
       create: {
-        slug: "furniture",
-        name: "Furniture",
+        slug: "cat",
+        name: "Cat",
+        description: "Everything for your feline friends",
         image: "/images/categories/category-1.jpg",
       },
     }),
-    prisma.category.upsert({
-      where: { slug: "toys" },
+    prisma.animal.upsert({
+      where: { slug: "dog" },
       update: {},
       create: {
-        slug: "toys",
-        name: "Toys",
+        slug: "dog",
+        name: "Dog",
+        description: "Products for dogs of all sizes",
         image: "/images/categories/category-2.jpg",
       },
     }),
-    prisma.category.upsert({
-      where: { slug: "beds" },
+    prisma.animal.upsert({
+      where: { slug: "bird" },
       update: {},
       create: {
-        slug: "beds",
-        name: "Beds",
+        slug: "bird",
+        name: "Bird",
+        description: "Food and accessories for birds",
         image: "/images/categories/category-3.jpg",
       },
     }),
-    prisma.category.upsert({
-      where: { slug: "bowls" },
+    prisma.animal.upsert({
+      where: { slug: "fish" },
       update: {},
       create: {
-        slug: "bowls",
-        name: "Bowls",
+        slug: "fish",
+        name: "Fish",
+        description: "Aquarium essentials and fish food",
         image: "/images/categories/category-4.jpg",
       },
     }),
+  ]);
+
+  const [cat, dog, bird, fish] = animals;
+  console.log(`Created ${animals.length} animals`);
+
+  // ─── Categories ─────────────────────────────────────────────────────────────
+  const categories = await Promise.all([
     prisma.category.upsert({
-      where: { slug: "treats" },
+      where: { slug: "cat-food" },
       update: {},
       create: {
-        slug: "treats",
-        name: "Treats",
-        image: "/images/categories/category-5.jpg",
+        slug: "cat-food",
+        name: "Cat Food",
+        description: "Nutritious meals for cats",
+        image: "/images/categories/category-1.jpg",
+        animalId: cat.id,
       },
     }),
     prisma.category.upsert({
-      where: { slug: "crates" },
+      where: { slug: "cat-toys" },
       update: {},
       create: {
-        slug: "crates",
-        name: "Crates",
+        slug: "cat-toys",
+        name: "Cat Toys",
+        description: "Interactive toys for cats",
+        image: "/images/categories/category-2.jpg",
+        animalId: cat.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "cat-grooming" },
+      update: {},
+      create: {
+        slug: "cat-grooming",
+        name: "Cat Grooming",
+        description: "Grooming essentials for cats",
+        image: "/images/categories/category-3.jpg",
+        animalId: cat.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "dog-food" },
+      update: {},
+      create: {
+        slug: "dog-food",
+        name: "Dog Food",
+        description: "Premium dog nutrition",
+        image: "/images/categories/category-4.jpg",
+        animalId: dog.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "dog-toys" },
+      update: {},
+      create: {
+        slug: "dog-toys",
+        name: "Dog Toys",
+        description: "Fun toys for dogs",
+        image: "/images/categories/category-5.jpg",
+        animalId: dog.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "dog-accessories" },
+      update: {},
+      create: {
+        slug: "dog-accessories",
+        name: "Dog Accessories",
+        description: "Collars, leashes, and more",
         image: "/images/categories/category-6.jpg",
+        animalId: dog.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "bird-food" },
+      update: {},
+      create: {
+        slug: "bird-food",
+        name: "Bird Food",
+        description: "Seed mixes and pellets for birds",
+        image: "/images/categories/category-1.jpg",
+        animalId: bird.id,
+      },
+    }),
+    prisma.category.upsert({
+      where: { slug: "fish-food" },
+      update: {},
+      create: {
+        slug: "fish-food",
+        name: "Fish Food",
+        description: "Flakes and pellets for aquarium fish",
+        image: "/images/categories/category-2.jpg",
+        animalId: fish.id,
       },
     }),
   ]);
+
+  const categoryBySlug = Object.fromEntries(categories.map((c) => [c.slug, c]));
 
   console.log(`Created ${categories.length} categories`);
 
@@ -151,7 +234,7 @@ async function main() {
       rating: 4.8,
       reviewCount: 128,
       inStock: true,
-      categoryId: categories[4].id, // Treats
+      categoryId: categoryBySlug["dog-food"].id,
       brandId: brands[0].id, // PetPro
       tagNames: ["dog", "treats", "bestseller"],
     },
@@ -167,7 +250,7 @@ async function main() {
       rating: 4.9,
       reviewCount: 96,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["cat-food"].id,
       brandId: brands[3].id, // NaturePet
       tagNames: ["cat", "food", "organic"],
     },
@@ -183,7 +266,7 @@ async function main() {
       rating: 4.7,
       reviewCount: 215,
       inStock: true,
-      categoryId: categories[4].id, // Treats
+      categoryId: categoryBySlug["dog-food"].id,
       brandId: brands[1].id, // HappyPaws
       tagNames: ["dog", "food", "premium"],
     },
@@ -198,7 +281,7 @@ async function main() {
       rating: 4.6,
       reviewCount: 64,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["bird-food"].id,
       brandId: brands[2].id, // FurryFriends
       tagNames: ["bird", "food"],
     },
@@ -213,7 +296,7 @@ async function main() {
       rating: 4.5,
       reviewCount: 42,
       inStock: true,
-      categoryId: categories[3].id, // Bowls
+      categoryId: categoryBySlug["fish-food"].id,
       brandId: brands[4].id, // AnimalCare
       tagNames: ["fish", "food"],
     },
@@ -230,7 +313,7 @@ async function main() {
       rating: 4.8,
       reviewCount: 156,
       inStock: true,
-      categoryId: categories[1].id, // Toys
+      categoryId: categoryBySlug["dog-toys"].id,
       brandId: brands[1].id, // HappyPaws
       tagNames: ["dog", "toy", "interactive"],
     },
@@ -246,7 +329,7 @@ async function main() {
       rating: 4.9,
       reviewCount: 312,
       inStock: true,
-      categoryId: categories[2].id, // Beds
+      categoryId: categoryBySlug["dog-accessories"].id,
       brandId: brands[5].id, // PetLuxury
       tagNames: ["bed", "dog", "cat"],
     },
@@ -261,7 +344,7 @@ async function main() {
       rating: 4.7,
       reviewCount: 88,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["dog-accessories"].id,
       brandId: brands[0].id, // PetPro
       tagNames: ["dog", "cat", "collar"],
     },
@@ -278,7 +361,7 @@ async function main() {
       rating: 4.8,
       reviewCount: 74,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["cat-food"].id,
       brandId: brands[2].id, // FurryFriends
       tagNames: ["cat", "treats"],
     },
@@ -293,7 +376,7 @@ async function main() {
       rating: 4.6,
       reviewCount: 53,
       inStock: true,
-      categoryId: categories[3].id, // Bowls
+      categoryId: categoryBySlug["dog-accessories"].id,
       brandId: brands[4].id, // AnimalCare
       tagNames: ["dog", "cat", "bowl"],
     },
@@ -308,7 +391,7 @@ async function main() {
       rating: 4.7,
       reviewCount: 119,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["cat-grooming"].id,
       brandId: brands[3].id, // NaturePet
       tagNames: ["dog", "cat", "grooming"],
     },
@@ -323,7 +406,7 @@ async function main() {
       rating: 4.5,
       reviewCount: 36,
       inStock: true,
-      categoryId: categories[0].id, // Furniture (placeholder)
+      categoryId: categoryBySlug["bird-food"].id,
       brandId: brands[2].id, // FurryFriends
       tagNames: ["hamster", "food"],
     },
@@ -341,7 +424,7 @@ async function main() {
     });
 
     // Connect tags
-    for (const tagName of productTagNames) {
+    for (const tagName of productTagNames ?? []) {
       if (tags[tagName]) {
         await prisma.productTag.upsert({
           where: {

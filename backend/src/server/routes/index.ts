@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import healthRoutes from "./health";
 import authRoutes from "./auth";
 import categoryRoutes from "./categories";
+import animalRoutes from "./animals";
 import productRoutes from "./products";
 import brandRoutes from "./brands";
 import bannerRoutes from "./banners";
@@ -13,6 +14,7 @@ export default async function apiRoutes(fastify: FastifyInstance) {
   fastify.register(healthRoutes, { prefix: "/api" });
   fastify.register(authRoutes, { prefix: "/api" });
   fastify.register(categoryRoutes, { prefix: "/api" });
+  fastify.register(animalRoutes, { prefix: "/api" });
   fastify.register(productRoutes, { prefix: "/api" });
   fastify.register(brandRoutes, { prefix: "/api" });
   fastify.register(bannerRoutes, { prefix: "/api" });

@@ -4,9 +4,10 @@ import { Menu, Bell, Search, User } from '@lucide/astro';
 export interface Props {
   title: string;
   subtitle?: string;
+  subtitleId?: string;
 }
 
-const { title, subtitle } = Astro.props;
+const { title, subtitle, subtitleId } = Astro.props;
 ---
 
 <header class="sticky top-0 z-30 shrink-0 border-b border-border bg-white">
@@ -23,7 +24,7 @@ const { title, subtitle } = Astro.props;
       <div class="min-w-0">
         <h1 class="text-lg font-semibold text-heading sm:text-xl">{title}</h1>
         {subtitle && (
-          <p class="mt-0.5 line-clamp-2 text-xs text-muted sm:text-sm">{subtitle}</p>
+          <p id={subtitleId} class="mt-0.5 line-clamp-2 text-xs text-muted sm:text-sm">{subtitle}</p>
         )}
       </div>
     </div>

@@ -2,12 +2,8 @@
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import AdminSidebar from '../../../components/admin/AdminSidebar.astro';
 import AdminTopbar from '../../../components/admin/AdminTopbar.astro';
-import categoriesData from '../../../data/categories.json';
-import type { Category } from '../../../types';
-import { Plus, Package } from '@lucide/astro';
-
-const categories: Category[] = categoriesData;
-
+import CategoryModal from '../../../components/admin/CategoryModal.astro';
+import { Plus } from '@lucide/astro';
 ---
 
 <AdminLayout title="Categories - Petmania Admin" activeNav="categories">
@@ -15,50 +11,83 @@ const categories: Category[] = categoriesData;
   <AdminTopbar
     slot="topbar"
     title="Categories"
-    subtitle={`${categories.length} categories in your store`}
+    subtitle="Loading categories..."
+    subtitleId="categories-subtitle"
   />
 
-  <div class="mb-6 flex justify-end">
-    <button
-      type="button"
-      class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
-    >
-      <Plus size={18} />
-      Add Category
-    </button>
+  <div id="categories-page">
+    <div
+      id="categories-error"
+      class="hidden mb-4 rounded-lg border border-sale/30 bg-sale/5 px-4 py-3 text-sm text-sale"
+      role="alert"
+    ></div>
+
+    <div id="categories-loading" class="rounded-xl border border-border bg-white px-6 py-16 text-center">
+      <div class="mx-auto mb-3 h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary"></div>
+      <p class="text-sm text-muted">Loading categories...</p>
+    </div>
+
+    <div id="categories-content" class="hidden">
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div id="animal-filters" class="flex flex-wrap gap-2"></div>
+        <button
+          id="add-category-btn"
+          type="button"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          <Plus size={18} />
+          Add Category
+        </button>
+      </div>
+
+      <div id="categories-table-wrap" class="hidden overflow-hidden rounded-xl border border-border bg-white">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-left text-sm">
+            <thead class="border-b border-border bg-light">
+              <tr>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Image</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Name</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Slug</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Animal</th>
+                <th class="px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted">Products</th>
+                <th class="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="categories-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        id="categories-empty"
+        class="hidden rounded-xl border border-dashed border-border bg-white px-6 py-16 text-center"
+      >
+        <p class="text-base font-medium text-heading">No categories yet</p>
+        <p class="mt-1 text-sm text-muted">
+          Create your first category to organize products by animal type.
+        </p>
+        <button
+          type="button"
+          class="add-category-empty-btn mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent"
+        >
+          <Plus size={16} />
+          Add Category
+        </button>
+      </div>
+    </div>
   </div>
 
-  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {
-      categories.map((category) => (
-        <article class="group overflow-hidden rounded-2xl border border-border bg-white shadow-sm transition-all hover:shadow-card">
-          <div class="relative aspect-[4/3] overflow-hidden bg-light">
-            <img
-              src={category.image}
-              alt={category.name}
-              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-dark/60 to-transparent" />
-            <div class="absolute bottom-4 left-4 right-4">
-              <h3 class="text-lg font-semibold text-white">{category.name}</h3>
-              <p class="text-xs text-white/70">/{category.slug}</p>
-            </div>
-          </div>
-          <div class="flex items-center justify-between p-4">
-            <div class="flex items-center gap-2 text-sm text-muted">
-              <Package size={16} />
-              <span>{category.productCount} products</span>
-            </div>
-            <button
-              type="button"
-              class="text-sm font-medium text-primary transition-colors hover:text-accent"
-            >
-              Edit
-            </button>
-          </div>
-        </article>
-      ))
-    }
-  </div>
+  <CategoryModal />
 </AdminLayout>
+
+<script>
+  import { initCategoriesPage } from '../../../scripts/admin-categories';
+
+  initCategoriesPage();
+
+  document.querySelectorAll('.add-category-empty-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      document.getElementById('add-category-btn')?.click();
+    });
+  });
+</script>
