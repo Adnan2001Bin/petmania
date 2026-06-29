@@ -16,7 +16,7 @@ import { X } from '@lucide/astro';
     role="dialog"
     aria-modal="true"
     aria-labelledby="category-modal-title"
-    class="relative w-full max-w-lg rounded-xl border border-border bg-white"
+    class="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-border bg-white"
   >
     <div class="flex items-start justify-between border-b border-border px-5 py-4">
       <div>
@@ -57,6 +57,62 @@ import { X } from '@lucide/astro';
           >
             <option value="">Select animal type</option>
           </select>
+        </div>
+
+        <div id="new-animal-panel" class="hidden space-y-3 rounded-lg border border-dashed border-border bg-light p-4">
+          <p class="text-sm font-medium text-heading">New animal type</p>
+          <p class="text-xs text-muted">Add a new animal before creating this category.</p>
+
+          <div>
+            <label for="new-animal-name" class="mb-1.5 block text-xs font-medium text-heading">
+              Animal Name <span class="text-sale">*</span>
+            </label>
+            <input
+              id="new-animal-name"
+              type="text"
+              maxlength="100"
+              placeholder="e.g. Rabbit"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <label for="new-animal-slug" class="mb-1.5 block text-xs font-medium text-heading">
+              Animal Slug <span class="text-sale">*</span>
+            </label>
+            <input
+              id="new-animal-slug"
+              type="text"
+              maxlength="100"
+              placeholder="e.g. rabbit"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <label for="new-animal-description" class="mb-1.5 block text-xs font-medium text-heading">
+              Description
+            </label>
+            <textarea
+              id="new-animal-description"
+              rows="2"
+              maxlength="500"
+              placeholder="Short description"
+              class="w-full resize-none rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="new-animal-image" class="mb-1.5 block text-xs font-medium text-heading">
+              Image URL
+            </label>
+            <input
+              id="new-animal-image"
+              type="text"
+              placeholder="/images/categories/category-1.jpg"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
         </div>
 
         <div>
@@ -137,29 +193,3 @@ import { X } from '@lucide/astro';
     </form>
   </div>
 </div>
-
-<style>
-  .filter-pill {
-    display: inline-flex;
-    align-items: center;
-    border: 1px solid var(--color-border);
-    border-radius: 9999px;
-    background: var(--color-white);
-    padding: 0.375rem 0.875rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--color-body);
-    transition: border-color 0.2s, color 0.2s, background-color 0.2s;
-  }
-
-  .filter-pill:hover {
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-  }
-
-  .filter-pill.is-active {
-    border-color: var(--color-primary);
-    background: color-mix(in srgb, var(--color-primary) 8%, white);
-    color: var(--color-primary);
-  }
-</style>

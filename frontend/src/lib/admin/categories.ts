@@ -12,6 +12,20 @@ interface ApiResponse<T> {
   };
 }
 
+export interface CreateAnimalPayload {
+  name: string;
+  slug: string;
+  description?: string;
+  image?: string;
+}
+
+export async function createAnimal(
+  payload: CreateAnimalPayload,
+): Promise<Animal> {
+  const { data } = await api.post<ApiResponse<Animal>>("/api/animals", payload);
+  return data.data;
+}
+
 export interface CreateCategoryPayload {
   name: string;
   slug: string;

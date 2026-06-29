@@ -28,8 +28,31 @@ import { Plus } from '@lucide/astro';
     </div>
 
     <div id="categories-content" class="hidden">
-      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-        <div id="animal-filters" class="flex flex-wrap gap-2"></div>
+      <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+        <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end">
+          <div class="min-w-[180px]">
+            <label for="animal-filter" class="mb-1.5 block text-xs font-medium text-muted">
+              Filter by animal
+            </label>
+            <select
+              id="animal-filter"
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+            >
+              <option value="">All animals</option>
+            </select>
+          </div>
+          <div class="min-w-[220px] flex-1 sm:max-w-xs">
+            <label for="category-search" class="mb-1.5 block text-xs font-medium text-muted">
+              Search categories
+            </label>
+            <input
+              id="category-search"
+              type="search"
+              placeholder="Search by name or slug..."
+              class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            />
+          </div>
+        </div>
         <button
           id="add-category-btn"
           type="button"
@@ -62,7 +85,7 @@ import { Plus } from '@lucide/astro';
         id="categories-empty"
         class="hidden rounded-xl border border-dashed border-border bg-white px-6 py-16 text-center"
       >
-        <p class="text-base font-medium text-heading">No categories yet</p>
+        <p id="categories-empty-title" class="text-base font-medium text-heading">No categories yet</p>
         <p class="mt-1 text-sm text-muted">
           Create your first category to organize products by animal type.
         </p>
