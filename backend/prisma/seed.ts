@@ -5,46 +5,49 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Seeding database...");
 
+  const pexels = (id: number, width = 800) =>
+    `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=${width}&h=${width}&fit=crop`;
+
   // ─── Animals ────────────────────────────────────────────────────────────────
   const animals = await Promise.all([
     prisma.animal.upsert({
       where: { slug: "cat" },
-      update: {},
+      update: { image: pexels(320014) },
       create: {
         slug: "cat",
         name: "Cat",
         description: "Everything for your feline friends",
-        image: "/images/categories/category-1.jpg",
+        image: pexels(320014),
       },
     }),
     prisma.animal.upsert({
       where: { slug: "dog" },
-      update: {},
+      update: { image: pexels(1805164) },
       create: {
         slug: "dog",
         name: "Dog",
         description: "Products for dogs of all sizes",
-        image: "/images/categories/category-2.jpg",
+        image: pexels(1805164),
       },
     }),
     prisma.animal.upsert({
       where: { slug: "bird" },
-      update: {},
+      update: { image: pexels(1661174) },
       create: {
         slug: "bird",
         name: "Bird",
         description: "Food and accessories for birds",
-        image: "/images/categories/category-3.jpg",
+        image: pexels(1661174),
       },
     }),
     prisma.animal.upsert({
       where: { slug: "fish" },
-      update: {},
+      update: { image: pexels(128756) },
       create: {
         slug: "fish",
         name: "Fish",
         description: "Aquarium essentials and fish food",
-        image: "/images/categories/category-4.jpg",
+        image: pexels(128756),
       },
     }),
   ]);
@@ -56,89 +59,89 @@ async function main() {
   const categories = await Promise.all([
     prisma.category.upsert({
       where: { slug: "cat-food" },
-      update: {},
+      update: { image: pexels(6864018) },
       create: {
         slug: "cat-food",
         name: "Cat Food",
         description: "Nutritious meals for cats",
-        image: "/images/categories/category-1.jpg",
+        image: pexels(6864018),
         animalId: cat.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "cat-toys" },
-      update: {},
+      update: { image: pexels(1170986) },
       create: {
         slug: "cat-toys",
         name: "Cat Toys",
         description: "Interactive toys for cats",
-        image: "/images/categories/category-2.jpg",
+        image: pexels(1170986),
         animalId: cat.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "cat-grooming" },
-      update: {},
+      update: { image: pexels(6864019) },
       create: {
         slug: "cat-grooming",
         name: "Cat Grooming",
         description: "Grooming essentials for cats",
-        image: "/images/categories/category-3.jpg",
+        image: pexels(6864019),
         animalId: cat.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "dog-food" },
-      update: {},
+      update: { image: pexels(1805164) },
       create: {
         slug: "dog-food",
         name: "Dog Food",
         description: "Premium dog nutrition",
-        image: "/images/categories/category-4.jpg",
+        image: pexels(1805164),
         animalId: dog.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "dog-toys" },
-      update: {},
+      update: { image: pexels(4587997) },
       create: {
         slug: "dog-toys",
         name: "Dog Toys",
         description: "Fun toys for dogs",
-        image: "/images/categories/category-5.jpg",
+        image: pexels(4587997),
         animalId: dog.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "dog-accessories" },
-      update: {},
+      update: { image: pexels(1851164) },
       create: {
         slug: "dog-accessories",
         name: "Dog Accessories",
         description: "Collars, leashes, and more",
-        image: "/images/categories/category-6.jpg",
+        image: pexels(1851164),
         animalId: dog.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "bird-food" },
-      update: {},
+      update: { image: pexels(459460) },
       create: {
         slug: "bird-food",
         name: "Bird Food",
         description: "Seed mixes and pellets for birds",
-        image: "/images/categories/category-1.jpg",
+        image: pexels(459460),
         animalId: bird.id,
       },
     }),
     prisma.category.upsert({
       where: { slug: "fish-food" },
-      update: {},
+      update: { image: pexels(96947) },
       create: {
         slug: "fish-food",
         name: "Fish Food",
         description: "Flakes and pellets for aquarium fish",
-        image: "/images/categories/category-2.jpg",
+        image: pexels(96947),
         animalId: fish.id,
       },
     }),
@@ -224,209 +227,271 @@ async function main() {
       slug: "premium-dog-treats",
       name: "Premium Dog Treats",
       description:
-        "Healthy and delicious premium dog treats made with natural ingredients. Perfect for training and rewarding your furry friend.",
-      price: 60.4,
+        "All-natural training treats made with real chicken and sweet potato. Perfect for rewarding good behavior.",
+      price: 24.99,
       sku: "DOG-TRT-001",
-      image: "/images/products/product-1.jpg",
+      image: pexels(1108099),
       rating: 4.8,
       reviewCount: 128,
       inStock: true,
       categoryId: categoryBySlug["dog-food"].id,
-      brandId: brands[0].id, // PetPro
-      tagNames: ["dog", "treats", "bestseller"],
+      brandId: brands[0].id,
+      tagNames: ["dog", "treats", "bestseller", "food"],
     },
     {
       slug: "organic-cat-food",
       name: "Organic Cat Food",
       description:
-        "Grain-free organic cat food packed with real meat and essential nutrients for a healthy, active cat.",
-      price: 426.03,
+        "Grain-free organic cat food with real salmon and essential vitamins for a healthy, active cat.",
+      price: 34.99,
       sku: "CAT-FD-002",
-      image: "/images/products/product-2.jpg",
+      image: pexels(6864018),
       rating: 4.9,
       reviewCount: 96,
       inStock: true,
       categoryId: categoryBySlug["cat-food"].id,
-      brandId: brands[3].id, // NaturePet
-      tagNames: ["cat", "food", "organic"],
+      brandId: brands[3].id,
+      tagNames: ["cat", "food", "organic", "premium"],
     },
     {
       slug: "dry-dog-food-premium",
       name: "Dry Dog Food Premium",
       description:
-        "High-protein dry dog food formulated for adult dogs of all breeds. Supports muscle health and shiny coat.",
-      price: 853.93,
+        "High-protein dry kibble for adult dogs. Supports muscle health, digestion, and a shiny coat.",
+      price: 42.99,
       sku: "DOG-DF-003",
-      image: "/images/products/product-3.jpg",
+      image: pexels(1805164),
       rating: 4.7,
       reviewCount: 215,
       inStock: true,
       categoryId: categoryBySlug["dog-food"].id,
-      brandId: brands[1].id, // HappyPaws
-      tagNames: ["dog", "food", "premium"],
+      brandId: brands[1].id,
+      tagNames: ["dog", "food", "premium", "bestseller"],
     },
     {
       slug: "parrot-seed-mix",
       name: "Parrot Seed Mix",
       description:
-        "A balanced blend of seeds, nuts, and fruits designed to keep your parrot happy and healthy.",
-      price: 179.5,
+        "A balanced blend of seeds, nuts, and dried fruit formulated for parrots and medium birds.",
+      price: 18.5,
       sku: "BRD-SEED-004",
-      image: "/images/products/product-4.jpg",
+      image: pexels(1661174),
       rating: 4.6,
       reviewCount: 64,
       inStock: true,
       categoryId: categoryBySlug["bird-food"].id,
-      brandId: brands[2].id, // FurryFriends
+      brandId: brands[2].id,
       tagNames: ["bird", "food"],
     },
     {
       slug: "aquarium-fish-food",
       name: "Aquarium Fish Food",
       description:
-        "Nutrient-rich flakes for tropical fish. Helps enhance color and support immune system.",
+        "Nutrient-rich tropical fish flakes that enhance color and support a healthy immune system.",
       price: 12.5,
       sku: "FISH-FD-005",
-      image: "/images/products/product-5.jpg",
+      image: pexels(128756),
       rating: 4.5,
       reviewCount: 42,
       inStock: true,
       categoryId: categoryBySlug["fish-food"].id,
-      brandId: brands[4].id, // AnimalCare
+      brandId: brands[4].id,
       tagNames: ["fish", "food"],
     },
     {
       slug: "interactive-dog-toy",
       name: "Interactive Dog Toy",
       description:
-        "Keep your dog entertained for hours with this durable interactive toy. Great for mental stimulation.",
+        "Durable rubber chew toy that keeps dogs entertained and supports dental health.",
       price: 19.99,
       oldPrice: 25.99,
       sku: "DOG-TOY-006",
-      image: "/images/products/product-6.jpg",
+      image: pexels(4587997),
       rating: 4.8,
       reviewCount: 156,
       inStock: true,
       categoryId: categoryBySlug["dog-toys"].id,
-      brandId: brands[1].id, // HappyPaws
-      tagNames: ["dog", "toy", "interactive"],
+      brandId: brands[1].id,
+      tagNames: ["dog", "toy", "interactive", "bestseller"],
     },
     {
       slug: "cozy-pet-bed",
       name: "Cozy Pet Bed",
       description:
-        "Ultra-soft pet bed with orthopedic support. Machine washable cover and non-slip bottom.",
+        "Ultra-soft orthopedic pet bed with a washable cover and non-slip base for dogs and cats.",
       price: 59.99,
       sku: "PET-BED-007",
-      image: "/images/products/product-7.jpg",
+      image: pexels(1741207),
       rating: 4.9,
       reviewCount: 312,
       inStock: true,
       categoryId: categoryBySlug["dog-accessories"].id,
-      brandId: brands[5].id, // PetLuxury
-      tagNames: ["bed", "dog", "cat"],
+      brandId: brands[5].id,
+      tagNames: ["bed", "dog", "cat", "premium"],
     },
     {
       slug: "leather-pet-collar",
       name: "Leather Pet Collar",
       description:
-        "Genuine leather collar with sturdy buckle. Available in multiple sizes and colors.",
+        "Genuine leather collar with a sturdy brass buckle. Adjustable and available in multiple sizes.",
       price: 22.0,
       sku: "PET-CLLR-008",
-      image: "/images/products/product-8.jpg",
+      image: pexels(1851164),
       rating: 4.7,
       reviewCount: 88,
       inStock: true,
       categoryId: categoryBySlug["dog-accessories"].id,
-      brandId: brands[0].id, // PetPro
+      brandId: brands[0].id,
       tagNames: ["dog", "cat", "collar"],
     },
     {
       slug: "kitten-starter-pack",
       name: "Kitten Starter Pack",
       description:
-        "Everything you need for your new kitten: food, treats, toys, and grooming essentials.",
+        "Starter bundle with kitten food, treats, and a soft toy — everything for your new arrival.",
       price: 39.99,
       oldPrice: 49.99,
       sku: "CAT-KIT-009",
-      image: "/images/products/product-9.jpg",
+      image: pexels(320014),
       rating: 4.8,
       reviewCount: 74,
       inStock: true,
       categoryId: categoryBySlug["cat-food"].id,
-      brandId: brands[2].id, // FurryFriends
-      tagNames: ["cat", "treats"],
+      brandId: brands[2].id,
+      tagNames: ["cat", "treats", "food", "new-arrival"],
     },
     {
       slug: "stainless-steel-bowl",
       name: "Stainless Steel Bowl",
       description:
-        "Durable stainless steel feeding bowl with non-slip rubber base. Rust resistant and dishwasher safe.",
+        "Rust-resistant stainless steel feeding bowl with a non-slip rubber base. Dishwasher safe.",
       price: 14.99,
       sku: "PET-BOWL-010",
-      image: "/images/products/product-10.jpg",
+      image: pexels(6234611),
       rating: 4.6,
       reviewCount: 53,
       inStock: true,
       categoryId: categoryBySlug["dog-accessories"].id,
-      brandId: brands[4].id, // AnimalCare
+      brandId: brands[4].id,
       tagNames: ["dog", "cat", "bowl"],
     },
     {
       slug: "pet-grooming-kit",
       name: "Pet Grooming Kit",
       description:
-        "Complete grooming set with brush, nail clippers, and shampoo for a clean, happy pet.",
+        "Complete grooming set with brush, nail clippers, and gentle shampoo for dogs and cats.",
       price: 29.99,
       sku: "PET-GRM-011",
-      image: "/images/products/product-11.jpg",
+      image: pexels(5732537),
       rating: 4.7,
       reviewCount: 119,
       inStock: true,
       categoryId: categoryBySlug["cat-grooming"].id,
-      brandId: brands[3].id, // NaturePet
+      brandId: brands[3].id,
       tagNames: ["dog", "cat", "grooming"],
     },
     {
-      slug: "hamster-food-mix",
-      name: "Hamster Food Mix",
+      slug: "cat-feather-wand",
+      name: "Cat Feather Wand Toy",
       description:
-        "Nutritious blend of seeds, grains, and pellets specially formulated for hamsters.",
+        "Interactive feather wand toy that encourages exercise and satisfies your cat's hunting instincts.",
+      price: 15.99,
+      sku: "CAT-TOY-012",
+      image: pexels(1170986),
+      rating: 4.8,
+      reviewCount: 91,
+      inStock: true,
+      categoryId: categoryBySlug["cat-toys"].id,
+      brandId: brands[1].id,
+      tagNames: ["cat", "toy", "interactive", "new-arrival"],
+    },
+    {
+      slug: "dog-rope-tug-toy",
+      name: "Dog Rope Tug Toy",
+      description:
+        "Heavy-duty cotton rope toy for tug-of-war and fetch. Great for medium and large breeds.",
+      price: 16.49,
+      sku: "DOG-TOY-013",
+      image: pexels(4588077),
+      rating: 4.6,
+      reviewCount: 67,
+      inStock: true,
+      categoryId: categoryBySlug["dog-toys"].id,
+      brandId: brands[0].id,
+      tagNames: ["dog", "toy", "interactive"],
+    },
+    {
+      slug: "goldfish-pellets",
+      name: "Goldfish Pellets",
+      description:
+        "Slow-sinking pellets designed for goldfish and koi. Supports growth and vibrant coloration.",
       price: 9.99,
-      sku: "SML-HAM-012",
-      image: "/images/products/product-12.jpg",
+      sku: "FISH-PLT-014",
+      image: pexels(96947),
+      rating: 4.4,
+      reviewCount: 38,
+      inStock: true,
+      categoryId: categoryBySlug["fish-food"].id,
+      brandId: brands[4].id,
+      tagNames: ["fish", "food"],
+    },
+    {
+      slug: "bird-treat-sticks",
+      name: "Bird Treat Sticks",
+      description:
+        "Honey seed treat sticks for cockatiels and parakeets. Enriched with vitamins and minerals.",
+      price: 11.99,
+      sku: "BRD-TRT-015",
+      image: pexels(459460),
       rating: 4.5,
-      reviewCount: 36,
+      reviewCount: 29,
       inStock: true,
       categoryId: categoryBySlug["bird-food"].id,
-      brandId: brands[2].id, // FurryFriends
-      tagNames: ["hamster", "food"],
+      brandId: brands[2].id,
+      tagNames: ["bird", "treats", "food"],
+    },
+    {
+      slug: "cat-grooming-brush",
+      name: "Cat Grooming Brush",
+      description:
+        "Self-cleaning slicker brush that removes loose fur and reduces shedding for long-haired cats.",
+      price: 18.99,
+      sku: "CAT-GRM-016",
+      image: pexels(6864019),
+      rating: 4.7,
+      reviewCount: 102,
+      inStock: true,
+      categoryId: categoryBySlug["cat-grooming"].id,
+      brandId: brands[3].id,
+      tagNames: ["cat", "grooming", "bestseller"],
     },
   ];
+
+  const seedSlugs = products.map((item) => item.slug);
+  await prisma.product.deleteMany({
+    where: { slug: { notIn: seedSlugs } },
+  });
 
   for (let i = 0; i < products.length; i++) {
     const { tagNames: productTagNames, ...productData } = products[i];
     const product = await prisma.product.upsert({
       where: { slug: productData.slug },
-      update: {},
+      update: {
+        ...productData,
+        sortOrder: i + 1,
+      },
       create: {
         ...productData,
         sortOrder: i + 1,
       },
     });
 
-    // Connect tags
+    await prisma.productTag.deleteMany({ where: { productId: product.id } });
+
     for (const tagName of productTagNames ?? []) {
       if (tags[tagName]) {
-        await prisma.productTag.upsert({
-          where: {
-            productId_tagId: {
-              productId: product.id,
-              tagId: tags[tagName].id,
-            },
-          },
-          update: {},
-          create: {
+        await prisma.productTag.create({
+          data: {
             productId: product.id,
             tagId: tags[tagName].id,
           },
@@ -438,13 +503,15 @@ async function main() {
   console.log(`Created ${products.length} products`);
 
   // ─── Banners ──────────────────────────────────────────────────────────────
+  await prisma.banner.deleteMany({});
+
   const banners = [
     {
       title: "Felt Cat Beds For Indoor Cats",
       subtitle: "Felt products that cats love",
       description: "Limited time offer",
       discount: "15%",
-      image: "/images/hero/hero-1.jpg",
+      image: pexels(320014),
       link: "/shop",
       type: "HERO" as const,
       size: "LARGE" as const,
@@ -456,7 +523,7 @@ async function main() {
       subtitle: "Summer Sale",
       description: "Premium quality products for your best friends.",
       discount: "30%",
-      image: "/images/hero/hero-2.jpg",
+      image: pexels(1108099),
       link: "/shop",
       type: "HERO" as const,
       size: "LARGE" as const,
@@ -468,7 +535,7 @@ async function main() {
       subtitle: "New Arrivals",
       description: "Discover the latest cat food, toys, and accessories.",
       discount: "20%",
-      image: "/images/hero/hero-3.jpg",
+      image: pexels(6864018),
       link: "/shop",
       type: "HERO" as const,
       size: "LARGE" as const,
@@ -479,7 +546,7 @@ async function main() {
       title: "50% Off",
       subtitle: "Pet Food & Accessories",
       description: "Everything for your pet.",
-      image: "/images/banners/banner-1.jpg",
+      image: pexels(1805164),
       link: "/shop",
       type: "PROMO" as const,
       size: "SMALL" as const,
@@ -490,7 +557,7 @@ async function main() {
       title: "30% Sale Off",
       subtitle: "FREE SHIPPING",
       description: "Shop Now",
-      image: "/images/banners/banner-2.jpg",
+      image: pexels(4587997),
       link: "/shop",
       type: "PROMO" as const,
       size: "SMALL" as const,
@@ -501,7 +568,7 @@ async function main() {
       title: "Healthy formula",
       subtitle: "Parrot Food",
       description: "Premium bird nutrition",
-      image: "/images/banners/banner-3.jpg",
+      image: pexels(459460),
       link: "/shop",
       type: "PROMO" as const,
       size: "SMALL" as const,
@@ -512,7 +579,7 @@ async function main() {
       title: "25% Off",
       subtitle: "Dog Supplies",
       description: "Hotline Order (877) 123-4567",
-      image: "/images/banners/banner-4.jpg",
+      image: pexels(1741207),
       link: "/shop",
       type: "PROMO" as const,
       size: "MEDIUM" as const,
@@ -523,7 +590,7 @@ async function main() {
       title: "Save 30%",
       subtitle: "Premium Cat Food",
       description: "GIFT FOR PET",
-      image: "/images/banners/banner-1.jpg",
+      image: pexels(6864019),
       link: "/shop",
       type: "PROMO" as const,
       size: "MEDIUM" as const,
@@ -547,7 +614,7 @@ async function main() {
         "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
       content:
         "Choosing the right treats for your dog can be overwhelming with so many options available. In this guide, we'll walk you through everything you need to know about selecting the best bully sticks and treats for your canine companion.",
-      image: "/images/blog/blog-1.jpg",
+      image: pexels(1805164),
       date: new Date("2022-06-03"),
       author: "Admin",
       category: "Pet Care",
@@ -561,7 +628,7 @@ async function main() {
         "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
       content:
         "Animal shelters play a vital role in our communities. Learn how you can help make a difference in the lives of shelter animals.",
-      image: "/images/blog/blog-2.jpg",
+      image: pexels(1108099),
       date: new Date("2022-06-03"),
       author: "Admin",
       category: "Pet Toys",
@@ -575,7 +642,7 @@ async function main() {
         "Below is an excerpt of porch.com's article \"Moving With Pets? We Have the Experts' Advice to Do It Properly\". For...",
       content:
         "Himalayan yak chews are becoming increasingly popular among dog owners. Discover the 11 key benefits that make them a great choice for your pet.",
-      image: "/images/blog/blog-3.jpg",
+      image: pexels(4588077),
       date: new Date("2022-06-03"),
       author: "Admin",
       category: "Pet Care",
@@ -587,7 +654,7 @@ async function main() {
   for (const post of blogPosts) {
     await prisma.blogPost.upsert({
       where: { slug: post.slug },
-      update: {},
+      update: post,
       create: post,
     });
   }
@@ -595,11 +662,13 @@ async function main() {
   console.log(`Created ${blogPosts.length} blog posts`);
 
   // ─── Testimonials ─────────────────────────────────────────────────────────
+  await prisma.testimonial.deleteMany({});
+
   const testimonials = [
     {
       name: "John Alvy",
       role: "Pet Owner",
-      avatar: "/images/testimonials/avatar-1.jpg",
+      avatar: pexels(2379004, 200),
       content:
         "Petmania has completely transformed how I shop for my pets. The quality is outstanding and delivery is always on time. My dogs absolutely love the treats!",
       rating: 5,
@@ -608,7 +677,7 @@ async function main() {
     {
       name: "Sarah Jenkins",
       role: "Cat Lover",
-      avatar: "/images/testimonials/avatar-2.jpg",
+      avatar: pexels(774909, 200),
       content:
         "Finally a pet shop that understands what cats need. The organic cat food selection is amazing and my kitty has never been healthier.",
       rating: 5,
@@ -617,7 +686,7 @@ async function main() {
     {
       name: "Michael Brown",
       role: "Dog Trainer",
-      avatar: "/images/testimonials/avatar-3.jpg",
+      avatar: pexels(1222271, 200),
       content:
         "I recommend Petmania to all my clients. Their training treats and toys are top-notch, and the prices are very competitive.",
       rating: 4,
@@ -632,33 +701,35 @@ async function main() {
   console.log(`Created ${testimonials.length} testimonials`);
 
   // ─── Gallery Images ───────────────────────────────────────────────────────
+  await prisma.galleryImage.deleteMany({});
+
   const galleryImages = [
     {
-      src: "/images/gallery/gallery-1.jpg",
+      src: pexels(1108099),
       alt: "Happy pets",
       link: "https://instagram.com",
       sortOrder: 1,
     },
     {
-      src: "/images/gallery/gallery-2.jpg",
+      src: pexels(1805164),
       alt: "Dogs playing",
       link: "https://instagram.com",
       sortOrder: 2,
     },
     {
-      src: "/images/gallery/gallery-3.jpg",
+      src: pexels(320014),
       alt: "Cute cat",
       link: "https://instagram.com",
       sortOrder: 3,
     },
     {
-      src: "/images/gallery/gallery-4.jpg",
+      src: pexels(4587997),
       alt: "Pet toys",
       link: "https://instagram.com",
       sortOrder: 4,
     },
     {
-      src: "/images/gallery/gallery-5.jpg",
+      src: pexels(6864018),
       alt: "Dog treats",
       link: "https://instagram.com",
       sortOrder: 5,

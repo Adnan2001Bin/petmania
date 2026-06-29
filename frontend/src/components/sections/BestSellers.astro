@@ -1,10 +1,18 @@
 ---
-import { products } from '../../data';
+import { fetchPublicProducts } from '../../lib/products';
 import SectionHeading from '../ui/SectionHeading.astro';
 import ProductCard from '../cards/ProductCard.astro';
 import { ChevronRight } from '@lucide/astro';
 
-const bestSellers = products.slice(0, 10);
+let bestSellers = [];
+try {
+  const products = await fetchPublicProducts({ limit: 10 });
+  bestSellers = products
+    .sort((a, b) => b.reviewCount - a.reviewCount)
+    .slice(0, 10);
+} catch {
+  bestSellers = [];
+}
 ---
 
 <section class="py-16 md:py-20">

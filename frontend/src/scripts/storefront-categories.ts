@@ -1,6 +1,7 @@
 import {
   fetchPublicCategories,
   renderCategoryCard,
+  toStorefrontCategory,
 } from "../lib/categories";
 import Swiper from "swiper";
 import { Navigation } from "swiper/modules";
@@ -14,8 +15,9 @@ export async function initCategorySlider(): Promise<void> {
 
   try {
     const categories = await fetchPublicCategories();
+    const storefrontCategories = categories.map(toStorefrontCategory);
 
-    if (categories.length === 0) {
+    if (storefrontCategories.length === 0) {
       wrapper.innerHTML = `
         <div class="swiper-slide">
           <p class="py-8 text-center text-sm text-muted">No categories available yet.</p>
@@ -24,7 +26,7 @@ export async function initCategorySlider(): Promise<void> {
       return;
     }
 
-    wrapper.innerHTML = categories
+    wrapper.innerHTML = storefrontCategories
       .map(
         (category) => `
           <div class="swiper-slide">

@@ -3,22 +3,33 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import ProductCard from '../../components/cards/ProductCard.astro';
 import StarRating from '../../components/ui/StarRating.astro';
 import Button from '../../components/ui/Button.astro';
-import { products, getProductBySlug, getRelatedProducts } from '../../data';
+import { fetchPublicProducts } from '../../lib/products';
+import type { Product } from '../../types';
 
-export function getStaticPaths() {
-  return products.map((product) => ({
-    params: { slug: product.slug },
-  }));
+export async function getStaticPaths() {
+  try {
+    const products = await fetchPublicProducts({ limit: 100 });
+    return products.map((product) => {
+      const relatedProducts = products
+        .filter((item) => item.id !== product.id)
+        .slice(0, 4);
+
+      return {
+        params: { slug: product.slug },
+        props: { product, relatedProducts },
+      };
+    });
+  } catch {
+    return [];
+  }
 }
 
-const { slug } = Astro.params;
-const product = getProductBySlug(slug);
-
-if (!product) {
-  return Astro.redirect('/404');
+interface Props {
+  product: Product;
+  relatedProducts: Product[];
 }
 
-const relatedProducts = getRelatedProducts(product.id, 4);
+const { product, relatedProducts } = Astro.props;
 ---
 
 <MainLayout title={`${product.name} - Petmania`} description={product.description}>
@@ -100,11 +111,10 @@ const relatedProducts = getRelatedProducts(product.id, 4);
   </section>
 </MainLayout>
 
-<script>
+<script define:vars={{ product }}>
   import { addToCart } from '../../stores/cartStore';
-  import { products } from '../../data';
 
-  const qtyInput = document.getElementById('qty-input') as HTMLInputElement;
+  const qtyInput = document.getElementById('qty-input');
   const minusBtn = document.getElementById('qty-minus');
   const plusBtn = document.getElementById('qty-plus');
   const addBtn = document.querySelector('.add-to-cart-btn');
@@ -120,11 +130,9 @@ const relatedProducts = getRelatedProducts(product.id, 4);
   });
 
   addBtn?.addEventListener('click', () => {
-    const productId = addBtn.getAttribute('data-product-id');
-    const product = products.find((p) => p.id === productId);
     const qty = parseInt(qtyInput.value) || 1;
-    if (product) {
-      addToCart(product, qty);
+    for (let i = 0; i < qty; i++) {
+      addToCart(product);
     }
   });
 </script>

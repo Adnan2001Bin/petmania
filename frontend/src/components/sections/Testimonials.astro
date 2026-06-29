@@ -1,7 +1,14 @@
 ---
-import { testimonials } from '../../data';
+import { fetchTestimonials } from '../../lib/content';
 import SectionHeading from '../ui/SectionHeading.astro';
 import TestimonialCard from '../cards/TestimonialCard.astro';
+
+let testimonials = [];
+try {
+  testimonials = await fetchTestimonials();
+} catch {
+  testimonials = [];
+}
 ---
 
 <section class="py-16 md:py-20">

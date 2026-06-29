@@ -151,3 +151,12 @@ img {
     display: none;
   }
 }
+
+.product-card-image {
+  aspect-ratio: 1 / 1;
+}
+
+.product-card-image .product-card-img {
+  min-height: 100%;
+  min-width: 100%;
+}

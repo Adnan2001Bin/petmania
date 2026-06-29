@@ -1,18 +1,6 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import ProductCard from '../components/cards/ProductCard.astro';
-import { products } from '../data';
-import { LayoutGrid, List, ChevronRight, ChevronLeft, PawPrint } from '@lucide/astro';
-
-const bestSellers = products.slice(0, 4);
-
-const brands = [
-  { name: 'NaturePet', count: 3 },
-  { name: 'HappyPaws', count: 2 },
-  { name: 'PetPro', count: 2 },
-  { name: 'FurryFriends', count: 1 },
-  { name: 'AnimalCare', count: 1 },
-];
+import { LayoutGrid, List, ChevronRight, ChevronLeft } from '@lucide/astro';
 
 const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'Organic'];
 ---
@@ -22,7 +10,6 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
   <section class="py-6">
     <div class="container-main">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Orange Banner -->
         <a href="/shop" class="group relative overflow-hidden rounded-2xl h-64 md:h-72 bg-gradient-to-br from-primary via-primary/90 to-primary/70">
           <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
           <div class="relative z-10 h-full flex flex-col justify-center p-8">
@@ -42,7 +29,6 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
           </div>
         </a>
 
-        <!-- Purple Banner -->
         <a href="/shop" class="group relative overflow-hidden rounded-2xl h-64 md:h-72 bg-gradient-to-br from-accent via-accent/90 to-accent/70">
           <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
           <div class="relative z-10 h-full flex flex-col justify-center p-8">
@@ -61,7 +47,6 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
     </div>
   </section>
 
-  <!-- Breadcrumb -->
   <section class="py-4">
     <div class="container-main">
       <nav class="text-sm text-muted flex items-center gap-2">
@@ -72,12 +57,10 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
     </div>
   </section>
 
-  <!-- Shop Content -->
   <section class="pb-16">
     <div class="container-main">
-      <!-- Title Row -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-heading">Product Categories</h1>
+        <h1 class="text-2xl md:text-3xl font-bold text-heading">Shop</h1>
         <div class="flex items-center gap-6">
           <div class="flex items-center gap-2">
             <button type="button" class="w-9 h-9 flex items-center justify-center rounded bg-primary text-white" aria-label="Grid view">
@@ -87,139 +70,101 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
               <List size={18} />
             </button>
           </div>
-          <select class="px-4 py-2.5 text-sm border border-border rounded-lg outline-none focus:border-primary bg-white cursor-pointer">
-            <option>Default sorting</option>
-            <option>Sort by popularity</option>
-            <option>Sort by average rating</option>
-            <option>Sort by latest</option>
-            <option>Price: low to high</option>
-            <option>Price: high to low</option>
+          <select id="shop-sort" class="px-4 py-2.5 text-sm border border-border rounded-lg outline-none focus:border-primary bg-white cursor-pointer">
+            <option value="default">Default sorting</option>
+            <option value="popularity">Sort by popularity</option>
+            <option value="rating">Sort by average rating</option>
+            <option value="price-asc">Price: low to high</option>
+            <option value="price-desc">Price: high to low</option>
           </select>
-          <p class="text-sm text-muted hidden md:block">Showing 1–{products.length} of {products.length} results</p>
+          <p id="shop-results-count" class="text-sm text-muted hidden md:block">Loading products...</p>
         </div>
       </div>
 
       <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Sidebar -->
         <aside class="w-full lg:w-72 shrink-0 space-y-8">
-          <!-- Product Categories -->
-          <div>
+          <div id="shop-category-section">
             <h3 class="text-lg font-bold text-heading mb-4">Product Categories</h3>
+            <label for="shop-animal-filter" class="mb-1.5 block text-xs font-medium text-muted">
+              Animal
+            </label>
+            <select
+              id="shop-animal-filter"
+              class="mb-4 w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
+            >
+              <option value="">All animals</option>
+            </select>
             <ul id="shop-category-list" class="space-y-1">
               <li class="px-3 py-2 text-sm text-muted">Loading categories...</li>
             </ul>
           </div>
 
-          <!-- Filter By Price -->
           <div>
             <h3 class="text-lg font-bold text-heading mb-4">Filter By Price</h3>
             <div class="px-1">
-              <div class="relative h-1 bg-border rounded-full mb-4">
-                <div class="absolute left-0 top-0 h-full w-3/4 bg-accent rounded-full"></div>
-                <div class="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 bg-accent border-2 border-white rounded-full shadow cursor-pointer"></div>
-                <div class="absolute left-3/4 top-1/2 -translate-y-1/2 w-4 h-4 bg-accent border-2 border-white rounded-full shadow cursor-pointer"></div>
+              <div class="relative mb-4 h-6">
+                <div class="absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-border"></div>
+                <div id="price-range-track" class="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent"></div>
+                <input
+                  id="price-min"
+                  type="range"
+                  class="price-range-input absolute inset-x-0 top-1/2 w-full -translate-y-1/2"
+                />
+                <input
+                  id="price-max"
+                  type="range"
+                  class="price-range-input absolute inset-x-0 top-1/2 w-full -translate-y-1/2"
+                />
               </div>
-              <div class="flex items-center justify-between text-sm text-body mb-4">
-                <span>Price: $10 — $990</span>
+              <div class="mb-4 text-sm text-body">
+                <span id="price-range-label">Price: $0 — $0</span>
               </div>
-              <button type="button" class="inline-flex items-center gap-2 px-6 py-2.5 bg-accent text-white text-sm font-semibold rounded-pill hover:bg-primary transition-colors">
-                Filter
-                <ChevronRight size={16} />
-              </button>
+              <div class="flex flex-wrap gap-2">
+                <button
+                  id="price-filter-btn"
+                  type="button"
+                  class="inline-flex items-center gap-2 rounded-pill bg-accent px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary"
+                >
+                  Filter
+                  <ChevronRight size={16} />
+                </button>
+                <button
+                  id="clear-filters-btn"
+                  type="button"
+                  class="inline-flex items-center rounded-pill border border-border px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
+                >
+                  Clear all
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Filter By Brands -->
-          <div>
-            <h3 class="text-lg font-bold text-heading mb-4">Filter By Brands</h3>
-            <ul class="space-y-1">
-              {brands.map((brand) => (
-                <li>
-                  <label class="flex items-center justify-between py-2.5 px-3 text-sm text-body hover:bg-light rounded-lg transition-all cursor-pointer group">
-                    <span class="flex items-center gap-3">
-                      <PawPrint size={16} class="text-muted group-hover:text-primary transition-colors" />
-                      {brand.name}
-                    </span>
-                    <span class="text-xs text-muted">({brand.count})</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <!-- Best Seller Products -->
           <div>
             <h3 class="text-lg font-bold text-heading mb-4">Best Seller Products</h3>
-            <div class="space-y-4">
-              {bestSellers.map((product) => (
-                <a href={`/product/${product.slug}`} class="flex items-center gap-3 group">
-                  <div class="w-16 h-16 rounded-lg overflow-hidden bg-light shrink-0">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      class="w-full h-full object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <h4 class="text-sm font-semibold text-heading group-hover:text-primary transition-colors truncate">
-                      {product.name}
-                    </h4>
-                    <div class="flex items-center gap-1 my-1">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <svg width={12} height={12} viewBox="0 0 24 24" fill={i < Math.round(product.rating) ? '#ffcb45' : 'none'} stroke="#ffcb45" stroke-width="2">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
-                      ))}
-                      <span class="text-xs text-muted">({product.reviewCount})</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="text-sm font-bold text-primary">${product.price.toFixed(2)}</span>
-                      {product.oldPrice && (
-                        <span class="text-xs text-muted line-through">${product.oldPrice.toFixed(2)}</span>
-                      )}
-                    </div>
-                  </div>
-                </a>
-              ))}
+            <div id="shop-best-sellers">
+              <p class="text-sm text-muted">Loading...</p>
             </div>
           </div>
 
-          <!-- Filter By Tags -->
           <div>
             <h3 class="text-lg font-bold text-heading mb-4">Filter By Tags</h3>
             <div class="flex flex-wrap gap-2">
               {tags.map((tag) => (
-                <a
-                  href={`/shop?tag=${tag.toLowerCase()}`}
-                  class="px-4 py-2 text-sm text-body border border-border rounded-full hover:border-primary hover:text-primary transition-colors"
+                <button
+                  type="button"
+                  data-tag={tag.toLowerCase()}
+                  class="shop-tag-btn rounded-full border border-border px-4 py-2 text-sm text-body transition-colors hover:border-primary hover:text-primary"
                 >
                   {tag}
-                </a>
+                </button>
               ))}
             </div>
           </div>
         </aside>
 
-        <!-- Products Grid -->
         <div class="flex-1">
-          <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <ProductCard product={product} />
-            ))}
-          </div>
-
-          <!-- Pagination -->
-          <div class="flex items-center justify-center gap-2 mt-10">
-            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-semibold text-sm">
-              1
-            </button>
-            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-heading hover:border-primary hover:text-primary font-semibold text-sm transition-colors">
-              2
-            </button>
-            <button type="button" class="w-10 h-10 flex items-center justify-center rounded-lg border border-border text-heading hover:border-primary hover:text-primary transition-colors" aria-label="Next page">
-              <ChevronRight size={18} />
-            </button>
+          <div id="shop-products-grid" class="grid grid-cols-1 items-stretch sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="col-span-full py-16 text-center text-sm text-muted">Loading products...</div>
           </div>
         </div>
       </div>
@@ -227,8 +172,40 @@ const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'O
   </section>
 </MainLayout>
 
-<script>
-  import { initShopCategories } from '../scripts/shop-categories';
+<style>
+  .price-range-input {
+    appearance: none;
+    height: 0;
+    background: transparent;
+    pointer-events: none;
+  }
 
-  initShopCategories();
+  .price-range-input::-webkit-slider-thumb {
+    appearance: none;
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    background: #7c3aed;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+    cursor: pointer;
+  }
+
+  .price-range-input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    border: 2px solid #fff;
+    background: #7c3aed;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 15%);
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { initShopPage } from '../scripts/shop-page';
+
+  initShopPage();
 </script>

@@ -1,9 +1,22 @@
 ---
-import { getSmallPromoBanners, getMediumPromoBanners } from '../../data';
+import {
+  fetchPromoBanners,
+  getMediumPromoBanners,
+  getSmallPromoBanners,
+} from '../../lib/content';
 import BannerCard from '../cards/BannerCard.astro';
 
-const smallBanners = getSmallPromoBanners();
-const mediumBanners = getMediumPromoBanners();
+let smallBanners = [];
+let mediumBanners = [];
+
+try {
+  const promoBanners = await fetchPromoBanners();
+  smallBanners = getSmallPromoBanners(promoBanners);
+  mediumBanners = getMediumPromoBanners(promoBanners);
+} catch {
+  smallBanners = [];
+  mediumBanners = [];
+}
 ---
 
 <section class="pb-16 md:pb-20">

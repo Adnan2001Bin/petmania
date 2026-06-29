@@ -1,5 +1,12 @@
 ---
-import { brands } from '../../data';
+import { fetchBrands } from '../../lib/content';
+
+let brands = [];
+try {
+  brands = await fetchBrands();
+} catch {
+  brands = [];
+}
 ---
 
 <section class="py-12 border-t border-border">

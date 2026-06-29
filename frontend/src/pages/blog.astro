@@ -1,7 +1,14 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import BlogCard from '../components/cards/BlogCard.astro';
-import { posts } from '../data';
+import { fetchBlogPosts } from '../lib/content';
+
+let posts = [];
+try {
+  posts = await fetchBlogPosts(20);
+} catch {
+  posts = [];
+}
 ---
 
 <MainLayout title="Blog - Petmania" description="Read the latest pet care tips and news.">

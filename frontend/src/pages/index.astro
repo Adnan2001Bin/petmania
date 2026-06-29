@@ -11,9 +11,14 @@ import Testimonials from '../components/sections/Testimonials.astro';
 import BrandLogos from '../components/sections/BrandLogos.astro';
 import InstagramGallery from '../components/sections/InstagramGallery.astro';
 import Newsletter from '../components/sections/Newsletter.astro';
-import { products } from '../data';
+import { fetchPublicProducts } from '../lib/products';
 
-const bestSellingProducts = products.slice(0, 8);
+let bestSellingProducts = [];
+try {
+  bestSellingProducts = await fetchPublicProducts({ limit: 8 });
+} catch {
+  bestSellingProducts = [];
+}
 ---
 
 <MainLayout>
@@ -48,7 +53,9 @@ const bestSellingProducts = products.slice(0, 8);
           </a>
         </div>
         <div class="absolute right-0 top-0 bottom-0 w-1/2 opacity-20">
-          <img src="/images/products/product-7.jpg" alt="Pet products" class="w-full h-full object-cover" />
+          {bestSellingProducts[0] && (
+            <img src={bestSellingProducts[0].image} alt="Pet products" class="w-full h-full object-cover" />
+          )}
         </div>
       </div>
     </div>

@@ -1,5 +1,12 @@
 ---
-import { gallery } from '../../data';
+import { fetchGalleryImages } from '../../lib/content';
+
+let gallery = [];
+try {
+  gallery = await fetchGalleryImages();
+} catch {
+  gallery = [];
+}
 ---
 
 <section class="py-16 md:py-20">

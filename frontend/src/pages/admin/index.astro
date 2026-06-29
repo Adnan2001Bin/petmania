@@ -4,7 +4,7 @@ import AdminSidebar from '../../components/admin/AdminSidebar.astro';
 import AdminTopbar from '../../components/admin/AdminTopbar.astro';
 import StatCard from '../../components/admin/StatCard.astro';
 import ProductTable from '../../components/admin/ProductTable.astro';
-import adminProductsData from '../../data/admin-products.json';
+import { fetchPublicProducts } from '../../lib/products';
 import type { Product } from '../../types';
 import {
   Package,
@@ -15,11 +15,18 @@ import {
   Plus,
 } from '@lucide/astro';
 
-const products: Product[] = adminProductsData;
+let products: Product[] = [];
+try {
+  products = await fetchPublicProducts({ limit: 100, all: true });
+} catch {
+  products = [];
+}
 
 const totalProducts = products.length;
 const inStockCount = products.filter((p) => p.inStock).length;
-const avgRating = (products.reduce((sum, p) => sum + p.rating, 0) / totalProducts).toFixed(1);
+const avgRating = totalProducts
+  ? (products.reduce((sum, p) => sum + p.rating, 0) / totalProducts).toFixed(1)
+  : '0.0';
 const totalValue = products.reduce((sum, p) => sum + p.price, 0);
 const categories = [...new Set(products.map((p) => p.category))];
 const recentProducts = products.slice(0, 5);

@@ -1,8 +1,13 @@
 ---
-import { getHeroBanners } from '../../data';
+import { fetchHeroBanners } from '../../lib/content';
 import Button from '../ui/Button.astro';
 
-const heroBanners = getHeroBanners();
+let heroBanners = [];
+try {
+  heroBanners = await fetchHeroBanners();
+} catch {
+  heroBanners = [];
+}
 ---
 
 <section class="relative">
