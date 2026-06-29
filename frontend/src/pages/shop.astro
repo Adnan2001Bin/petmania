@@ -1,17 +1,10 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import ProductCard from '../components/cards/ProductCard.astro';
-import { products, categories } from '../data';
+import { products } from '../data';
 import { LayoutGrid, List, ChevronRight, ChevronLeft, PawPrint } from '@lucide/astro';
 
-const categoryCounts: Record<string, number> = {
-  'dog-food': 4,
-  'cat-food': 3,
-  'bird-supplies': 2,
-  'fish-supplies': 2,
-  'pet-toys': 5,
-  'pet-care': 4,
-};
+const bestSellers = products.slice(0, 4);
 
 const brands = [
   { name: 'NaturePet', count: 3 },
@@ -22,8 +15,6 @@ const brands = [
 ];
 
 const tags = ['Food', 'Toys', 'Treats', 'Collar', 'Grooming', 'Beds', 'Bowl', 'Organic'];
-
-const bestSellers = products.slice(0, 4);
 ---
 
 <MainLayout title="Shop - Petmania" description="Browse our wide range of premium pet products.">
@@ -114,23 +105,8 @@ const bestSellers = products.slice(0, 4);
           <!-- Product Categories -->
           <div>
             <h3 class="text-lg font-bold text-heading mb-4">Product Categories</h3>
-            <ul class="space-y-1">
-              {categories.map((category) => (
-                <li>
-                  <a
-                    href={`/shop?category=${category.slug}`}
-                    class="flex items-center justify-between py-2.5 px-3 text-sm text-body hover:text-primary hover:bg-light rounded-lg transition-all group"
-                  >
-                    <span class="flex items-center gap-3">
-                      <PawPrint size={16} class="text-muted group-hover:text-primary transition-colors" />
-                      {category.name}
-                    </span>
-                    <span class="text-xs text-muted bg-light group-hover:bg-primary/10 group-hover:text-primary px-2 py-0.5 rounded-full transition-colors">
-                      ({categoryCounts[category.slug] || 0})
-                    </span>
-                  </a>
-                </li>
-              ))}
+            <ul id="shop-category-list" class="space-y-1">
+              <li class="px-3 py-2 text-sm text-muted">Loading categories...</li>
             </ul>
           </div>
 
@@ -250,3 +226,9 @@ const bestSellers = products.slice(0, 4);
     </div>
   </section>
 </MainLayout>
+
+<script>
+  import { initShopCategories } from '../scripts/shop-categories';
+
+  initShopCategories();
+</script>
