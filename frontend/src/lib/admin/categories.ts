@@ -74,3 +74,14 @@ export function slugify(value: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+
+export function buildCategoryFromAnimal(
+  animal: Pick<Animal, "name" | "slug">,
+  typeLabel: string,
+): { name: string; slug: string } {
+  const trimmedType = typeLabel.trim();
+  return {
+    name: `${animal.name} ${trimmedType}`,
+    slug: slugify(`${animal.slug}-${trimmedType}`),
+  };
+}

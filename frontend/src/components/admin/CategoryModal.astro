@@ -18,15 +18,10 @@ import { X } from '@lucide/astro';
     aria-labelledby="category-modal-title"
     class="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl border border-border bg-white"
   >
-    <div class="flex items-start justify-between border-b border-border px-5 py-4">
-      <div>
-        <h2 id="category-modal-title" class="text-base font-semibold text-heading">
-          Add Category
-        </h2>
-        <p class="mt-0.5 text-xs text-muted">
-          Create a new category under an animal type
-        </p>
-      </div>
+    <div class="flex items-center justify-between border-b border-border px-5 py-4">
+      <h2 id="category-modal-title" class="text-base font-semibold text-heading">
+        Add Category
+      </h2>
       <button
         id="modal-close-btn"
         type="button"
@@ -47,7 +42,7 @@ import { X } from '@lucide/astro';
       <div class="space-y-4">
         <div>
           <label for="category-animal" class="mb-1.5 block text-sm font-medium text-heading">
-            Animal Type <span class="text-sale">*</span>
+            Animal <span class="text-sale">*</span>
           </label>
           <select
             id="category-animal"
@@ -55,96 +50,99 @@ import { X } from '@lucide/astro';
             required
             class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary"
           >
-            <option value="">Select animal type</option>
+            <option value="">Select animal</option>
           </select>
         </div>
 
-        <div id="new-animal-panel" class="hidden space-y-3 rounded-lg border border-dashed border-border bg-light p-4">
-          <p class="text-sm font-medium text-heading">New animal type</p>
-          <p class="text-xs text-muted">Add a new animal before creating this category.</p>
-
-          <div>
-            <label for="new-animal-name" class="mb-1.5 block text-xs font-medium text-heading">
-              Animal Name <span class="text-sale">*</span>
-            </label>
-            <input
-              id="new-animal-name"
-              type="text"
-              maxlength="100"
-              placeholder="e.g. Rabbit"
-              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
-            />
+        <div id="new-animal-panel" class="hidden space-y-3 rounded-lg border border-border bg-light p-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-sm font-medium text-heading">New animal</span>
+            <button
+              id="new-animal-cancel-btn"
+              type="button"
+              class="flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:text-primary"
+              aria-label="Cancel"
+            >
+              <X size={14} />
+            </button>
           </div>
 
-          <div>
-            <label for="new-animal-slug" class="mb-1.5 block text-xs font-medium text-heading">
-              Animal Slug <span class="text-sale">*</span>
-            </label>
-            <input
-              id="new-animal-slug"
-              type="text"
-              maxlength="100"
-              placeholder="e.g. rabbit"
-              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
-            />
-          </div>
+          <input
+            id="new-animal-name"
+            type="text"
+            maxlength="100"
+            placeholder="Name"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
 
-          <div>
-            <label for="new-animal-description" class="mb-1.5 block text-xs font-medium text-heading">
-              Description
-            </label>
-            <textarea
-              id="new-animal-description"
-              rows="2"
-              maxlength="500"
-              placeholder="Short description"
-              class="w-full resize-none rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
-            ></textarea>
-          </div>
+          <input
+            id="new-animal-slug"
+            type="text"
+            maxlength="100"
+            placeholder="Slug"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
 
-          <div>
-            <label for="new-animal-image" class="mb-1.5 block text-xs font-medium text-heading">
-              Image URL
-            </label>
-            <input
-              id="new-animal-image"
-              type="text"
-              placeholder="/images/categories/category-1.jpg"
-              class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
-            />
-          </div>
+          <input
+            id="new-animal-image"
+            type="text"
+            placeholder="Image URL (optional)"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+          />
+
+          <div
+            id="new-animal-error"
+            class="hidden rounded-lg border border-sale/30 bg-sale/5 px-3 py-2 text-xs text-sale"
+            role="alert"
+          ></div>
+
+          <button
+            id="new-animal-add-btn"
+            type="button"
+            class="inline-flex w-full items-center justify-center rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary"
+          >
+            Add Animal
+          </button>
         </div>
 
-        <div>
-          <label for="category-name" class="mb-1.5 block text-sm font-medium text-heading">
-            Category Name <span class="text-sale">*</span>
+        <div id="category-type-section">
+          <label for="category-type" class="mb-1.5 block text-sm font-medium text-heading">
+            Category <span class="text-sale">*</span>
           </label>
+          <select
+            id="category-type"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors focus:border-primary disabled:cursor-not-allowed disabled:bg-light"
+          >
+            <option value="">Select type</option>
+          </select>
+        </div>
+
+        <div id="new-category-type-panel" class="hidden space-y-3 rounded-lg border border-border bg-light p-3">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-sm font-medium text-heading">New type</span>
+            <button
+              id="new-category-type-cancel-btn"
+              type="button"
+              class="flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:text-primary"
+              aria-label="Cancel"
+            >
+              <X size={14} />
+            </button>
+          </div>
+
           <input
-            id="category-name"
-            name="name"
+            id="new-category-type-name"
             type="text"
-            required
             maxlength="100"
-            placeholder="e.g. Cat Food"
-            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
+            placeholder="Type name"
+            class="w-full rounded-lg border border-border bg-white px-3 py-2 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
           />
         </div>
 
-        <div>
-          <label for="category-slug" class="mb-1.5 block text-sm font-medium text-heading">
-            Slug <span class="text-sale">*</span>
-          </label>
-          <input
-            id="category-slug"
-            name="slug"
-            type="text"
-            required
-            maxlength="100"
-            placeholder="e.g. cat-food"
-            class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
-          />
-          <p class="mt-1 text-xs text-muted">Lowercase letters, numbers, and hyphens only</p>
-        </div>
+        <div
+          id="category-preview"
+          class="hidden text-sm font-medium text-heading"
+        ></div>
 
         <div>
           <label for="category-description" class="mb-1.5 block text-sm font-medium text-heading">
@@ -153,22 +151,22 @@ import { X } from '@lucide/astro';
           <textarea
             id="category-description"
             name="description"
-            rows="3"
+            rows="2"
             maxlength="500"
-            placeholder="Brief description of this category"
+            placeholder="Optional"
             class="w-full resize-none rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
           ></textarea>
         </div>
 
         <div>
           <label for="category-image" class="mb-1.5 block text-sm font-medium text-heading">
-            Image URL
+            Image
           </label>
           <input
             id="category-image"
             name="image"
             type="text"
-            placeholder="/images/categories/category-1.jpg"
+            placeholder="URL (optional)"
             class="w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-body outline-none transition-colors placeholder:text-muted focus:border-primary"
           />
         </div>

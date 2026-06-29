@@ -1,0 +1,40 @@
+<div
+  id="confirm-dialog"
+  class="hidden fixed inset-0 z-[70] flex items-center justify-center p-4"
+  aria-hidden="true"
+>
+  <div
+    id="confirm-dialog-backdrop"
+    class="absolute inset-0 bg-dark/50"
+  ></div>
+
+  <div
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="confirm-dialog-title"
+    aria-describedby="confirm-dialog-message"
+    class="relative w-full max-w-sm rounded-xl border border-border bg-white p-5 shadow-lg"
+  >
+    <h2 id="confirm-dialog-title" class="text-base font-semibold text-heading">
+      Confirm delete
+    </h2>
+    <p id="confirm-dialog-message" class="mt-2 text-sm text-body"></p>
+
+    <div class="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+      <button
+        id="confirm-dialog-cancel"
+        type="button"
+        class="inline-flex items-center justify-center rounded-lg border border-border px-4 py-2 text-sm font-medium text-heading transition-colors hover:border-primary hover:text-primary"
+      >
+        Cancel
+      </button>
+      <button
+        id="confirm-dialog-confirm"
+        type="button"
+        class="inline-flex items-center justify-center rounded-lg bg-sale px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-sale/90"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>

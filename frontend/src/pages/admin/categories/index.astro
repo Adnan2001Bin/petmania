@@ -3,6 +3,8 @@ import AdminLayout from '../../../layouts/AdminLayout.astro';
 import AdminSidebar from '../../../components/admin/AdminSidebar.astro';
 import AdminTopbar from '../../../components/admin/AdminTopbar.astro';
 import CategoryModal from '../../../components/admin/CategoryModal.astro';
+import ConfirmDialog from '../../../components/admin/ConfirmDialog.astro';
+import AdminToast from '../../../components/admin/AdminToast.astro';
 import { Plus } from '@lucide/astro';
 ---
 
@@ -101,6 +103,8 @@ import { Plus } from '@lucide/astro';
   </div>
 
   <CategoryModal />
+  <ConfirmDialog />
+  <AdminToast />
 </AdminLayout>
 
 <script>
