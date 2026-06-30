@@ -36,13 +36,13 @@ const {
     <!-- Sidebar -->
     <aside
       id="admin-sidebar"
-      class="admin-sidebar fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col bg-dark text-white shadow-xl transition-transform duration-300"
+      class="admin-sidebar fixed inset-y-0 left-0 z-50 flex h-screen w-[280px] -translate-x-full flex-col bg-dark text-white shadow-xl transition-transform duration-300 lg:translate-x-0 lg:shadow-none"
     >
       <slot name="sidebar" />
     </aside>
 
     <!-- Main column -->
-    <div class="flex min-h-screen min-w-0 flex-col">
+    <div class="flex min-h-screen min-w-0 flex-col lg:ml-[280px]">
       <slot name="topbar" />
       <main class="flex-1 p-4 sm:p-6 lg:p-8">
         <slot />
@@ -86,12 +86,9 @@ const {
       document.body.classList.remove('overflow-hidden');
     }
 
-    toggleBtn?.addEventListener('click', openSidebar);
-    closeBtn?.addEventListener('click', closeSidebar);
-    overlay?.addEventListener('click', closeSidebar);
-
-    window.addEventListener('resize', () => {
+    function syncSidebarState() {
       if (isDesktop()) {
+        sidebar?.classList.remove('-translate-x-full');
         overlay?.classList.add('opacity-0', 'pointer-events-none');
         document.body.classList.remove('overflow-hidden');
       } else {
@@ -99,7 +96,14 @@ const {
         overlay?.classList.add('opacity-0', 'pointer-events-none');
         document.body.classList.remove('overflow-hidden');
       }
-    });
+    }
+
+    toggleBtn?.addEventListener('click', openSidebar);
+    closeBtn?.addEventListener('click', closeSidebar);
+    overlay?.addEventListener('click', closeSidebar);
+    window.addEventListener('resize', syncSidebarState);
+
+    syncSidebarState();
     }
   </script>
 </body>

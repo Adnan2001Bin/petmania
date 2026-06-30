@@ -128,22 +128,7 @@ img {
 }
 
 @media (min-width: 1024px) {
-  .admin-shell {
-    display: grid;
-    grid-template-columns: 280px minmax(0, 1fr);
-    align-items: start;
-  }
-
   .admin-sidebar {
-    position: sticky;
-    top: 0;
-    align-self: start;
-    height: 100vh;
-    max-height: 100vh;
-    transform: none;
-    translate: none;
-    z-index: 50;
-    box-shadow: none;
     overflow: hidden;
   }
 
