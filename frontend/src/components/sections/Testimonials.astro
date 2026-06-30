@@ -33,22 +33,27 @@ try {
   import 'swiper/css';
   import 'swiper/css/pagination';
 
-  new Swiper('.testimonial-slider', {
-    modules: [Pagination, Autoplay],
-    slidesPerView: 1,
-    spaceBetween: 24,
-    loop: true,
-    autoplay: {
-      delay: 6000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    breakpoints: {
-      768: { slidesPerView: 2 },
-      1024: { slidesPerView: 3 },
-    },
-  });
+  const slider = document.querySelector('.testimonial-slider');
+  if (slider) {
+    const slideCount = slider.querySelectorAll('.swiper-slide').length;
+
+    new Swiper(slider, {
+      modules: [Pagination, Autoplay],
+      slidesPerView: 1,
+      spaceBetween: 24,
+      loop: slideCount > 3,
+      autoplay: {
+        delay: 6000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      breakpoints: {
+        768: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      },
+    });
+  }
 </script>

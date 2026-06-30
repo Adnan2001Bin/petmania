@@ -3,33 +3,30 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import ProductCard from '../../components/cards/ProductCard.astro';
 import StarRating from '../../components/ui/StarRating.astro';
 import Button from '../../components/ui/Button.astro';
-import { fetchPublicProducts } from '../../lib/products';
+import { fetchProductBySlug, fetchPublicProducts } from '../../lib/products';
 import type { Product } from '../../types';
 
-export async function getStaticPaths() {
-  try {
-    const products = await fetchPublicProducts({ limit: 100 });
-    return products.map((product) => {
-      const relatedProducts = products
-        .filter((item) => item.id !== product.id)
-        .slice(0, 4);
+const { slug } = Astro.params;
 
-      return {
-        params: { slug: product.slug },
-        props: { product, relatedProducts },
-      };
-    });
-  } catch {
-    return [];
-  }
+if (!slug) {
+  return Astro.redirect('/404');
 }
 
-interface Props {
-  product: Product;
-  relatedProducts: Product[];
+const product = await fetchProductBySlug(slug);
+
+if (!product) {
+  return Astro.redirect('/404');
 }
 
-const { product, relatedProducts } = Astro.props;
+let relatedProducts: Product[] = [];
+try {
+  const products = await fetchPublicProducts({ limit: 100 });
+  relatedProducts = products
+    .filter((item) => item.id !== product.id)
+    .slice(0, 4);
+} catch {
+  relatedProducts = [];
+}
 ---
 
 <MainLayout title={`${product.name} - Petmania`} description={product.description}>

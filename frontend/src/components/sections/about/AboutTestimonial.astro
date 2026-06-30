@@ -77,13 +77,18 @@ const { testimonials, gallery } = aboutData;
   import { Navigation } from 'swiper/modules';
   import 'swiper/css';
 
-  new Swiper('.about-testimonial-slider', {
-    modules: [Navigation],
-    slidesPerView: 1,
-    loop: true,
-    navigation: {
-      prevEl: '.about-testimonial-prev',
-      nextEl: '.about-testimonial-next',
-    },
-  });
+  const slider = document.querySelector('.about-testimonial-slider');
+  if (slider) {
+    const slideCount = slider.querySelectorAll('.swiper-slide').length;
+
+    new Swiper(slider, {
+      modules: [Navigation],
+      slidesPerView: 1,
+      loop: slideCount > 1,
+      navigation: {
+        prevEl: '.about-testimonial-prev',
+        nextEl: '.about-testimonial-next',
+      },
+    });
+  }
 </script>

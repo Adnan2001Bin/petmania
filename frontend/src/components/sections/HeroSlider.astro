@@ -66,22 +66,27 @@ try {
   import 'swiper/css/pagination';
   import 'swiper/css/effect-fade';
 
-  new Swiper('.hero-slider', {
-    modules: [Navigation, Pagination, Autoplay, EffectFade],
-    effect: 'fade',
-    fadeEffect: { crossFade: true },
-    loop: true,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: false,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    navigation: {
-      nextEl: '.swiper-button-next',
-      prevEl: '.swiper-button-prev',
-    },
-  });
+  const slider = document.querySelector('.hero-slider');
+  if (slider) {
+    const slideCount = slider.querySelectorAll('.swiper-slide').length;
+
+    new Swiper(slider, {
+      modules: [Navigation, Pagination, Autoplay, EffectFade],
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      loop: slideCount > 1,
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  }
 </script>

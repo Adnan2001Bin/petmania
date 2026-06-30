@@ -31,4 +31,4 @@ RUN npm install -g concurrently
 
 EXPOSE 5000 4321
 
-CMD ["concurrently", "npm --prefix backend run dev", "npm --prefix frontend run preview -- --host 0.0.0.0 --port 4321"]
+CMD ["concurrently", "npm --prefix backend run dev", "sh -c \"HOST=0.0.0.0 PORT=4321 node frontend/dist/server/entry.mjs\""]
